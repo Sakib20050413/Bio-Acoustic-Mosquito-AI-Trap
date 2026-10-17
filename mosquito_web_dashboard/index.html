@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BAIUST CSE 326 — Bio-Acoustic Mosquito DSP & TinyML Surveillance Dashboard</title>
+  <style>
+    :root {
+      --bg: #090d16; --card: #111827; --border: #1e293b; --text: #f8fafc;
+      --green: #10b981; --yellow: #f59e0b; --red: #ef4444; --cyan: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 16px; }
+    header {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      padding: 14px 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 14px;
+    }
+    .title { font-size: 16px; font-weight: 800; color: var(--cyan); }
+    .sub { font-size: 12px; color: #94a3b8; }
+    .grid { display: grid; grid-template-columns: 350px 1fr; gap: 14px; }
+    @media (max-width: 960px) { .grid { grid-template-columns: 1fr; } }
+    .panel { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+    .p-title { font-size: 12.5px; font-weight: 700; color: var(--cyan); text-transform: uppercase; margin-bottom: 10px; }
+    button {
+      background: #1e293b; color: #fff; border: 1px solid #334155; padding: 8px 12px;
+      border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; width: 100%; margin-bottom: 6px; text-align: left;
+    }
+    button:hover { background: #334155; }
+    .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 12px; }
+    .kpi { background: #090d16; border: 1px solid var(--border); border-radius: 8px; padding: 10px; text-align: center; }
+    .kpi-v { font-size: 20px; font-weight: 800; color: #fff; }
+    .kpi-l { font-size: 11px; color: #94a3b8; }
+    canvas { background: #050811; border: 1px solid var(--border); border-radius: 8px; width: 100%; height: 240px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <div class="title">🦟 BAIUST CSE 326 — ESP32-S3 Bio-Acoustic Mosquito Vector DSP &amp; Selective Trap</div>
+      <div class="sub">Team BlackBerry (1119003, 1119004, 1119007) | Supervisor: Md. Fahim Kabir Chowdhury | INMP441 I2S + Dual IR Gate + Int8 1D-CNN</div>
+    </div>
+  </header>
+
+  <div class="grid">
+    <div class="panel">
+      <div class="p-title">Winter Lab Viva Audio + Optical Gate Simulator</div>
+      <p style="font-size:11.5px;color:#94a3b8;margin-bottom:10px;">
+        Click any button below to play the real mosquito wingbeat fundamental + harmonic frequency through your speaker and simulate the optical gate transit:
+      </p>
+      <button onclick="simulateInsect('fly', 160, 24.5, 'GREEN')">🟢 1. Play Housefly (160 Hz, Transit 24.5 ms) -> IGNORED</button>
+      <button onclick="simulateInsect('male_culex', 560, 2.1, 'YELLOW')">🟡 2. Play Non-Biting Male Culex (560 Hz) -> IGNORED</button>
+      <button onclick="simulateInsect('anopheles', 325, 2.4, 'RED')">🔴 3. Play Female Anopheles Malaria (325 Hz) -> TRAP 100%!</button>
+      <button onclick="simulateInsect('aedes', 498, 1.9, 'RED')">🔴 4. Play Female Aedes Dengue (498 Hz + 996 Hz 2f0) -> TRAP 100%!</button>
+
+      <div class="p-title" style="margin-top:14px;">1.3" SH1106 OLED Dual-Page Preview</div>
+      <div id="oledScreen" style="background:#000;border:2px solid #0284c7;border-radius:6px;padding:12px;font-family:monospace;color:#38bdf8;line-height:1.5;font-size:12.5px;">
+        [OLED PAGE 1: LIVE DSP]<br>
+        Species : STANDBY<br>
+        Peak f0 : 0 Hz | 2f0: 0 Hz<br>
+        IR Gate1: 0.0 ms | T: 26.5C<br>
+        PWM Fan : 20% (Silent Idle)
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-v" id="cntAedes" style="color:#ef4444;">0</div><div class="kpi-l">Female Aedes (Dengue)</div></div>
+        <div class="kpi"><div class="kpi-v" id="cntAnoph" style="color:#f59e0b;">0</div><div class="kpi-l">Female Anopheles</div></div>
+        <div class="kpi"><div class="kpi-v" id="cntIgnored" style="color:#10b981;">0</div><div class="kpi-l">Flies / Males Ignored</div></div>
+        <div class="kpi"><div class="kpi-v" id="cntTrap" style="color:#38bdf8;">0</div><div class="kpi-l">In-Trap Gate 2 Confirmed</div></div>
+      </div>
+
+      <div class="p-title">Live 1024-Point Radix-4 FFT &amp; 40-Bin Mel-Filterbank Harmonic Spectrum (f0, 2f0, 3f0)</div>
+      <canvas id="fftCanvas" width="700" height="240"></canvas>
+    </div>
+  </div>
+
+  <script>
+    let counts = { aedes: 0, anoph: 0, ignored: 0, trap: 0 };
+    const canvas = document.getElementById('fftCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function playWingbeatAudio(f0) {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc1 = audioCtx.createOscillator();
+        const osc2 = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc1.frequency.value = f0;
+        osc2.frequency.value = f0 * 2; // 2nd harmonic
+        gain.gain.value = 0.15;
+        osc1.connect(gain); osc2.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc1.start(); osc2.start();
+        osc1.stop(audioCtx.currentTime + 0.8);
+        osc2.stop(audioCtx.currentTime + 0.8);
+      } catch (e) {}
+    }
+
+    function drawSpectrum(f0, zone) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = '#1e293b';
+      for (let x = 0; x < canvas.width; x += 50) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+      }
+      ctx.fillStyle = '#94a3b8'; ctx.font = '11px monospace';
+      ctx.fillText('100 Hz', 35, 230); ctx.fillText('325 Hz (Anopheles)', 140, 230);
+      ctx.fillText('498 Hz (Aedes f0)', 270, 230); ctx.fillText('996 Hz (2f0 Harmonic)', 490, 230);
+
+      // Draw harmonic peaks
+      ctx.strokeStyle = zone === 'RED' ? '#ef4444' : (zone === 'YELLOW' ? '#f59e0b' : '#10b981');
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let x = 0; x < canvas.width; x++) {
+        const hz = (x / canvas.width) * 1400;
+        const p1 = Math.exp(-Math.pow((hz - f0) / 18, 2)) * 165;
+        const p2 = Math.exp(-Math.pow((hz - f0 * 2) / 24, 2)) * (zone === 'RED' ? 95 : 25);
+        const noise = Math.random() * 8;
+        const y = 210 - (p1 + p2 + noise);
+        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+
+    function simulateInsect(type, f0, transitMs, zone) {
+      playWingbeatAudio(f0);
+      drawSpectrum(f0, zone);
+      let label = '';
+      let fanState = '20% (Idle)';
+      if (type === 'fly') {
+        counts.ignored++;
+        label = 'IGNORED: HOUSEFLY';
+      } else if (type === 'male_culex') {
+        counts.ignored++;
+        label = 'NON-BITING MALE CULEX';
+      } else if (type === 'anopheles') {
+        counts.anoph++; counts.trap++;
+        label = 'VECTOR: FEM ANOPHELES';
+        fanState = '100% FULL SUCTION!';
+      } else if (type === 'aedes') {
+        counts.aedes++; counts.trap++;
+        label = 'DANGER: FEMALE AEDES!';
+        fanState = '100% FULL SUCTION!';
+      }
+      document.getElementById('cntAedes').innerText = counts.aedes;
+      document.getElementById('cntAnoph').innerText = counts.anoph;
+      document.getElementById('cntIgnored').innerText = counts.ignored;
+      document.getElementById('cntTrap').innerText = counts.trap;
+
+      document.getElementById('oledScreen').innerHTML = `
+        [OLED PAGE 1: 6.4ms TinyML]<br>
+        Result  : <b>${label}</b><br>
+        Peak f0 : ${f0} Hz | 2f0: ${f0*2} Hz<br>
+        IR Gate1: ${transitMs} ms | Zone: ${zone}<br>
+        PWM Fan : ${fanState}
+      `;
+    }
+
+    drawSpectrum(498, 'RED');
+  </script>
+</body>
+</html>
