@@ -85,9 +85,12 @@ while ($true) {
     if ($choice -eq "0") { break }
 
     if ($choice -in @("1","2","3","4")) {
-        $ports = Get-CimInstance Win32_SerialPort | Where-Object { $_.DeviceID -ne "COM1" }
-        $ports | Select-Object DeviceID, Description | Format-Table -AutoSize
-        $defaultPort = ($ports | Select-Object -First 1).DeviceID
+        $ports = Get-CimInstance Win32_PnPEntity | Where-Object { $_.Name -match "\(COM(\d+)\)" -and $_.Name -notmatch "\(COM1\)" } | ForEach-Object {
+            [PSCustomObject]@{ DeviceID = ($_.Name -replace ".*\((COM\d+)\).*", '$1'); Description = $_.Name }
+        }
+        $ports | Format-Table -AutoSize
+        $ch = $ports | Where-Object { $_.Description -match "CH343|CH340|CP210|JTAG|USB Serial" } | Select-Object -First 1
+        $defaultPort = if ($ch) { $ch.DeviceID } else { ($ports | Select-Object -First 1).DeviceID }
         $port = Read-Host "Enter COM port (default: $defaultPort)"
         if ([string]::IsNullOrWhiteSpace($port)) { $port = $defaultPort }
         $usbType = Read-Host "Port plugged into [U]ART (Right, default) or [N]ative USB (Left)? (U/N)"

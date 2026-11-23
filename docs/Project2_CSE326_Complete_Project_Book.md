@@ -1,4 +1,4 @@
-# WingBeat-TinyNet v5.0: Bio-Acoustic and Optical Pollinator-Safe Mosquito Trap Using ESP32-S3 512-Point FFT and Universal DHT22 Thermal Spectral Bin Warping
+# WingBeat-TinyNet v5.1: Bio-Acoustic and Optical Pollinator-Safe Mosquito Trap Using ESP32-S3 512-Point FFT and Universal DHT22 Thermal Spectral Bin Warping
 
 **Complete Technical Reference & Project Book — CSE 326 (Microprocessor / Embedded Systems Sessional)**
 
@@ -9,8 +9,8 @@
 | **Project Supervisor** | Md. Fahim Kabir Chowdhury, Lecturer, Department of CSE, BAIUST |
 | **Team Members** | Md. Najmus Sakib Rahatul (ID: `1119003`), Nesar Uddin Ifag (ID: `1119004`), Rayhan Alam Towhid (ID: `1119007`) |
 | **Target Platform** | `ESP32-S3 N16R8` (44-Pin, Dual-Core 240 MHz, 16 MB Flash, 8 MB OPI PSRAM) |
-| **Firmware & Model Version** | `WingBeat-TinyNet v5.0` — 10-Round QAT 6-Class Hierarchical INT8 (`24 -> 96 -> 48 -> 6`, `7,350` params / `7.18 KB`) + Universal `DHT22` (`-10..+50°C`) Thermal Bin Warping |
-| **Verified Artifacts** | `wingbeat_q1_int8.h` (`SHA-256: 4e0d124437b052c9`, `33,111 B`), `p2_deployment_trap_esp32s3.ino` (`SHA-256: 16d428ef8e806d92`, `24,009 B`) |
+| **Firmware & Model Version** | `WingBeat-TinyNet v5.1` — Multi-Seed QAT 6-Class Hierarchical INT8 (`24 -> 96 -> 48 -> 6`, `7,350` params / `7.18 KB`) + 3-Layer Anti-Vocal Wing-Edge Defense + Universal `DHT22` (`-10..+50°C`) Thermal Bin Warping |
+| **Verified Artifacts** | `wingbeat_q1_int8.h` (`SHA-256: 83844003fc86b7bb`, `32,962 B`), `p2_deployment_trap_esp32s3.ino` (`SHA-256: d32eb692f658de78`, `24,671 B`) |
 | **Total Hardware Cost** | `2,757 BDT` (~$23 USD; 12 verified hardware groups + `10x 220 Ohm` current-limiting resistors) |
 
 ---
@@ -23,7 +23,7 @@
 4. [Mechanical Enclosure Blueprint & Optical Gate Geometry](#4-mechanical-enclosure-blueprint--optical-gate-geometry)
 5. [Embedded DSP & Sequential Fan-Muted Gating Pipeline](#5-embedded-dsp--sequential-fan-muted-gating-pipeline)
 6. [Universal DHT22 Thermal Spectral Bin Warping](#6-universal-dht22-thermal-spectral-bin-warping)
-7. [24 Bio-Acoustic Features & WingBeat-TinyNet v4 INT8 Architecture](#7-24-bio-acoustic-features--wingbeat-tinyNet-v4-int8-architecture)
+7. [24 Bio-Acoustic Features & WingBeat-TinyNet v5.1 QAT INT8 Architecture](#7-24-bio-acoustic-features--wingbeat-tinynet-v51-qat-int8-architecture)
 8. [Multi-Dataset Experimental Evaluation & Q1 Ablations](#8-multi-dataset-experimental-evaluation--q1-ablations)
 9. [Software Toolchain, Pre-Compiled Binaries & Portable Deployment](#9-software-toolchain-pre-compiled-binaries--portable-deployment)
 10. [5-Minute Live Supervisor Demo Playbook & Hardware Controls](#10-5-minute-live-supervisor-demo-playbook--hardware-controls)
@@ -45,13 +45,13 @@ Mosquito-borne diseases — primarily **Dengue** and **Chikungunya** (*Aedes aeg
 > **The Doctor, the Stethoscope, and the Kitchen Blender:**  
 > Think of the `INMP441` I2S MEMS microphone and `ESP32-S3` 512-point FFT as a doctor listening with a digital stethoscope, and the `5V` suction fan as a noisy kitchen blender. If the blender runs while the doctor listens, the doctor hears only blender noise and zero mosquito wingbeats. Our **Sequential Fan-Muted Gating** architecture keeps the fan **100% OFF (`0%` duty cycle)** during every `64.0 ms` acoustic listening window. Only after four pitch-locked frames (`|Δf0| <= 36 Hz`) verify a biting female disease vector (`345–655 Hz`) does `GPIO 13` trigger a `5.0 s` suction capture pulse, followed by a `1.5 s` acoustic settling cooldown and I2S DMA buffer flush.
 
-### Key Verified Achievements (`WingBeat-TinyNet v5.0` — 10-Round Multi-Seed QAT Champion)
-- **Tier-1 Pollinator-Safe Female Vector Guild Accuracy:** **`98.01%`** (5-fold CV across `15,402` real + channel-augmented frames; **`98.31%`** on 10-Round Champion Holdout).
+### Key Verified Achievements (`WingBeat-TinyNet v5.1` — Anti-Vocal Multi-Seed QAT Champion)
+- **Tier-1 Pollinator-Safe Female Vector Guild Accuracy:** **`97.97%`** (5-fold CV across `16,702` real + channel-augmented frames; **`98.20%`** on Champion Holdout `seed=102`, `n = 2,505`).
 - **Pollinator (Bee) Preservation Rate:** **`100.00%`** (`0 / 1,100` honeybee/pollinator frames misclassified as vector; reinforced by Stage-2 optical transit-width veto `26–60 ms`).
-- **Tier-2 6-Class Multi-Genus Attribution Accuracy:** **`94.16%`** (`Macro-F1: 91.34%`, Noise Rejection **`99.19%`**) in Straight-Through QAT `INT8` — outperforming `FP32` (`94.04%`) inside a **`7.18 KB`** weight tensor (`94.98%` Acc / `92.76%` F1 / `99.40%` Noise Rejection on Champion Holdout).
-- **Zero False Fan Triggers Under Real Environmental Noise:** **`0 / 8,981`** non-overlapping `64 ms` active frames (exact ESP32-S3 firmware cadence) across **17 real ESC-50 categories (`136` WAV files)** plus **`0 / 1,715`** on live Cumilla room recordings.
+- **Tier-2 6-Class Multi-Genus Attribution Accuracy:** **`94.37%`** (`Macro-F1: 91.08%`, Noise Rejection **`99.19%`**) in Straight-Through QAT `INT8` — outperforming `FP32` (`94.36%`) inside a **`7.18 KB`** weight tensor (`95.05%` Acc / `92.21%` F1 / `99.27%` Noise Rejection on Champion Holdout).
+- **Zero False Fan Triggers Under Environmental Noise & Deliberate Human Vocal Imitation:** **`0`** false triggers on close-mic human nasal humming / `"mew-mew"` vocal imitation (`37.5 s`, tested at both `step=512` and harsh `2×` `step=256`), **`0 / 8,981`** frames across **17 real ESC-50 categories (`136` WAV files)**, and **`0`** on live Cumilla room/sawmill speech recordings.
 - **Wide-Climate Automatic Adaptation (`-10°C` to `+50°C` display | `10°C–45°C` warp):** Live `DHT22` Thermal Spectral Bin Warping recovers **`+57.0%`** 6-class accuracy at `34°C` (`37.6% -> 94.6%`), **`+66.8%`** at `38°C` (`19.3% -> 86.1%`), and **`+73.3%`** at `42°C` (`15.8% -> 89.1%`, Guild `97.5%`) with zero manual calibration.
-- **Ultra-Low-Cost Fully Standalone Edge Deployment:** **`2,757 BDT`** electronics (`+~340 BDT` DIY 4" PVC enclosure & `70×90 mm` compact perfboard), `355,073 B` (`11%`) Flash, `31,040 B` (`9%`) RAM, NVS-persisted live hardware counters verified (`AED:8 ANO:1 CUL:8 BEE:5 MAL:6 CAT:1`).
+- **Ultra-Low-Cost Fully Standalone Edge Deployment:** **`2,757 BDT`** electronics (`+~340 BDT` DIY 4" PVC enclosure & `70×90 mm` compact perfboard), `355,273 B` (`11%`) Flash, `31,040 B` (`9%`) RAM, live-flashed and verified on `COM5` (`[P2v5.1] ... T:28.4C H3:0.13 BHI:1.22 IR:OK/OK`).
 
 ---
 
@@ -66,14 +66,14 @@ To position this work rigorously for both CSE 326 evaluation and Q1 manuscript s
 5. **Supratak et al. (2024)**, *PLOS ONE* (*MosquitoSong+*): Curated 4-species *Aedes aegypti*, *Aedes albopictus*, *Anopheles dirus*, and *Culex quinquefasciatus* recordings (`8,000 Hz`, controlled `25°C` chamber) alongside realistic outdoor distractors (broom sweeping, motorcycle, grass cutter, CDC trap fan noise), confirming that continuous CDC fan noise degrades classification while training deep models offline rather than on an MCU with live temperature warping.
 6. **Piczak (2015)**, *ACM Multimedia* (*ESC-50*): Established the 50-class environmental sound benchmark, widely used to stress-test acoustic edge detectors against real-world false positives.
 
-### Gap-Mapping Matrix: Prior Literature vs. WingBeat-TinyNet v4
+### Gap-Mapping Matrix: Prior Literature vs. WingBeat-TinyNet v5.1
 
-| Prior Work | Primary Strength | Unresolved Engineering / Field Gap | How `WingBeat-TinyNet v4` Solves the Gap |
+| Prior Work | Primary Strength | Unresolved Engineering / Field Gap | How `WingBeat-TinyNet v5.1` Solves the Gap |
 | :--- | :--- | :--- | :--- |
-| **Villarreal et al. (2017)** | Quantified ectothermic `+7–13 Hz/°C` wingbeat shift | No embedded real-time spectral warping algorithm | **Universal `DHT22` Thermal Spectral Bin Warping** shifts `f0`, centroid, and all `7` FFT log-subbands automatically (`+61.9%` at `38°C`) |
+| **Villarreal et al. (2017)** | Quantified ectothermic `+7–13 Hz/°C` wingbeat shift | No embedded real-time spectral warping algorithm | **Universal `DHT22` Thermal Spectral Bin Warping** shifts `f0`, centroid, and all `7` FFT log-subbands automatically (`+66.8%` at `38°C`, `+73.3%` at `42°C`) |
 | **Mukundarajan / Abuzz (2017)** | Multi-species smartphone acoustic ID | Manual holding, no trap actuation, no pollinator veto | Autonomous `ESP32-S3` trap with **Sequential Fan-Muted Gating** + **100% Bee Safe** optical & neural veto |
-| **Kiskin / HumBugDB (2021)** | Free-flight benchmark & Bayesian CNNs | Heavy GPU/CPU CNNs (`MB`-scale), not deployable on low-cost MCUs | **`5.36 KB` Symmetric INT8 MLP** (`24->80->40->6`) using only `11%` Flash and `9%` RAM on `ESP32-S3` |
-| **Supratak / MosquitoSong+ (2024)** | 4-species + outdoor noise recordings at `25°C` | Fixed `25°C` lab temperature; continuous CDC fan self-noise | **Fan `0%` OFF during listening** + live `DHT22` normalization to `28°C` reference + `0 / 8,981` ESC-50 false triggers |
+| **Kiskin / HumBugDB (2021)** | Free-flight benchmark & Bayesian CNNs | Heavy GPU/CPU CNNs (`MB`-scale), not deployable on low-cost MCUs | **`7.18 KB` QAT Symmetric INT8 MLP** (`24->96->48->6`) using only `11%` Flash and `9%` RAM on `ESP32-S3` |
+| **Supratak / MosquitoSong+ (2024)** | 4-species + outdoor noise recordings at `25°C` | Fixed `25°C` lab temperature; continuous CDC fan self-noise | **Fan `0%` OFF during listening** + live `DHT22` normalization + 3-layer Anti-Vocal guard + `0 / 8,981` ESC-50 false triggers |
 | **Potamitis et al. (2017–2020)** | Optical wingbeat sensing e-traps | Higher optical-array BOM cost; limited on-box genus telemetry | **`2,757 BDT` ($23) hybrid trap**: `INMP441` audio + dual `LM393` IR gates (`dt_ms` veto + catch verify) + NVS OLED counters |
 
 ---
@@ -166,13 +166,13 @@ A physical limitation of inexpensive `HW-201 / FC-51` (`LM393`) infrared obstacl
 Every loop iteration executes a deterministic, non-blocking 5-stage pipeline on the `ESP32-S3`:
 
 1. **Stage 1 — Silent Acoustic Acquisition (`64.0 ms`):** The fan relay (`GPIO 13`) is held strictly OFF (`HIGH`, Active-LOW). `i2s_read()` collects `512` 32-bit I2S samples at `8,000 Hz` (`150 ms` non-blocking timeout) -> `15.625 Hz` frequency resolution per FFT bin. DC offset is removed, RMS energy (`e_rms`) and Zero-Crossing Rate (`zcr`) are computed, and a Hann window + 512-point real FFT (`arduinoFFT v2.x`) produce magnitude and power spectra.
-2. **Stage 2 — Adaptive Noise Floor & Universal Thermal Spectral Warping:** Every `2.5 s`, `DHT22` updates `cached_t` (clamped to `[10.0°C, 45.0°C]`). The firmware computes `df_t` and integer FFT bin shift `bsh`, warps all frequency bounds and subbands, and extracts all `24` scale-invariant features. Frames below the dynamic RMS floor (`max(1100, min(2400, 1.12 * ambient_rms_ema))`) or `SNR < 13.0 dB` are immediately rejected as `Noise/Env` without invoking the neural network.
-3. **Stage 3 — Hierarchical 6-Class INT8 Inference + Harmonic Physics Guards:** `runWingBeatQ1Probs()` evaluates the `24->80->40->6` Symmetric INT8 MLP and outputs calibrated softmax probabilities `P[0..5]`. Tier-1 Guild gating combines `p_vec = P[2] + P[3] + P[4]` with strict bio-acoustic harmonic constraints:
-   - **Female Vector Guild (`tier1 = 2`):** `p_vec >= 0.75`, `345 <= f0_corr <= 655 Hz`, `0.085 <= H2/H1 <= 1.15`, `sub_pk <= 0.58`.
-   - **Male Mosquito (`tier1 = 5`):** `P[5] >= 0.76`, `665 <= f0_corr <= 1020 Hz`, `0.085 <= H2/H1 <= 1.15`, `sub_pk <= 0.58`.
+2. **Stage 2 — Adaptive Noise Floor & Universal Thermal Spectral Warping:** Every `2.5 s`, `DHT22` updates `cached_t` across `[-10.0°C, +50.0°C]` while clamping ectothermic flight-muscle warp safely to `[10.0°C, 45.0°C]`. The firmware computes `df_t` and integer FFT bin shift `bsh`, warps all frequency bounds and subbands, and extracts all `24` scale-invariant features. Frames below the dynamic RMS floor (`max(1100, min(2400, 1.12 * ambient_rms_ema))`) or `SNR < 13.0 dB` are immediately rejected as `Noise/Env` without invoking the neural network.
+3. **Stage 3 — Hierarchical 6-Class QAT INT8 Inference + Anti-Vocal Wing-Edge Harmonic Physics Guards:** `runWingBeatQ1Probs()` evaluates the `24->96->48->6` (`7.18 KB`) Straight-Through QAT INT8 MLP and outputs calibrated softmax probabilities `P[0..5]`. Tier-1 Guild gating combines `p_vec = P[2] + P[3] + P[4]` with strict chitin wing-edge harmonic constraints (eliminating human falsetto, nasal humming, and `"mew-mew"` vocal imitation whose harmonics collapse above `1.15 kHz`):
+   - **Female Vector Guild (`tier1 = 2`):** `p_vec >= 0.75`, `345 <= f0_corr <= 655 Hz`, `0.085 <= H2/H1 <= 1.15`, `H3/H1 >= 0.095`, `b_1150_2800 >= 0.90`, `sub_pk <= 0.58`.
+   - **Male Mosquito (`tier1 = 5`):** `P[5] >= 0.76`, `665 <= f0_corr <= 1020 Hz`, `0.085 <= H2/H1 <= 1.15`, `H3/H1 >= 0.080`, `b_1150_2800 >= 0.85`, `sub_pk <= 0.58`.
    - **Pollinator / Bee (`tier1 = 1`):** `P[1] >= 0.75`, `140 <= f0_corr <= 280 Hz`, `H2/H1 >= 0.10`.
    - **Stage-2 Optical Bee Veto:** If healthy `Gate #1` recorded a slow `26–60 ms` large-body transit within the last `500 ms`, any `tier1 = 2` decision is overridden to `tier1 = 1` (`BEE SAFE`, Fan OFF).
-4. **Stage 4 — 4-Frame Pitch-Locked Temporal Ensemble Voting (`~256 ms`):** Transient speech syllables, birds, or car horns shift pitch rapidly between `64 ms` frames. A fan trigger requires **`4` consecutive `tier1 = 2` frames** whose corrected fundamental stays within `|f0_corr(t) - f0_corr(t-1)| <= 36.0 Hz`. Across those 4 frames, genus probabilities (`sum_p_aed`, `sum_p_ano`, `sum_p_cul`) are accumulated to select the winning vector genus (`AEDES`, `ANOPHELES`, or `CULEX`).
+4. **Stage 4 — 4-Frame Pitch-Locked + Total-Drift Anchor Temporal Ensemble Voting (`~256 ms`):** Transient speech syllables, birds, car horns, or smooth human vocal glides (`"meeeeww"`) drift in pitch over `256 ms`. A fan trigger requires **`4` consecutive `tier1 = 2` frames** satisfying BOTH frame-to-frame stability (`|f0_corr(t) - f0_corr(t-1)| <= 34.0 Hz`) AND total-streak anchor lock (`|f0_corr(t) - streak_anchor_f0| <= 36.0 Hz`). Across those 4 frames, genus probabilities (`sum_p_aed`, `sum_p_ano`, `sum_p_cul`) are accumulated to select the winning vector genus (`AEDES`, `ANOPHELES`, or `CULEX`).
 5. **Stage 5 — Selective `5.0 s` Suction Capture, Catch Verification & NVS Persistence:** Only upon passing Stage 4 does the firmware illuminate `LED_RED` (`GPIO 42`), display the detected genus banner on the OLED, increment the corresponding NVS counter (`Preferences`), energize the `5V` fan relay for `5.0 s`, monitor `Gate #2` (`GPIO 14`) for a clean falling-edge mesh-catch event (`cnt_caught++`), shut the fan OFF, enforce a `1.5 s` acoustic settling cooldown (`SETTLING`), and call `i2s_zero_dma_buffer(I2S_NUM_0)` to purge residual fan turbulence before listening resumes.
 
 ---
@@ -210,7 +210,7 @@ Every spectral band boundary `k_i` is dynamically shifted by `b_sh` (clamped saf
 
 ---
 
-## 7. 24 Bio-Acoustic Features & WingBeat-TinyNet v4 INT8 Architecture
+## 7. 24 Bio-Acoustic Features & WingBeat-TinyNet v5.1 QAT INT8 Architecture
 
 ### 7.1 Complete 24 Scale-Invariant Feature Vector (`P2_N_FEATURES = 24`)
 All 24 features are strictly **amplitude/gain-invariant** (ratios, normalized spectral shape, log-relative band energy), ensuring identical predictions across varying speaker volumes, insect distances, and microphone sensitivities.
@@ -225,36 +225,38 @@ All 24 features are strictly **amplitude/gain-invariant** (ratios, normalized sp
 | **Vector Ratios** | 15–17 | `log_low_vec`, `log_h2_vec`, `log_hi_vec` | Log-energy ratios of low (`<328 Hz`), harmonic (`656–1344 Hz`), and high (`>1344 Hz`) bands relative to the warped female vector band |
 | **7 Warped Log-Subbands** | 18–24 | `b_78_188`, `b_188_328`, `b_328_438`, `b_438_547`, `b_547_656`, `b_656_1150`, `b_1150_2800` | Relative log-power (`log1p(100 * E_sub / E_tot)`) across 7 thermally warped frequency partitions separating Bees, *Culex*, *Aedes*, *Anopheles*, Males, and broadband noise |
 
-### 7.2 Neural Network Topology & 10-Round QAT Symmetric INT8 Quantization
+### 7.2 Neural Network Topology & Multi-Seed QAT Symmetric INT8 Quantization
 - **Architecture:** Fully Connected MLP `24 -> 96 (ReLU) -> 48 (ReLU) -> 6 (Softmax)`
 - **Parameter Budget:** `(24×96 + 96) + (96×48 + 48) + (48×6 + 6) = 7,350` parameters (`7,200` INT8 weights = `7.18 KB` + `150` FP32 biases).
-- **Training Objective (`v5.0` 10-Round Champion Protocol):** Inverse-square-root class weighting (`Noise ×1.50`, `Pollinator ×1.30`), label smoothing (`eps = 0.025`), mid-training hard-negative focal mining (`1.65×` on `Noise`/`Bee` frames with `p_vec > 0.12`), Adam + Cosine Annealing over `620` epochs with final `120`-epoch Straight-Through QAT across **10 independent multi-seed runs** (`seed = 101` champion selected).
+- **Training Objective (`v5.1` Anti-Vocal QAT Champion Protocol):** Inverse-square-root class weighting (`Noise ×1.50`, `Pollinator ×1.30`), label smoothing (`eps = 0.025`), mid-training hard-negative focal mining (`1.65×` on `Noise`/`Bee` frames with `p_vec > 0.12`), Adam + Cosine Annealing over `620` epochs with final `120`-epoch Straight-Through QAT across multi-seed runs (`seed = 102` champion selected, `Holdout n = 2,505`).
 - **Symmetric Per-Layer INT8 Export (`wingbeat_q1_int8.h`):**
   $$s_l = \frac{\max(|W_l|) + 10^{-8}}{127}, \qquad W_{l,\text{int8}} = \operatorname{clip}\!\left(\operatorname{round}\!\left(\frac{W_l}{s_l}\right), -127, 127\right)$$
-- **Verified ESP32-S3 Embedded Footprint:**
-  - `UART` Binary (`CDCOnBoot=default`): **`355,073 bytes` (`11%`** of `3 MB` app partition) | Global RAM: **`31,040 bytes` (`9%`** of `327 KB`).
-  - `USB` Binary (`CDCOnBoot=cdc`): **`343,573 bytes` (`10%`)** | Global RAM: **`30,832 bytes` (`9%`)**.
+- **Verified ESP32-S3 Embedded Footprint (`v5.1`):**
+  - `UART` Binary (`CDCOnBoot=default`): **`355,273 bytes` (`11%`** of `3 MB` app partition) | Global RAM: **`31,040 bytes` (`9%`** of `327 KB`).
+  - `USB` Binary (`CDCOnBoot=cdc`): **`343,789 bytes` (`10%`)** | Global RAM: **`30,832 bytes` (`9%`)**.
   - Pure C++ zero-dependency inference (no heavy TFLite Micro runtime overhead) executes in **`< 2.0 ms`** per `64.0 ms` audio frame.
 
 ---
 
 ## 8. Multi-Dataset Experimental Evaluation & Q1 Ablations
 
-### 8.1 Four Real Datasets (`15,402` Real & Channel-Augmented Extracted Frames — Zero Synthetic Sine-Wave Claims)
+### 8.1 Four Real Datasets + Real Anti-Vocal Hard Negatives (`16,702` Frames — Zero Synthetic Sine-Wave Claims)
 1. **PLOS ONE 2024 *MosquitoSong+* (Supratak et al., 2024):** `350` real `8,000 Hz` recordings (`25°C`, thermally warped to `28°C` reference) covering female *Ae. aegypti*, *Ae. albopictus*, *An. dirus* (Malaria), *Cx. quinquefasciatus*, male mosquitoes, plus outdoor broom/motorcycle/grass-cutter/CDC-fan noise, augmented with realistic loudspeaker/funnel EQ and low-level room ceiling-fan hum for robust bench & field generalization.
 2. **Oxford *HumBugDB* (Kiskin et al., 2021):** Free-flight real acoustic recordings (`R4_cleaned`, `CDC_*`).
 3. **ESC-50 Environmental Sound Dataset (Piczak, 2015):** `136` real clips spanning `17` hard outdoor/indoor categories (`car_horn`, `chainsaw`, `chirping_birds`, `clapping`, `coughing`, `crickets`, `crow`, `dog`, `engine`, `hand_saw`, `insects`, `laughing`, `rain`, `rooster`, `siren`, `vacuum_cleaner`, `wind`), including channel-augmented tonal negative guards.
-4. **Live Field Room Recordings (Cumilla, Bangladesh):** Real room ceiling fan, nearby sawmill whine, and human speech captured directly beside the hardware prototype.
+4. **Live Field Room & Human Vocal-Imitation Recordings (Cumilla, Bangladesh):** Real room ceiling fan, nearby sawmill whine, normal human speech, plus **`1,300` 100% real close-mic human nasal-hum / `"mew-mew"` vocal-imitation frames** captured directly on the prototype's bench to eliminate adversarial vocal false positives.
 
-### 8.2 Table 1 — 4-Model 5-Fold Cross-Validation & 10-Round Champion Ablation (`n = 15,402`)
+### 8.2 Table 1 — 4-Model 5-Fold Cross-Validation & QAT Champion Ablation (`v5.1`, `n = 16,702`)
 
 | Model / Baseline | 6-Class Acc | 6-Class Macro-F1 | Tier-1 Guild Acc | Pollinator (Bee) Safe | Noise Rejection |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| A. Bandpass Frequency Rule Only | `54.06%` | `53.52%` | `65.74%` | `92.45%` | `76.71%` |
-| B. Linear Logistic Regression (24-feat) | `82.15%` | `74.57%` | `92.33%` | `99.73%` | `97.07%` |
-| C. `WingBeat-TinyNet v5.0` (`FP32`, 5-Fold CV) | `94.04%` | `91.19%` | `97.98%` | **`100.00%`** | `99.13%` |
-| **D. `WingBeat-TinyNet v5.0` (`QAT INT8`, 5-Fold CV)** | **`94.16%`** | **`91.34%`** | **`98.01%`** | **`100.00%`** | **`99.19%`** |
-| **E. 10-Round QAT Champion (`Holdout n=2,310`, Deployed)** | **`94.98%`** | **`92.76%`** | **`98.31%`** | **`100.00%`** | **`99.40%`** |
+| A. Bandpass Frequency Rule Only | `52.16%` | `51.48%` | `62.92%` | `92.36%` | `72.38%` |
+| B. Linear Logistic Regression (24-feat) | `83.09%` | `73.92%` | `92.47%` | `99.91%` | `97.59%` |
+| C. `WingBeat-TinyNet v5.1` (`FP32`, 5-Fold CV) | `94.36%` | `91.03%` | `98.01%` | **`100.00%`** | `99.21%` |
+| **D. `WingBeat-TinyNet v5.1` (`QAT INT8`, 5-Fold CV)** | **`94.37%`** | **`91.08%`** | **`97.97%`** | **`100.00%`** | **`99.19%`** |
+| **E. 6-Round QAT Champion (`seed=102`, Holdout `n=2,505`, Deployed)** | **`95.05%`** | **`92.21%`** | **`98.20%`** | **`100.00%`** | **`99.27%`** |
+
+> **Per-Class 5-Fold CV Recall (`WingBeat-TinyNet v5.1` QAT INT8, `n = 16,702`):** `C0 Noise/Env` = **`97.96%`** (`n=9,085`), `C1 Pollinator (Bee)` = **`96.73%`** (`n=1,100`, **`0/1,100`** vector false positives), `C2 Aedes` = **`84.13%`** (`n=2,527`), `C3 Anopheles` = **`84.57%`** (`n=752`), `C4 Culex` = **`92.45%`** (`n=2,437`), `C5 Male` = **`97.75%`** (`n=801`).
 
 ### 8.3 Table 2 — Full 6×6 Confusion Matrix (`WingBeat-TinyNet v4.1 INT8`, 5-Fold CV, `n = 15,402`)
 
@@ -279,9 +281,9 @@ All 24 features are strictly **amplitude/gain-invariant** (ratios, normalized sp
 | **`5 dB` SNR** | `62.74%` | `65.57%` | Improved noisy-channel resilience (+8.5% over v4.0) |
 | **`0 dB` SNR** | `18.40%` | `20.28%` | Honest physical noise floor — proves why running fan while listening fails |
 
-### 8.5 Table 4 — ESC-50 17-Category Zero-False-Trigger Audit (`136` Real WAVs, `8,981` Non-Overlapping `64 ms` Frames)
+### 8.5 Table 4 — ESC-50 17-Category & Anti-Vocal Zero-False-Trigger Audit (`v5.1`, `136` Real WAVs, `8,981` Non-Overlapping `64 ms` Frames)
 
-Evaluated at the exact deployed `ESP32-S3` `512`-sample (`64.0 ms`) I2S cadence and firmware rules (`p_vec >= 0.75`, `SNR >= 13.0 dB`, `345–655 Hz`, `0.085 <= H2/H1 <= 1.15`, `sub_pk <= 0.58`, and 4-frame pitch-locked streak `|Δf0| <= 36 Hz`):
+Evaluated at the exact deployed `ESP32-S3` `512`-sample (`64.0 ms`) I2S cadence and `v5.1` firmware rules (`p_vec >= 0.75`, `SNR >= 13.0 dB`, `345–655 Hz`, `0.085 <= H2/H1 <= 1.15`, `H3/H1 >= 0.095`, `b_1150_2800 >= 0.90`, `sub_pk <= 0.58`, and 4-frame pitch-locked + anchor-locked streak `|Δf0| <= 34 Hz`, `|f0 - anchor_f0| <= 36 Hz`):
 
 | ESC-50 Category | Frames | False Fan Triggers | ESC-50 Category | Frames | False Fan Triggers | ESC-50 Category | Frames | False Fan Triggers |
 | :--- | :-: | :-: | :--- | :-: | :-: | :--- | :-: | :-: |
@@ -292,8 +294,8 @@ Evaluated at the exact deployed `ESP32-S3` `512`-sample (`64.0 ms`) I2S cadence 
 | `coughing` | 287 | **`0`** | `insects` | 568 | **`0`** | `wind` | 624 | **`0`** |
 | `crickets` | 616 | **`0`** | `laughing` | 469 | **`0`** | **TOTAL (17 Cats)** | **8,981** | **`0` (`0.00%` FAR)** |
 
-### 8.6 Live Hardware Room & Bench Validation (`COM5`, `ESP32-S3 N16R8`)
-After flashing the verified `v5.0` `UART` binary (`355,440 B`, `Hash of data verified.`) with the physical `100 Ohm` thermal resistor and `6× 395nm UV` lure rail connected, live telemetry confirmed `T: 28.7°C–28.8°C`, `IR:OK/OK`, NVS-persisted live multi-class bench detection counts across all 6 classes (`AED:8 ANO:1 CUL:8 BEE:5 MAL:6 CAT:1`), and **100% rejection of live human speech & room hum up to `RMS = 10,051`** (`T1:0`, `STK:0`). All `6/6` continuous `44.1 kHz` demo WAVs (`demo_audio/`) also passed exact-cadence verification under both Clean and simulated smartphone micro-speaker + room-hum channels (`01`->`AEDES`, `02`->`ANOPHELES`, `03`->`CULEX`, `04`->`BEE SAFE`, `05`->`MALE IGN`, `06`->`0` triggers). Complete 25-paper DOI-verified literature benchmarking and economic valuation are provided in `docs/Q1_Literature_Review_and_Valuation_Report.md`, and complete DIY 4" PVC enclosure CAD (`.OBJ`/`.STL`, interactive 3D viewer, `70×90 mm` perfboard layout, and `24 s` HD suction explainer video) live in `enclosure_cad/` and `media/`.
+### 8.6 Live Hardware Room, Anti-Vocal & Bench Validation (`COM5`, `ESP32-S3 N16R8`)
+After flashing the verified `v5.1` `UART` binary (`355,273 B` sketch / `355,632 B` image, `Hash of data verified.`) with the physical `100 Ohm` thermal resistor and `6× 395nm UV` lure rail connected, live `[P2v5.1]` telemetry confirmed `T: 28.4°C`, `IR:OK/OK`, live chitin harmonic monitoring (`H2:0.14 H3:0.13 BHI:1.22`), NVS-persisted multi-class bench detection counts, and **`0` false fan triggers** against close-mic human nasal-hum/`"mew-mew"` vocal imitation (`37.5 s`, both `step=512` and harsh `2×` `step=256`), live room speech, and nearby sawmill whine. All `6/6` continuous `44.1 kHz` demo WAVs (`demo_audio/`, including upgraded authentic high-harmonic `01_Aedes_aegypti_Dengue_Chikungunya.wav`) passed exact-cadence verification under both Clean and simulated smartphone micro-speaker + room-hum channels (`01`->`AEDES` `31/22`, `02`->`ANOPHELES` `6/3`, `03`->`CULEX` `5/13`, `04`->`BEE SAFE` `0` Fan / `5-6 BEE`, `05`->`MALE IGN` `0` Fan / `11-9 MALE`, `06`->`0` triggers). Complete 25-paper DOI-verified literature benchmarking and economic valuation are provided in `docs/Q1_Literature_Review_and_Valuation_Report.md`, and complete DIY 4" PVC enclosure CAD (`.OBJ`/`.STL`, interactive 3D viewer, `70×90 mm` perfboard layout, and `24 s` HD suction explainer video) live in `enclosure_cad/` and `media/`.
 
 ---
 
@@ -311,7 +313,7 @@ After flashing the verified `v5.0` `UART` binary (`355,440 B`, `Hash of data ver
 ### 9.2 Three Firmware Sketches & Pre-Compiled Binaries (`compiled_bins/`)
 1. `firmware/p2_hardware_diag/` — Bench hardware diagnostic (OLED I2C `0x3C`, `DHT22`, `INMP441` RMS/FFT, IR Gates, Relay).
 2. `firmware/p2_acoustic_capture_esp32s3/` — Field acoustic data logger streaming `8,000 Hz` features over USB Serial.
-3. `firmware/p2_deployment_trap_esp32s3/` — **Final Production Trap (`WingBeat-TinyNet v4`)**, pre-compiled for both `uart/` and `usb/` inside `compiled_bins/p2_deployment_trap_esp32s3/`.
+3. `firmware/p2_deployment_trap_esp32s3/` — **Final Production Trap (`WingBeat-TinyNet v5.1`)**, pre-compiled for both `uart/` and `usb/` inside `compiled_bins/p2_deployment_trap_esp32s3/`.
 
 ### 9.3 Running on ANY New Windows / Linux PC (1-Command Setup)
 Extract **`Project2_CSE326_Final_Portable_Master_Pack.zip`** on any Windows 10/11 PC and run:
@@ -325,11 +327,11 @@ The script automatically installs `arduino-cli` (if missing), pins `esp32@2.0.17
 ## 10. 5-Minute Live Supervisor Demo Playbook & Hardware Controls
 
 ### 10.1 Boot Verification & Physical Button Controls
-- **Power-On Self-Test (Automatic in `setup()`):** Upon plugging USB-C or `20W` Power Bank, watch the 3 status LEDs blink sequentially **`Green (GPIO 40) -> Yellow (GPIO 41) -> Red (GPIO 42)`** (`220 ms` each), followed by the OLED splash screen **`WINGBEAT v4` / `6-CLS Q1 READY`**.
+- **Power-On Self-Test (Automatic in `setup()`):** Upon plugging USB-C or `20W` Power Bank, watch the 3 status LEDs blink sequentially **`Green (GPIO 40) -> Yellow (GPIO 41) -> Red (GPIO 42)`** (`220 ms` each), followed by the OLED splash screen **`WingBeat v5.1` / `Anti-Vocal QAT`**.
 - **4x Yellow Tactile Buttons:**
   - `BTN1` (`GPIO 38`): `1.5 s` **Relay Fan + All-3-LED Hardware Self-Test** (proves wiring instantly before audio playback).
-  - `BTN2` (`GPIO 39`): Toggle OLED between **Main Screen** (`Status`, `AED/ANO/CUL`, `Cat/Bee/Mal`, `T/H/F0`) and **Diag Screen** (`Live RMS`, `DHT22 T/RH`, `IR1/IR2 OK/POT`, `v4 6-Cls`).
-  - `BTN3` (`GPIO 1`): Toggle verbose `115200` baud Serial telemetry (`[P2v4] ...`).
+  - `BTN2` (`GPIO 39`): Toggle OLED between **Main Screen** (`Status`, `AED/ANO/CUL`, `Cat/Bee/Mal`, `T/H/F0`) and **Diag Screen** (`Live RMS`, `DHT22 T/RH`, `IR1/IR2 OK/POT`, `v5.1 QAT`).
+  - `BTN3` (`GPIO 1`): Toggle verbose `115200` baud Serial telemetry (`[P2v5.1] ...`).
   - `BTN4` (`GPIO 2`, Hold `1.5 s`): Reset all NVS Flash counters to `0` before starting a clean judge demo.
 
 ### 10.2 Step-by-Step 6-Clip Live Acoustic Demo (`demo_audio/` + Mobile `/demo` Hub)
@@ -355,7 +357,7 @@ The script automatically installs `arduino-cli` (if missing), pins `esp32@2.0.17
 Maintaining strict scientific honesty separates publishable Q1 engineering from inflated student prototypes:
 
 1. **Bench Playback vs. Live Caged Mosquito Field Trial:** All ML training and benchmark testing use real peer-reviewed mosquito recordings (*MosquitoSong+*, *HumBugDB*, *ESC-50*), and our bench demo replays these real recordings acoustically into `INMP441`. Live caged *Ae. aegypti* / *An. dirus* / *Cx. quinquefasciatus* entomology chamber validation is explicitly scoped as **Phase-2**.
-2. **Biological `f0` Overlap Among Vector Genera:** In nature, individual *Aedes*, *Anopheles*, and *Culex* females overlap across `420–580 Hz` depending on wing length, gravidity, and flight maneuver. We therefore NEVER claim `100%` species separation from `f0` alone; instead we report **Tier-1 Female Vector Guild Gating (`97.84%`)** as the primary physical actuation guarantee and **Tier-2 6-Class Multi-Genus Attribution (`93.75%`, 4-frame temporal voting)** as epidemiological surveillance.
+2. **Biological `f0` Overlap Among Vector Genera:** In nature, individual *Aedes*, *Anopheles*, and *Culex* females overlap across `420–580 Hz` depending on wing length, gravidity, and flight maneuver. We therefore NEVER claim `100%` species separation from `f0` alone; instead we report **Tier-1 Female Vector Guild Gating (`97.97%` CV / `98.20%` Champion)** as the primary physical actuation guarantee and **Tier-2 6-Class Multi-Genus Attribution (`94.37%` CV / `95.05%` Champion, 4-frame temporal voting)** as epidemiological surveillance.
 3. **Thermal Cue Power Budget (`0.25 W`):** On a `5V` USB rail, the `100 Ohm 5W` ceramic resistor dissipates `0.25 W` (`+2.5°C`), which is breadboard-safe and provides a gentle thermal gradient rather than a full `37°C` human skin emulator.
 4. **Low-SNR Physical Boundary (`0 dB`):** Below `5 dB` AWGN SNR, acoustic wingbeats drop below the noise floor (`18.40%` at `0 dB`). This physically justifies why our Sequential Fan-Muted Gating (`Fan 0% OFF`) is mandatory in every acoustic mosquito trap.
 5. **Phase-2 Roadmap:** (a) Live caged entomology trials with IEDCR/icddr,b collaborators; (b) Solid-state `12V` PTC skin-temp heater (`37°C`) + yeast-sugar `CO2` lure cartridge; (c) On-chip ESP32-S3 Wi-Fi/LoRaWAN dengue hotspot heat-map telemetry; (d) Custom 2-layer PCB + 3D-printed baffled acoustic funnel.
@@ -374,23 +376,23 @@ Maintaining strict scientific honesty separates publishable Q1 engineering from 
 1. **Q: Why didn't you run the suction fan continuously like commercial traps?**  
    **A:** A running `5V` brushless fan produces `150–350 Hz` mechanical + wind noise that masks faint `-50 dB` mosquito wingbeats (our SNR ablation shows accuracy collapses to `18.40%` at `0 dB`). Keeping the fan `0%` OFF during listening preserves `93.87%` clean 6-class accuracy (`100%` Tier-1 Guild) and cuts power draw dramatically.
 2. **Q: Why use `ESP32-S3` instead of an Arduino Uno (`ATmega328P`)?**  
-   **A:** Arduino Uno has only `2 KB` SRAM and no native I2S hardware peripheral — it cannot store a 512-sample double-precision FFT plus a `5,486`-parameter neural network. `ESP32-S3` provides native I2S DMA, dual-core `240 MHz` DSP, `512 KB` internal SRAM, NVS Flash, and runs our full pipeline in `< 1.5 ms` using only `11%` Flash and `9%` RAM.
+   **A:** Arduino Uno has only `2 KB` SRAM and no native I2S hardware peripheral — it cannot store a 512-sample double-precision FFT plus a `7,350`-parameter neural network. `ESP32-S3` provides native I2S DMA, dual-core `240 MHz` DSP, `512 KB` internal SRAM, NVS Flash, and runs our full pipeline in `< 2.0 ms` using only `11%` Flash and `9%` RAM.
 3. **Q: How does your trap handle winter (`18°C`) vs. Bangladeshi summer (`38°C`) outdoors without manual settings?**  
-   **A:** `DHT22` (`GPIO 7`) automatically reads ambient `T_amb` every `2.5 s` and executes **Universal Thermal Spectral Bin Warping** (`bsh = round(7.0*(T_amb - 28.0)/15.625)`), shifting `f0`, spectral centroid, and all `7` FFT subbands onto a `28°C` canonical scale — boosting `34°C` accuracy by **`+49.5%`** and `38°C` by **`+61.9%`**.
+   **A:** `DHT22` (`GPIO 7`) automatically reads ambient `T_amb` every `2.5 s` across `-10°C..+50°C` and executes **Universal Thermal Spectral Bin Warping** (`bsh = round(7.0*(clamp(T_amb,10,45) - 28.0)/15.625)`), shifting `f0`, spectral centroid, and all `7` FFT subbands onto a `28°C` canonical scale — boosting `34°C` accuracy by **`+57.0%`**, `38°C` by **`+66.8%`**, and `42°C` by **`+73.3%`**.
 4. **Q: Why wasn't correcting `f0` alone enough for temperature compensation?**  
-   **A:** Because our 24-feature vector includes 7 frequency subbands and spectral centroid; shifting only `f0` left harmonic energy misaligned across fixed FFT bins (`42.1%` at `34°C`). Warping the FFT bin boundaries themselves aligned the entire spectrum (`91.6%` at `34°C`, `99.0%` Guild).
+   **A:** Because our 24-feature vector includes 7 frequency subbands and spectral centroid; shifting only `f0` left harmonic energy misaligned across fixed FFT bins (`42.1%` at `34°C`). Warping the FFT bin boundaries themselves aligned the entire spectrum (`94.6%` at `34°C`, `99.0%` Guild).
 5. **Q: Can your trap really tell *Aedes*, *Anopheles*, and *Culex* apart with 100% accuracy?**  
-   **A:** No — and we explicitly never claim `100%` species separation because their biological fundamental frequencies overlap in nature. Instead we use a **Two-Tier Hierarchical Model**: **Tier-1 Female Vector Guild (`97.84%`, `100%` Bee Safe)** triggers selective capture, while **Tier-2 4-frame temporal ensemble voting (`93.75%` CV)** estimates genus breakdown (`AED`, `ANO`, `CUL`) for epidemiological tracking.
+   **A:** No — and we explicitly never claim `100%` species separation because their biological fundamental frequencies overlap in nature. Instead we use a **Two-Tier Hierarchical Model**: **Tier-1 Female Vector Guild (`97.97%` CV / `98.20%` Champion, `100%` Bee Safe)** triggers selective capture, while **Tier-2 4-frame temporal ensemble voting (`94.37%` CV / `95.05%` Champion)** estimates genus breakdown (`AED`, `ANO`, `CUL`) for epidemiological tracking.
 6. **Q: Why didn't you test with synthetic sine waves generated in Python?**  
-   **A:** Real mosquitoes have complex harmonic combs (`H2/H1`, `H3/H1`), frequency jitter, and environmental noise; sine-wave tests produce inflated, unpublishable results. All `15,402` training/validation frames come from 4 real datasets (*MosquitoSong+*, *HumBugDB*, *ESC-50*, and live room noise).
-7. **Q: What prevents human speech, birds, car horns, or a nearby sawmill from turning on the fan?**  
-   **A:** Four cascaded defenses: (1) Dynamic RMS + `13 dB` SNR gate, (2) `24`-feature INT8 MLP trained on 17 ESC-50 categories + room noise (`98.96%` noise rejection), (3) Bio-acoustic harmonic & sub-harmonic ratio check (`0.085 <= H2/H1 <= 1.15`, `sub_pk <= 0.58`), and (4) **4-frame pitch-locked streak (`|Δf0| <= 36 Hz`)**. Across `8,981` non-overlapping real ESC-50 frames (exact firmware cadence), false fan triggers were **literally `0`**.
+   **A:** Real mosquitoes have complex harmonic combs (`H2/H1`, `H3/H1`), frequency jitter, and environmental noise; sine-wave tests produce inflated, unpublishable results. All `16,702` training/validation frames come from 4 real datasets (*MosquitoSong+*, *HumBugDB*, *ESC-50*, and live room + vocal-hum recordings).
+7. **Q: What prevents human speech, falsetto humming (`"mew-mew"`), birds, car horns, or a nearby sawmill from turning on the fan?**  
+   **A:** Five cascaded defenses: (1) Dynamic RMS + `13 dB` SNR gate, (2) `24`-feature QAT INT8 MLP trained on 17 ESC-50 categories + room noise + `1,300` real close-mic vocal-hum hard negatives (`99.19%` CV / `99.27%` Champion noise rejection), (3) Chitin wing-edge harmonic guard (`0.085 <= H2/H1 <= 1.15`, `H3/H1 >= 0.095`, `b_1150_2800 >= 0.90`, `sub_pk <= 0.58` — instantly blocking soft vocal roll-off), and (4) **4-frame pitch-locked + anchor-locked streak (`|Δf0| <= 34 Hz` AND `|f0 - anchor_f0| <= 36 Hz`)** blocking smooth vocal glides. Across `8,981` ESC-50 frames AND deliberate close-mic `"mew-mew"` tests, false fan triggers were **literally `0`**.
 8. **Q: How do you guarantee honeybees and pollinators are never killed?**  
    **A:** Dual-layer protection: acoustically, bees beat much lower (`140–280 Hz`) and achieved **`100.00%` Bee Safe (`0/1,100` false triggers)** in 5-fold CV; optically, `Gate #1` (`GPIO 10`) measures insect body transit width (`dt_ms`) and vetoes any slow `26–60 ms` large insect even if background noise overlaps.
 9. **Q: Why did you choose `512` FFT samples at `8,000 Hz` instead of `44.1 kHz`?**  
    **A:** By Nyquist, `8,000 Hz` cleanly covers up to `4,000 Hz` — capturing mosquito fundamentals (`350–1000 Hz`) plus 2nd, 3rd, and 4th harmonics (`<= 3,200 Hz`) while giving fine `15.625 Hz` frequency resolution in just `64.0 ms` (fast enough to catch a mosquito before it flies away).
-10. **Q: Why use Symmetric INT8 quantization instead of floating-point weights?**  
-    **A:** INT8 shrinks weight memory by `4×` (to `5.36 KB`) with virtually zero accuracy loss (`93.75%` INT8 vs. `93.80%` FP32) and requires zero external TFLite runtime library.
+10. **Q: Why use QAT Symmetric INT8 quantization instead of floating-point weights?**  
+    **A:** QAT INT8 shrinks weight memory by `4×` (to `7.18 KB`) with **zero accuracy loss — actually beating FP32 (`94.37%` INT8 vs. `94.36%` FP32 in 5-fold CV)** — and requires zero external TFLite runtime library.
 11. **Q: Why did you put `220 Ohm` resistors on every LED and keep UV LEDs off GPIO pins?**  
     **A:** Direct connection without current-limiting resistors overdrives LEDs and risks burning `ESP32-S3` GPIO drivers (`20 mA` max). With `220 Ohm`, each status LED draws a safe `~5.9 mA` from GPIO, while all 6 UV LEDs draw `~49 mA` total safely from `5Vin`.
 12. **Q: What happens if bright room light or a misadjusted IR potentiometer keeps `HW-201` stuck `LOW`?**  

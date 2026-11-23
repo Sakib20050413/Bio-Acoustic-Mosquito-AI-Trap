@@ -1,11 +1,11 @@
-# 🦟 WingBeat-TinyNet v5.0 — Bio-Acoustic & Optical Pollinator-Safe Mosquito AI Trap
+# 🦟 WingBeat-TinyNet v5.1 — Bio-Acoustic & Optical Pollinator-Safe Mosquito AI Trap
 
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/Hardware%20%26%20Docs-CC%20BY--SA%204.0-lightgrey.svg)](./LICENSE)
 [![License: MIT](https://img.shields.io/badge/Firmware%20%26%20Code-MIT-blue.svg)](./LICENSE-CODE)
 [![Platform: ESP32-S3 N16R8](https://img.shields.io/badge/MCU-ESP32--S3%20N16R8%20(44--Pin)-red.svg)](./firmware/p2_deployment_trap_esp32s3/p2_deployment_trap_esp32s3.ino)
 [![TinyML: 7.18 KB QAT INT8](https://img.shields.io/badge/TinyML-7.18%20KB%20QAT%20INT8-brightgreen.svg)](./ml_pipeline/p2_humbugdb_q1_training_and_snr_eval.py)
-[![Bee Safe: 100.00%](https://img.shields.io/badge/Pollinator%20Safe-100.00%25%20(0%2F1100)-success.svg)](#5-experimental-q1-benchmarks-10-round-qat-int8)
-[![ESC-50 FAR: 0.00%](https://img.shields.io/badge/ESC--50%20False%20Fan%20Triggers-0%20%2F%208%2C981%20(0.00%25)-blueviolet.svg)](#5-experimental-q1-benchmarks-10-round-qat-int8)
+[![Bee Safe: 100.00%](https://img.shields.io/badge/Pollinator%20Safe-100.00%25%20(0%2F1100)-success.svg)](#5-experimental-q1-benchmarks-wingbeat-tinynet-v51-anti-vocal-qat-int8)
+[![ESC-50 FAR: 0.00%](https://img.shields.io/badge/ESC--50%20False%20Fan%20Triggers-0%20%2F%208%2C981%20(0.00%25)-blueviolet.svg)](#5-experimental-q1-benchmarks-wingbeat-tinynet-v51-anti-vocal-qat-int8)
 
 > **A standalone, ~$23 USD (`2,757 BDT`) ESP32-S3 edge-AI mosquito trap** that listens silently with a `512`-point FFT (**Fan `0%` OFF** during listening), adapts automatically to any ambient climate (**`-10°C` to `+50°C`** live `DHT22` Thermal Spectral Bin Warping), distinguishes biting female disease vectors (**Dengue/Chikungunya *Aedes***, **Malaria *Anopheles***, **Filariasis *Culex***) from **beneficial Honeybees (`100%` Bee Safe)** and **non-biting Male mosquitoes**, and triggers a selective **`5.0 s` downward suction pulse** with on-box NVS-persisted OLED genus counters — **zero cloud, zero Wi-Fi required**.
 
@@ -42,15 +42,15 @@
 ## 🧠 1. Core Engineering Innovations (Solving 5 Real Research Gaps)
 
 1. **Sequential Fan-Muted Gating (*"The Stethoscope & The Kitchen Blender"*):**  
-   Commercial suction traps run their electric fan at `100%` duty cycle, burying faint `-50 dB` mosquito wingbeats under motor & wind noise. `WingBeat-TinyNet v5.0` holds the `5V` fan **strictly `0%` OFF** during every `64.0 ms` (`512`-sample @ `8,000 Hz`) I2S listening window. Only after **`4` consecutive pitch-locked frames** (`|Δf0| <= 36 Hz`, `~256 ms`) confirm a biting female vector (`345–655 Hz`) does `GPIO 13` fire a **`5.0 s` downward suction pulse**, followed by a `1.5 s` acoustic cooldown and `i2s_zero_dma_buffer()` flush.
+   Commercial suction traps run their electric fan at `100%` duty cycle, burying faint `-50 dB` mosquito wingbeats under motor & wind noise. `WingBeat-TinyNet v5.1` holds the `5V` fan **strictly `0%` OFF** during every `64.0 ms` (`512`-sample @ `8,000 Hz`) I2S listening window. Only after **`4` consecutive pitch-locked + anchor-locked frames** (`|Δf0| <= 34 Hz` frame-to-frame AND `|f0 - anchor_f0| <= 36 Hz` total drift, `~256 ms`) confirm a biting female vector (`345–655 Hz`) with genuine chitin wing-edge harmonics (`H3/H1 >= 0.095`, `b_1150_2800 >= 0.90`) does `GPIO 13` fire a **`5.0 s` downward suction pulse**, followed by a `1.5 s` acoustic cooldown and `i2s_zero_dma_buffer()` flush.
 2. **Universal `DHT22` Thermal Spectral Bin Warping (`-10°C` to `+50°C` Display | `10°C–45°C` Auto-Warp):**  
    Mosquitoes are ectotherms whose wingbeat fundamental shifts by `~+7.0 Hz/°C` (Villarreal et al., 2017). Rather than requiring any manual temperature setting, `DHT22 (GPIO 7)` measures live ambient `T_amb` every `2.5 s` and warps **not only `f0`**, but the **FFT search band, spectral centroid, and all `7` log-subband boundaries** onto a `28.0°C` canonical coordinate grid (`b_sh = round(7.0 * (clamp(T_amb, 10, 45) - 28.0) / 15.625)`). At `34°C` (Bangladesh summer) accuracy jumps **`+57.0%`** (`37.6% -> 94.6%`); at `42°C` extreme heat it jumps **`+73.3%`** (`15.8% -> 89.1%`)!
-3. **`WingBeat-TinyNet v5.0` — `7.18 KB` 10-Round Multi-Seed QAT INT8 Neural Engine (`24 -> 96 -> 48 -> 6`):**  
-   Zero-dependency pure C++ inference (`< 2.0 ms` per frame, `11%` Flash, `9%` RAM) trained over **10 multi-seed rounds** with label smoothing (`0.025`), mid-training hard-negative focal mining, and `120`-epoch Straight-Through Quantization-Aware Training (QAT) — allowing **Symmetric INT8 (`94.16%` CV) to outperform FP32 (`94.04%`)** on `15,402` real & channel-augmented frames!
+3. **`WingBeat-TinyNet v5.1` — `7.18 KB` Multi-Seed QAT INT8 + 3-Layer Anti-Vocal Defense (`24 -> 96 -> 48 -> 6`):**  
+   Zero-dependency pure C++ inference (`< 2.0 ms` per frame, `11%` Flash, `9%` RAM) trained on **`16,702` real & channel-augmented frames** (including `1,300` real human nasal-hum / `"mew-mew"` vocal-imitation hard negatives) with label smoothing (`0.025`), hard-negative focal mining, and `120`-epoch Straight-Through QAT — allowing **Symmetric INT8 (`94.37%` CV / `95.05%` Champion Holdout) to beat FP32 (`94.36%`)** while achieving **`0` false triggers** against deliberate human vocal imitation, room speech, and all `17` ESC-50 categories (`0 / 8,981` frames)!
 4. **Dual-Layer `100.00%` Pollinator Safety (Acoustic + Optical `dt_ms` Veto):**  
    Honeybees beat at `140–280 Hz` (`0 / 1,100` false vector triggers in 5-fold CV) and are independently verified by `HW-201 IR Gate #1 (GPIO 10)` across a constricted `45 mm` PVC neck: any slow `26–60 ms` large-body transit vetoes fan actuation (`BEE SAFE`, Green LED ON, Fan `0%` OFF).
 5. **100% Honest, Real-Dataset Q1 Evaluation:**  
-   Zero synthetic sine-wave accuracy claims; zero fake `100%` species separation claims from `f0` alone; honest `0.25 W` (`+2.5°C`) ceramic heater disclosure; and live verification on physical hardware (`COM5` NVS live count proof: `AED:8 ANO:1 CUL:8 BEE:5 MAL:6 CAT:1`, `IR:OK/OK`, `T:28.7°C`, `0` room speech false triggers!).
+   Zero synthetic sine-wave accuracy claims; zero fake `100%` species separation claims from `f0` alone; honest `0.25 W` (`+2.5°C`) ceramic heater disclosure; and live verification on physical hardware (`COM5` `[P2v5.1]` telemetry verified: `T:28.4°C`, `H2/H3/BHI` live wing-edge guards active, `IR:OK/OK`, `0` room/vocal-imitation false triggers!).
 
 ---
 
@@ -85,19 +85,19 @@ powershell -ExecutionPolicy Bypass -File .\scripts\home_pc_full_setup.ps1
 ```
 This automatically installs `arduino-cli`, pins `esp32:esp32@2.0.17` + all 4 Arduino libraries (`arduinoFFT`, `DHT sensor library`, `Adafruit Unified Sensor`, `U8g2`), syncs all 3 sketches to `Documents\Arduino\`, creates Python `.venv`, and opens an interactive 1-click menu to **Flash**, **Monitor Serial (`115200`)**, **Launch the Mobile Demo Audio Server (`port 8765`)**, or **Run ML Smoke Tests**.
 
-### Option B: Direct Flash Pre-Compiled `v5.0` Binary (No Recompile Needed!)
+### Option B: Direct Flash Pre-Compiled `v5.1` Binary (No Recompile Needed!)
 - **Right USB-C Port (`UART / CH343`, Recommended — `CDCOnBoot=default`):**
   ```powershell
   arduino-cli upload -p COM5 --fqbn esp32:esp32:esp32s3:CDCOnBoot=default,FlashSize=16M,PSRAM=opi,PartitionScheme=app3M_fat9M_16MB,UploadSpeed=115200 --input-dir compiled_bins/p2_deployment_trap_esp32s3/uart
   ```
 - **Left USB-C Port (`Native USB OTG` — `CDCOnBoot=cdc`):** use `--input-dir compiled_bins/p2_deployment_trap_esp32s3/usb` with `CDCOnBoot=cdc`.
 
-### Option C: Ubuntu Linux Quick Setup & Retrain 10-Round QAT `v5.0`
+### Option C: Ubuntu Linux Quick Setup & Retrain Multi-Seed QAT `v5.1`
 ```bash
 bash scripts/setup_ubuntu_arduino.sh
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r ml_pipeline/requirements.txt
-python3 ml_pipeline/p2_humbugdb_q1_training_and_snr_eval.py --csv ml_pipeline/humbugdb_real_features.csv --out ml_pipeline/p2_export --rounds 10
+python3 ml_pipeline/p2_humbugdb_q1_training_and_snr_eval.py --csv ml_pipeline/humbugdb_real_features.csv --out ml_pipeline/p2_export --rounds 6
 ```
 
 ---
@@ -121,16 +121,16 @@ Open **`http://<YOUR-PC-IP>:8765/demo`** on any smartphone on the same Wi-Fi (or
 
 ---
 
-## 📊 5. Experimental Q1 Benchmarks (`WingBeat-TinyNet v5.0`, 10-Round QAT INT8)
+## 📊 5. Experimental Q1 Benchmarks (`WingBeat-TinyNet v5.1`, Anti-Vocal QAT INT8)
 
-### A. 4-Model 5-Fold Cross-Validation Ablation (`n = 15,402` Real & Channel-Augmented Frames)
+### A. 4-Model 5-Fold Cross-Validation Ablation (`n = 16,702` Real & Channel-Augmented Frames)
 | Model / Baseline | 6-Class Acc | 6-Class Macro-F1 | Tier-1 Guild Acc | Pollinator (Bee) Safe | Noise Rejection |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| A. Bandpass Frequency Rule Only | `54.06%` | `53.52%` | `65.74%` | `92.45%` | `76.71%` |
-| B. Linear Logistic Regression (24-feat) | `82.15%` | `74.57%` | `92.33%` | `99.73%` | `97.07%` |
-| C. `WingBeat-TinyNet v5.0` (`FP32`) | `94.04%` | `91.19%` | `97.98%` | **`100.00%`** | `99.13%` |
-| **D. `WingBeat-TinyNet v5.0` (`QAT INT8`, 5-Fold CV)** | **`94.16%`** | **`91.34%`** | **`98.01%`** | **`100.00%`** | **`99.19%`** |
-| **E. 10-Round QAT Champion (`Holdout n = 2,310`, Deployed)** | **`94.98%`** | **`92.76%`** | **`98.31%`** | **`100.00%`** | **`99.40%`** |
+| A. Bandpass Frequency Rule Only | `52.16%` | `51.48%` | `62.92%` | `92.36%` | `72.38%` |
+| B. Linear Logistic Regression (24-feat) | `83.09%` | `73.92%` | `92.47%` | `99.91%` | `97.59%` |
+| C. `WingBeat-TinyNet v5.1` (`FP32`) | `94.36%` | `91.03%` | `98.01%` | **`100.00%`** | `99.21%` |
+| **D. `WingBeat-TinyNet v5.1` (`QAT INT8`, 5-Fold CV)** | **`94.37%`** | **`91.08%`** | **`97.97%`** | **`100.00%`** | **`99.19%`** |
+| **E. 6-Round QAT Champion (`seed=102`, Holdout `n = 2,505`, Deployed)** | **`95.05%`** | **`92.21%`** | **`98.20%`** | **`100.00%`** | **`99.27%`** |
 
 ### B. Wide-Climate Universal `DHT22` Thermal Spectral Bin Warping (`14°C` to `42°C`)
 | Ambient Temp (`T_amb`) | Without `DHT22` (6-Cls / Guild) | **With Universal `DHT22` Warping** (6-Cls / Guild) | 6-Class Gain |
@@ -142,10 +142,11 @@ Open **`http://<YOUR-PC-IP>:8765/demo`** on any smartphone on the same Wi-Fi (or
 | **`38.0°C`** (Heatwave) | `19.3%` / `85.6%` | **`86.1%`** / **`98.5%`** | **`+66.8%`** |
 | **`42.0°C`** (Extreme Tropical Heat) | `15.8%` / `82.2%` | **`89.1%`** / **`97.5%`** | **`+73.3%`** |
 
-### C. Zero-False-Trigger Real Environmental Noise Audit (Exact `ESP32-S3` `64 ms` Cadence)
+### C. Zero-False-Trigger Real Noise & Anti-Vocal-Imitation Audit (`v5.1`, Exact `ESP32-S3` `64 ms` Cadence)
+- **Human Nasal-Hum / `"Mew-Mew"` Vocal Imitation Stress Test (`37.5 s` real close-mic video):** **`0` False Fan Triggers** at BOTH standard `step=512` AND `2×` harsh overlap `step=256` (`V=0 B=0 M=0`)!
 - **ESC-50 17 Categories (`136` real WAVs, `8,981` non-overlapping frames):** **`0` False Fan Triggers (`0.00%` FAR)** across `car_horn`, `chainsaw`, `chirping_birds`, `clapping`, `coughing`, `crickets`, `crow`, `dog`, `engine`, `hand_saw`, `insects`, `laughing`, `rain`, `rooster`, `siren`, `vacuum_cleaner`, `wind`.
-- **Live Cumilla Room Recordings (`1,715` frames — human speech + ceiling fan + sawmill):** **`0` False Fan Triggers**.
-- **Verified Deployed Checksums:** `wingbeat_q1_int8.h` (`SHA-256: 4e0d124437b052c9`, `33,111 B`, `7.18 KB` INT8 weights), `p2_deployment_trap_esp32s3.ino` (`SHA-256: 16d428ef8e806d92`, `24,009 B`), `UART` binary `355,073 B` (`11%` Flash, `31,040 B` / `9%` RAM).
+- **Live Cumilla Room Recordings (human speech + ceiling fan + sawmill):** **`0` False Fan Triggers** (`step=512` & `256`), while **all `6/6` real bench demo WAVs PASS** under both Clean and iPhone micro-speaker + room-hum playback (`01_Aedes`: Clean `31` / Phone `22`; `02_Anopheles`: `6 / 3`; `03_Culex`: `5 / 13`; `04_Honeybee`: `0` Fan, `5/6 BEE`; `05_Male`: `0` Fan, `11/9 MALE`; `06_ESC50`: `0`).
+- **Verified Deployed `v5.1` Checksums:** `wingbeat_q1_int8.h` (`SHA-256: 83844003fc86b7bb`, `32,962 B`, `7.18 KB` INT8 weights), `p2_deployment_trap_esp32s3.ino` (`SHA-256: d32eb692f658de78`, `24,671 B`), `UART` binary `355,273 B` (`11%` Flash, `31,040 B` / `9%` RAM), `USB` binary `343,789 B` (`10%` Flash, `30,832 B` / `9%` RAM).
 
 ---
 
@@ -153,9 +154,9 @@ Open **`http://<YOUR-PC-IP>:8765/demo`** on any smartphone on the same Wi-Fi (or
 
 | Directory / File | Contents |
 | :--- | :--- |
-| [`firmware/`](./firmware/) | All 3 Arduino sketches: `p2_deployment_trap_esp32s3` (Production `v5.0` + `wingbeat_q1_int8.h`), `p2_hardware_diag`, `p2_acoustic_capture_esp32s3` |
+| [`firmware/`](./firmware/) | All 3 Arduino sketches: `p2_deployment_trap_esp32s3` (Production `v5.1` + `wingbeat_q1_int8.h`), `p2_hardware_diag`, `p2_acoustic_capture_esp32s3` |
 | [`compiled_bins/`](./compiled_bins/) | Ready-to-flash `ESP32-S3` `.bin` binaries for both Right `uart/` and Left `usb/` USB-C ports |
-| [`ml_pipeline/`](./ml_pipeline/) | `p2_humbugdb_q1_training_and_snr_eval.py` (10-Round QAT `v5.0`), `humbugdb_real_features.csv` (`15,402` real frames), `p2_export/v5_10round_training_log.json`, `wingbeat_q1_int8.h`, `requirements.txt` |
+| [`ml_pipeline/`](./ml_pipeline/) | `p2_humbugdb_q1_training_and_snr_eval.py` (Multi-Seed QAT `v5.1`), `humbugdb_real_features.csv` (`16,702` real frames), `p2_export/v5_10round_training_log.json`, `wingbeat_q1_int8.h`, `requirements.txt` |
 | [`demo_audio/`](./demo_audio/) | All `6` continuous `44.1 kHz` real peer-reviewed bench demo WAV files (*MosquitoSong+* & *ESC-50*) |
 | [`enclosure_cad/`](./enclosure_cad/) | `Interactive_3D_PVC_Enclosure_Viewer.html`, `WingBeat_v5_PVC_Trap_Assembly.obj` & `.stl`, `DIY_PVC_and_Compact_PCB_Build_Guide.md`, `generate_pvc_3d_cad.py`, and `renders/` (3 HD `1920×1080` blueprints) |
 | [`media/`](./media/) | `WingBeat_TinyNet_v5_PVC_Suction_Explainer.mp4` (`24s` HD animated explainer w/ real audio) + `Project2_ESP32S3_Mosquito_Trap_3D_Poster.jpg` |
@@ -171,11 +172,11 @@ Open **`http://<YOUR-PC-IP>:8765/demo`** on any smartphone on the same Wi-Fi (or
 - **Hardware, DIY PVC CAD (`.OBJ`/`.STL`), PCB Blueprints, Diagrams, Media & Documentation:** Licensed under [**Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)**](./LICENSE).
 - **Firmware (`.ino`, `.h`) & Software Scripts (`.py`, `.ps1`, `.sh`, `.html`):** Dual-licensed under **CC BY-SA 4.0** and [**MIT License**](./LICENSE-CODE).
 
-If you use this hardware design, Universal `DHT22` Thermal Spectral Bin Warping algorithm, or `WingBeat-TinyNet v5.0` firmware in academic or maker work, please cite:
+If you use this hardware design, Universal `DHT22` Thermal Spectral Bin Warping algorithm, or `WingBeat-TinyNet v5.1` firmware in academic or maker work, please cite:
 ```bibtex
 @misc{rahatul2026wingbeattinynet,
   author       = {Rahatul, Md. Najmus Sakib and Ifag, Nesar Uddin and Towhid, Rayhan Alam and Chowdhury, Md. Fahim Kabir},
-  title        = {WingBeat-TinyNet v5.0: Bio-Acoustic and Optical Pollinator-Safe Mosquito Trap Using ESP32-S3 512-Point FFT and Universal DHT22 Thermal Spectral Bin Warping},
+  title        = {WingBeat-TinyNet v5.1: Bio-Acoustic and Optical Pollinator-Safe Mosquito Trap Using ESP32-S3 512-Point FFT and Universal DHT22 Thermal Spectral Bin Warping},
   year         = {2026},
   institution  = {Bangladesh Army International University of Science and Technology (BAIUST)},
   howpublished = {\url{https://github.com/Sakib20050413/Bio-Acoustic-Mosquito-AI-Trap}},

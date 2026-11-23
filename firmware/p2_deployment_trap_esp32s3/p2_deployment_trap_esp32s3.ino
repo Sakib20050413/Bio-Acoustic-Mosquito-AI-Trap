@@ -79,6 +79,7 @@ uint8_t vector_streak = 0;
 uint8_t male_streak = 0;
 uint8_t pol_streak = 0;
 float prev_vec_f0 = 0.0f;
+float streak_anchor_f0 = 0.0f;
 float sum_p_aed = 0.0f, sum_p_ano = 0.0f, sum_p_cul = 0.0f;
 int held_status_code = 0; // 0=READY, 1=NOISE IGN, 2=BEE SAFE, 3=MALE IGN
 
@@ -297,7 +298,7 @@ void setup() {
 
   dht.begin();
   u8g2.begin();
-  showToastOLED("WingBeat v5.0", "10-Rnd QAT Ready", 400);
+  showToastOLED("WingBeat v5.1", "Anti-Vocal QAT", 400);
 
   // 3-Zone LED Hardware Self-Test on Boot (Green -> Yellow -> Red)
   digitalWrite(LED_GREEN, HIGH);  delay(220); digitalWrite(LED_GREEN, LOW);
@@ -323,7 +324,7 @@ void setup() {
   };
   i2s_driver_install(I2S_NUM_0, &cfg, 0, NULL);
   i2s_set_pin(I2S_NUM_0, &pins);
-  Serial.println("\n=== PROJECT 2 (CSE 326) WINGBEAT-TINYNET v5.0 (6-CLASS Q1 QAT) STARTED ===");
+  Serial.println("\n=== PROJECT 2 (CSE 326) WINGBEAT-TINYNET v5.1 (6-CLASS Q1 QAT + VOCAL GUARD) STARTED ===");
 }
 
 void loop() {
@@ -353,6 +354,7 @@ void loop() {
     digitalWrite(LED_YELLOW, LOW);
     digitalWrite(LED_RED, LOW);
     vector_streak = 0; male_streak = 0; pol_streak = 0;
+    streak_anchor_f0 = 0.0f;
     sum_p_aed = 0.0f; sum_p_ano = 0.0f; sum_p_cul = 0.0f;
     fan_cooldown_until_ms = millis() + FAN_COOLDOWN_MS;
     i2s_zero_dma_buffer(I2S_NUM_0);
@@ -529,8 +531,10 @@ void loop() {
   int tier1 = 0;
   float tier1_prob = probs[0];
 
-  bool vec_harm_ok = (h2_h1 >= 0.085 && h2_h1 <= 1.15 && sub_pk <= 0.58);
-  bool mal_harm_ok = (h2_h1 >= 0.085 && h2_h1 <= 1.15 && sub_pk <= 0.58);
+  // Bio-acoustic wing-edge harmonic guard: real chitin wingbeats ALWAYS carry 3rd harmonic & >1.15 kHz buzz,
+  // whereas human nasal hum / "mew-mew" / falsetto rolls off steeply (h3 < 0.09, b_1150_2800 < 0.85).
+  bool vec_harm_ok = (h2_h1 >= 0.085 && h2_h1 <= 1.15 && h3_h1 >= 0.095 && b_1150_2800 >= 0.90 && sub_pk <= 0.58);
+  bool mal_harm_ok = (h2_h1 >= 0.085 && h2_h1 <= 1.15 && h3_h1 >= 0.080 && b_1150_2800 >= 0.85 && sub_pk <= 0.58);
 
   if (above_floor) {
     if (p_vec >= VEC_PROB_MIN && f0_corr >= 345.0f && f0_corr <= 655.0f && vec_harm_ok) {
@@ -553,21 +557,25 @@ void loop() {
     tier1 = 1;
   }
 
-  // 4-Frame Pitch-Locked Streak + Temporal Ensemble Genus Voting
+  // 4-Frame Pitch-Locked Streak + Total-Drift Anchor Lock (rejects vocal pitch glides like "mew-mew"!)
   if (tier1 == 2) {
-    bool stable_pitch = (vector_streak == 0) || (fabsf(f0_corr - prev_vec_f0) <= 36.0f);
+    bool stable_pitch = (vector_streak == 0) ||
+                        (fabsf(f0_corr - prev_vec_f0) <= 34.0f && fabsf(f0_corr - streak_anchor_f0) <= 36.0f);
     if (stable_pitch) {
+      if (vector_streak == 0) streak_anchor_f0 = f0_corr;
       vector_streak = min((uint8_t)10, (uint8_t)(vector_streak + 1));
       sum_p_aed += probs[2];
       sum_p_ano += probs[3];
       sum_p_cul += probs[4];
     } else {
       vector_streak = 1;
+      streak_anchor_f0 = f0_corr;
       sum_p_aed = probs[2]; sum_p_ano = probs[3]; sum_p_cul = probs[4];
     }
     prev_vec_f0 = f0_corr;
   } else {
     vector_streak = 0;
+    streak_anchor_f0 = 0.0f;
     sum_p_aed = 0.0f; sum_p_ano = 0.0f; sum_p_cul = 0.0f;
   }
   male_streak = (tier1 == 5) ? min((uint8_t)10, (uint8_t)(male_streak + 1)) : 0;
@@ -640,6 +648,7 @@ void loop() {
     digitalWrite(LED_RED, LOW);
     if (caught) { cnt_caught++; prefs.putUInt("cat", cnt_caught); }
     vector_streak = 0; male_streak = 0; pol_streak = 0;
+    streak_anchor_f0 = 0.0f;
     sum_p_aed = 0.0f; sum_p_ano = 0.0f; sum_p_cul = 0.0f;
     held_status_code = 0; status_hold_until_ms = 0;
     fan_cooldown_until_ms = millis() + FAN_COOLDOWN_MS;
@@ -648,9 +657,9 @@ void loop() {
   }
 
   if (serial_verbose && above_floor) {
-    Serial.printf("[P2v5.0] F0:%.1fHz T:%.1fC T1:%d P:%.2f STK:%u [A:%.2f N:%.2f C:%.2f] SNR:%.1f RMS:%.0f H2:%.2f SUB:%.2f IR:%s/%s AED:%lu ANO:%lu CUL:%lu BEE:%lu MAL:%lu CAT:%lu\n",
+    Serial.printf("[P2v5.1] F0:%.1fHz T:%.1fC T1:%d P:%.2f STK:%u [A:%.2f N:%.2f C:%.2f] SNR:%.1f RMS:%.0f H2:%.2f H3:%.2f BHI:%.2f SUB:%.2f IR:%s/%s AED:%lu ANO:%lu CUL:%lu BEE:%lu MAL:%lu CAT:%lu\n",
                   f0_corr, cached_t, tier1, tier1_prob, vector_streak, probs[2], probs[3], probs[4],
-                  snr_db, e_rms, h2_h1, sub_pk,
+                  snr_db, e_rms, h2_h1, h3_h1, b_1150_2800, sub_pk,
                   ir1_stuck ? "POT" : "OK", ir2_stuck ? "POT" : "OK",
                   cnt_aedes, cnt_anoph, cnt_culex, cnt_pollinator, cnt_male, cnt_caught);
   }

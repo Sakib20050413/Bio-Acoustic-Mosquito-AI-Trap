@@ -147,17 +147,17 @@ class BridgeHandler(http.server.BaseHTTPRequestHandler):
                     f'<div style="background:#0f172a;border-left:4px solid {col};padding:12px;border-radius:10px;margin-bottom:12px;">'
                     f'<div style="font-weight:700;font-size:0.98rem;">{html.escape(title)}</div>'
                     f'<div style="font-size:0.8rem;color:#cbd5e1;margin:3px 0 8px;">{html.escape(exp)}</div>'
-                    f'<audio controls playsinline preload="auto" style="width:100%;" src="/demo_audio/{w.name}?v=41"></audio>'
-                    f'<div style="margin-top:6px;"><a href="/demo_audio/{w.name}?v=41" download style="color:#38bdf8;font-size:0.8rem;">Download WAV (44.1 kHz)</a></div>'
+                    f'<audio controls playsinline preload="auto" style="width:100%;" src="/demo_audio/{w.name}?v=51"></audio>'
+                    f'<div style="margin-top:6px;"><a href="/demo_audio/{w.name}?v=51" download style="color:#38bdf8;font-size:0.8rem;">Download WAV (44.1 kHz)</a></div>'
                     f'</div>'
                 )
             body = (
                 '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-                '<title>Project 2 Live Demo Audio Hub v4.1</title>'
+                '<title>Project 2 Live Demo Audio Hub v5.1</title>'
                 '<style>body{font-family:system-ui,-apple-system,sans-serif;margin:0;padding:16px;background:#0f172a;color:#f8fafc;}'
                 '.card{max-width:580px;margin:0 auto;background:#1e293b;border:1px solid #334155;border-radius:14px;padding:18px;}</style></head>'
                 '<body><div class="card"><a href="/" style="color:#38bdf8;text-decoration:none;font-size:0.9rem;">&larr; Back to Camera Upload</a>'
-                '<h1 style="font-size:1.15rem;margin:10px 0 6px;">WingBeat-TinyNet v4.1 — Real Q1 Demo Audio (44.1 kHz)</h1>'
+                '<h1 style="font-size:1.15rem;margin:10px 0 6px;">WingBeat-TinyNet v5.1 — Real Q1 Demo Audio (44.1 kHz)</h1>'
                 '<p style="font-size:0.82rem;color:#94a3b8;margin:0 0 14px;">Hold iPhone speaker 5–10 cm from INMP441 mic (75–90% volume) and tap Play:</p>'
                 + "".join(cards)
                 + '</div></body></html>'

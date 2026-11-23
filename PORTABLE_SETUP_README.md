@@ -1,4 +1,4 @@
-# Project 2 (CSE 326) — WingBeat-TinyNet v4 Portable All-in-One Master Pack
+# Project 2 (CSE 326) — WingBeat-TinyNet v5.1 Portable All-in-One Master Pack
 
 **Unpack on ANY Windows 10/11 or Ubuntu Linux PC — Everything Included!**
 
@@ -7,8 +7,8 @@
 | **Course** | CSE 326 — Microprocessor / Embedded Systems Sessional (BAIUST, Cumilla) |
 | **Team** | Md. Najmus Sakib Rahatul (`1119003`), Nesar Uddin Ifag (`1119004`), Rayhan Alam Towhid (`1119007`) |
 | **Supervisor** | Md. Fahim Kabir Chowdhury (Lecturer, Dept. of CSE, BAIUST) |
-| **Model & Firmware** | `WingBeat-TinyNet v5.0` (10-Round QAT 6-Class INT8 `24->96->48->6` + Universal `DHT22` `-10..+50°C` Thermal Bin Warping) |
-| **Verified Checksums** | `wingbeat_q1_int8.h` (`SHA-256: 4e0d124437b052c9`), `p2_deployment_trap_esp32s3.ino` (`SHA-256: 16d428ef8e806d92`) |
+| **Model & Firmware** | `WingBeat-TinyNet v5.1` (Anti-Vocal QAT 6-Class INT8 `24->96->48->6` + Universal `DHT22` `-10..+50°C` Thermal Bin Warping) |
+| **Verified Checksums** | `wingbeat_q1_int8.h` (`SHA-256: 83844003fc86b7bb`), `p2_deployment_trap_esp32s3.ino` (`SHA-256: d32eb692f658de78`) |
 
 ---
 
@@ -55,7 +55,7 @@ python3 ml_pipeline/p2_humbugdb_q1_training_and_snr_eval.py --csv ml_pipeline/hu
 | **`docs/`** | Additional hardware wiring manual (`Project2_CSE326_Visual_Hardware_and_Breadboard_Wiring_Manual.pdf`), Q1 strict guide PDF, and handoff doc |
 | **`firmware/`** | All 3 verified Arduino sketches (`p2_deployment_trap_esp32s3` + `wingbeat_q1_int8.h`, `p2_hardware_diag`, `p2_acoustic_capture_esp32s3`) |
 | **`compiled_bins/`** | Pre-compiled ESP32-S3 `.bin` binaries (`uart/` & `usb/`) for instant flashing without recompiling |
-| **`ml_pipeline/`** | `p2_humbugdb_q1_training_and_snr_eval.py`, real 4-dataset `15,402`-frame feature CSV (`humbugdb_real_features.csv`), `wingbeat_q1_int8.h`, `requirements.txt` |
+| **`ml_pipeline/`** | `p2_humbugdb_q1_training_and_snr_eval.py`, real 4-dataset `16,702`-frame feature CSV (`humbugdb_real_features.csv`), `wingbeat_q1_int8.h`, `requirements.txt` |
 | **`demo_audio/`** | All `6` verified continuous `44.1 kHz` `8s` live-demo WAV files (*MosquitoSong+* & *ESC-50*, phone-speaker calibrated) |
 | **`diagrams/`** | Interactive 44-pin HTML wiring diagram + 4-page breadboard/funnel PNGs + infographic + yellow button guide |
 | **`scripts/`** | `home_pc_full_setup.ps1`, `phone_cam_bridge.py` (with `/demo` mobile player), `setup_windows_arduino.ps1`, `setup_ubuntu_arduino.sh`, `read_diag.ps1` |

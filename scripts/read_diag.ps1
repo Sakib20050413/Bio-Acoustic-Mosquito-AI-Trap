@@ -1,5 +1,5 @@
 param(
-    [string]$Port = "COM24",
+    [string]$Port = "COM5",
     [int]$Seconds = 4
 )
 $sp = New-Object System.IO.Ports.SerialPort($Port, 115200, "None", 8, "One")
