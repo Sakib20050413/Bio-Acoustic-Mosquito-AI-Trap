@@ -71,8 +71,6 @@ def extract_features_from_audio(signal, fs=8000, t_amb=28.0):
     bf = freqs[k_lo:k_hi]
     rel = int(np.argmax(band))
     pk_bin = k_lo + rel
-    f0_raw = float(bf[rel])
-    f0_corr = float(f0_raw - df_t)
     pk = float(band[rel])
     mag_sum = float(np.sum(band))
     noise_avg = (mag_sum - pk) / max(1, len(band) - 1) + 1e-6
@@ -83,6 +81,34 @@ def extract_features_from_audio(signal, fs=8000, t_amb=28.0):
         hi = min(255, c + 1)
         return float(np.max(spec[lo:hi + 1]))
 
+    # Smartphone micro-speaker octave-jump recovery (v5.2):
+    # Small phone speakers roll off 350-550 Hz so 2*f0 (700-1100 Hz) can exceed f0!
+    # A true 665-1020 Hz Male mosquito has flat noise at 0.5*peak & 1.5*peak;
+    # a Female mosquito whose 2*f0 peaked ALWAYS has sharp tonal peaks at BOTH 0.5*peak (f0) AND 1.5*peak (3*f0).
+    if clamp_k(42) <= pk_bin <= clamp_k(78):
+        hb = pk_bin // 2
+        h3b = (pk_bin * 3) // 2
+        if clamp_k(22) <= hb <= clamp_k(41) and h3b < 250:
+            lo_r = max(5, hb - 1)
+            hi_r = min(80, hb + 1)
+            best_hb = lo_r + int(np.argmax(spec[lo_r:hi_r + 1]))
+            m_half = float(spec[best_hb])
+            sk_half = 0.25 * (spec[max(2, best_hb - 3)] + spec[max(2, best_hb - 2)]
+                              + spec[min(254, best_hb + 2)] + spec[min(254, best_hb + 3)]) + 1e-6
+            lo_3 = max(5, h3b - 1)
+            hi_3 = min(252, h3b + 1)
+            best_3h = lo_3 + int(np.argmax(spec[lo_3:hi_3 + 1]))
+            m_3half = float(spec[best_3h])
+            sk_3h = 0.25 * (spec[max(2, best_3h - 3)] + spec[max(2, best_3h - 2)]
+                            + spec[min(254, best_3h + 2)] + spec[min(254, best_3h + 3)]) + 1e-6
+            if (m_half >= 0.04 * pk and m_half >= 2.2 * sk_half
+                    and m_3half >= 0.08 * pk and m_3half >= 2.2 * sk_3h):
+                pk_bin = best_hb
+                pk = m_half
+
+    f0_raw = float(freqs[pk_bin])
+    f0_corr = float(f0_raw - df_t)
+
     h2_mag = max_around(pk_bin * 2)
     h3_mag = max_around(pk_bin * 3)
     h4_mag = max_around(pk_bin * 4) if pk_bin * 4 < 255 else 0.0
@@ -91,10 +117,14 @@ def extract_features_from_audio(signal, fs=8000, t_amb=28.0):
     h4_h1 = h4_mag / (pk + 1e-6)
     harm_comb = float((pk + h2_mag + h3_mag) / (np.mean(spec[8:130]) * 3.0 + 1e-6))
 
+    # Ceiling-fan-safe sub-harmonic ratio: ignore f0/3 if it falls inside 120-165 Hz ceiling-fan band (< bin 12)
     b2 = max(4, pk_bin // 2)
-    b3 = max(4, pk_bin // 3)
+    b3 = pk_bin // 3
     b23 = max(4, (2 * pk_bin) // 3)
-    sub_pk = float(max(max_around(b2), max(max_around(b3), max_around(b23))) / (pk + 1e-6))
+    sub_mag = max(max_around(b2), max_around(b23))
+    if b3 >= 12:
+        sub_mag = max(sub_mag, max_around(b3))
+    sub_pk = float(sub_mag / (pk + 1e-6))
 
     p = spec ** 2
     e_tot = float(np.sum(p[5:180])) + 1e-8

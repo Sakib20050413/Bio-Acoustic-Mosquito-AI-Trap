@@ -1,766 +1,2132 @@
 {
-  "version": "v5.1",
-  "project": "WingBeat-TinyNet v5.1 \u2014 CSE 326 BAIUST",
+  "version": "v5.2",
+  "project": "WingBeat-TinyNet v5.2 \u2014 100% Real Unlooped Bio-Acoustic Hub",
   "demo_count": 6,
-  "library_count": 46,
+  "library_count": 43,
   "demo": [
     {
       "src": "audio/demo/01_Aedes_aegypti_Dengue_Chikungunya.wav",
       "filename": "01_Aedes_aegypti_Dengue_Chikungunya.wav",
-      "size_kb": 689,
-      "title": "01. Aedes aegypti (Dengue / Chikungunya / Zika)",
+      "title": "01. Aedes albopictus (Asian Tiger Dengue \u2014 5.5s Uncut, iPhone-Proven)",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
       "expect": "AEDES (DENGUE)! -> RED LED + FAN ON 5.0s",
       "color": "#ef4444",
-      "tag": "FEMALE VECTOR",
-      "f0": "505 Hz"
+      "f0": "575 Hz",
+      "duration_s": 5.5,
+      "size_kb": 889,
+      "audit": {
+        "vec": 16,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 16
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 496.5,
+        "h3_med": 0.26,
+        "bhi_med": 2.93
+      },
+      "audit_iphone13pm": {
+        "vec": 1,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 1
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 496.5,
+        "h3_med": 0.85,
+        "bhi_med": 3.57
+      }
     },
     {
       "src": "audio/demo/02_Anopheles_dirus_Malaria.wav",
       "filename": "02_Anopheles_dirus_Malaria.wav",
-      "size_kb": 689,
-      "title": "02. Anopheles dirus (Malaria Vector)",
+      "title": "02. Anopheles dirus (Malaria Vector \u2014 Uncut)",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
       "expect": "ANOPH (MALARIA) -> RED LED + FAN ON 5.0s",
       "color": "#f97316",
-      "tag": "FEMALE VECTOR",
-      "f0": "575 Hz"
+      "f0": "559.0 Hz",
+      "duration_s": 14.0,
+      "size_kb": 1206,
+      "audit": {
+        "vec": 4,
+        "genera": [
+          "ANOPHELES"
+        ],
+        "counts": {
+          "ANOPHELES": 4
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 559.0,
+        "h3_med": 0.26,
+        "bhi_med": 2.91
+      },
+      "audit_iphone13pm": {
+        "vec": 6,
+        "genera": [
+          "ANOPHELES"
+        ],
+        "counts": {
+          "ANOPHELES": 6
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 559.0,
+        "h3_med": 0.59,
+        "bhi_med": 3.79
+      }
     },
     {
       "src": "audio/demo/03_Culex_quinquefasciatus_Filariasis.wav",
       "filename": "03_Culex_quinquefasciatus_Filariasis.wav",
-      "size_kb": 689,
-      "title": "03. Culex quinquefasciatus (Filariasis / JE)",
-      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "expect": "CULEX (FILAR.) -> RED LED + FAN ON 5.0s",
+      "title": "03. Oxford HumBugDB Real Free-Flight Mosquito (44.1 kHz Uncut)",
+      "dataset": "Oxford HumBugDB (NeurIPS 2021)",
+      "source_url": "https://github.com/HumBug-Mosquito/MozzBNN",
+      "expect": "CULEX / VECTOR -> RED LED + FAN ON 5.0s",
       "color": "#eab308",
-      "tag": "FEMALE VECTOR",
-      "f0": "450 Hz"
+      "f0": "621.5 Hz",
+      "duration_s": 12.0,
+      "size_kb": 1034,
+      "audit": {
+        "vec": 9,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 3,
+          "ANOPHELES": 6
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 621.5,
+        "h3_med": 0.5,
+        "bhi_med": 3.25
+      },
+      "audit_iphone13pm": {
+        "vec": 23,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 12,
+          "ANOPHELES": 11
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 605.9,
+        "h3_med": 1.08,
+        "bhi_med": 4.14
+      }
     },
     {
       "src": "audio/demo/04_Pollinator_Honeybee_Spared.wav",
       "filename": "04_Pollinator_Honeybee_Spared.wav",
-      "size_kb": 689,
-      "title": "04. Pollinator Honeybee (Beneficial Insect)",
-      "dataset": "Verified Bio-Acoustic Bee Sample",
+      "title": "04. Real Outdoor Bumblebee / Pollinator (Wikimedia Hummel_bee.ogg)",
+      "dataset": "Wikimedia Commons (100% Real Field)",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Hummel_bee.ogg",
       "expect": "BEE SAFE -> GREEN LED + FAN OFF (0%)",
       "color": "#10b981",
-      "tag": "POLLINATOR SAFE",
-      "f0": "205 Hz"
+      "f0": "324.6 Hz",
+      "duration_s": 12.0,
+      "size_kb": 1034,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 4,
+        "male": 0,
+        "f0_med": 324.6,
+        "h3_med": 0.17,
+        "bhi_med": 1.44
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 824.6,
+        "h3_med": 0.1,
+        "bhi_med": 3.66
+      }
     },
     {
       "src": "audio/demo/05_Male_Mosquito_Ignored.wav",
       "filename": "05_Male_Mosquito_Ignored.wav",
-      "size_kb": 689,
-      "title": "05. Non-Biting Male Mosquito",
+      "title": "05. Real Non-Biting Male Mosquito (7.3s Uncut)",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
       "expect": "MALE IGN -> YELLOW LED + FAN OFF (0%)",
       "color": "#38bdf8",
-      "tag": "NON-BITING MALE",
-      "f0": "840 Hz"
+      "f0": "762.1 Hz",
+      "duration_s": 7.3,
+      "size_kb": 157,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 2,
+        "f0_med": 762.1,
+        "h3_med": 0.19,
+        "bhi_med": 2.58
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 2,
+        "f0_med": 762.1,
+        "h3_med": 0.2,
+        "bhi_med": 3.35
+      }
     },
     {
       "src": "audio/demo/06_ESC50_CarHorn_Birds_Sawmill_Noise.wav",
       "filename": "06_ESC50_CarHorn_Birds_Sawmill_Noise.wav",
-      "size_kb": 775,
       "title": "06. ESC-50 Car Horn + Birds + Chainsaw Noise",
-      "dataset": "ESC-50 Environmental Benchmark (Piczak 2015)",
+      "dataset": "ESC-50 Environmental Benchmark",
+      "source_url": "https://github.com/karolpiczak/ESC-50",
       "expect": "NOISE IGN -> ALL LEDs OFF + FAN OFF (0%)",
       "color": "#94a3b8",
-      "tag": "ZERO FALSE TRIGGER",
-      "f0": "Broadband"
+      "f0": "168.4 Hz",
+      "duration_s": 9.0,
+      "size_kb": 775,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 168.4,
+        "h3_med": 0.46,
+        "bhi_med": 2.2
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 137.1,
+        "h3_med": 0.17,
+        "bhi_med": 3.24
+      }
     }
   ],
   "library": [
     {
-      "src": "audio/library/01_Aedes_aegypti_Dengue_Female/01_01_Aedes_aegypti_5D_cut2.wav",
-      "filename": "01_01_Aedes_aegypti_5D_cut2.wav",
-      "title": "Aedes aegypti Female #1 (5D_cut2)",
+      "rel_path": "01_Aedes_aegypti_Dengue_Female/01_01_Aedes_aegypti_5D_cut24_UNLOOPED.wav",
+      "src": "audio/library/01_Aedes_aegypti_Dengue_Female/01_01_Aedes_aegypti_5D_cut24_UNLOOPED.wav",
+      "folder": "01_Aedes_aegypti_Dengue_Female",
+      "filename": "01_01_Aedes_aegypti_5D_cut24_UNLOOPED.wav",
+      "title": "Aedes aegypti Female #1 (5D_cut24, Uncut)",
       "category": "aedes",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Ae.Aegypti_1F_5D_25C_SmallCylinder_LowMic_cut24_16bit.wav",
+      "duration_s": 10.3,
       "expect": "AEDES (DENGUE) -> FAN ON 5.0s",
+      "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
       "color": "#ef4444",
+      "expect_color": "#ef4444",
+      "f0": 496.5,
+      "h3": 0.26,
+      "bhi": 2.93,
+      "size_kb": 889,
+      "audit": {
+        "vec": 16,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 16
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 496.5,
+        "h3_med": 0.26,
+        "bhi_med": 2.93
+      },
+      "audit_iphone13pm": {
+        "vec": 1,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 1
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 496.5,
+        "h3_med": 0.85,
+        "bhi_med": 3.57
+      }
+    },
+    {
+      "rel_path": "01_Aedes_aegypti_Dengue_Female/01_02_Aedes_aegypti_5D_cut5_UNLOOPED.wav",
+      "src": "audio/library/01_Aedes_aegypti_Dengue_Female/01_02_Aedes_aegypti_5D_cut5_UNLOOPED.wav",
+      "folder": "01_Aedes_aegypti_Dengue_Female",
+      "filename": "01_02_Aedes_aegypti_5D_cut5_UNLOOPED.wav",
+      "title": "Aedes aegypti Female #2 (5D_cut5, Uncut)",
+      "category": "aedes",
+      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Ae.Aegypti_1F_5D_25C_SmallCylinder_LowMic_cut5_16bit.wav",
+      "duration_s": 6.2,
+      "expect": "AEDES (DENGUE) -> FAN ON 5.0s",
+      "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
+      "color": "#ef4444",
+      "expect_color": "#ef4444",
       "f0": 480.9,
-      "h3": 0.25,
-      "bhi": 2.45,
-      "vec_triggers": 18,
-      "size_kb": 689
-    },
-    {
-      "src": "audio/library/01_Aedes_aegypti_Dengue_Female/01_02_Aedes_aegypti_21D_cut2.wav",
-      "filename": "01_02_Aedes_aegypti_21D_cut2.wav",
-      "title": "Aedes aegypti Female #2 (21D_cut2)",
-      "category": "aedes",
-      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
-      "expect": "AEDES (DENGUE) -> FAN ON 5.0s",
-      "color": "#ef4444",
-      "f0": 527.8,
       "h3": 0.22,
-      "bhi": 2.13,
-      "vec_triggers": 10,
-      "size_kb": 689
+      "bhi": 2.36,
+      "size_kb": 533,
+      "audit": {
+        "vec": 13,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 13
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 480.9,
+        "h3_med": 0.22,
+        "bhi_med": 2.36
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 480.9,
+        "h3_med": 1.12,
+        "bhi_med": 3.45
+      }
     },
     {
-      "src": "audio/library/01_Aedes_aegypti_Dengue_Female/01_03_Aedes_aegypti_5D_cut39.wav",
-      "filename": "01_03_Aedes_aegypti_5D_cut39.wav",
-      "title": "Aedes aegypti Female #3 (5D_cut39)",
+      "rel_path": "01_Aedes_aegypti_Dengue_Female/01_03_Aedes_aegypti_5D_cut24_UNLOOPED.wav",
+      "src": "audio/library/01_Aedes_aegypti_Dengue_Female/01_03_Aedes_aegypti_5D_cut24_UNLOOPED.wav",
+      "folder": "01_Aedes_aegypti_Dengue_Female",
+      "filename": "01_03_Aedes_aegypti_5D_cut24_UNLOOPED.wav",
+      "title": "Aedes aegypti Female #3 (5D_cut24, Uncut)",
       "category": "aedes",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Ae.Aegypti_1F_5D_25C_SmallCylinder_cut24_16bit.wav",
+      "duration_s": 10.3,
       "expect": "AEDES (DENGUE) -> FAN ON 5.0s",
+      "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
       "color": "#ef4444",
-      "f0": 512.1,
-      "h3": 0.22,
-      "bhi": 2.55,
-      "vec_triggers": 16,
-      "size_kb": 689
+      "expect_color": "#ef4444",
+      "f0": 496.5,
+      "h3": 0.23,
+      "bhi": 2.62,
+      "size_kb": 889,
+      "audit": {
+        "vec": 7,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 7
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 496.5,
+        "h3_med": 0.23,
+        "bhi_med": 2.62
+      },
+      "audit_iphone13pm": {
+        "vec": 1,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 1
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 496.5,
+        "h3_med": 0.98,
+        "bhi_med": 3.73
+      }
     },
     {
-      "src": "audio/library/01_Aedes_aegypti_Dengue_Female/01_04_Aedes_aegypti_5D_cut44.wav",
-      "filename": "01_04_Aedes_aegypti_5D_cut44.wav",
-      "title": "Aedes aegypti Female #4 (5D_cut44)",
+      "rel_path": "01_Aedes_aegypti_Dengue_Female/01_04_Aedes_aegypti_5D_cut46_UNLOOPED.wav",
+      "src": "audio/library/01_Aedes_aegypti_Dengue_Female/01_04_Aedes_aegypti_5D_cut46_UNLOOPED.wav",
+      "folder": "01_Aedes_aegypti_Dengue_Female",
+      "filename": "01_04_Aedes_aegypti_5D_cut46_UNLOOPED.wav",
+      "title": "Aedes aegypti Female #4 (5D_cut46, Uncut)",
       "category": "aedes",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Ae.Aegypti_1F_5D_25C_SmallCylinder_LowMic_cut46_16bit.wav",
+      "duration_s": 4.3,
       "expect": "AEDES (DENGUE) -> FAN ON 5.0s",
+      "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
       "color": "#ef4444",
-      "f0": 512.1,
-      "h3": 0.27,
-      "bhi": 2.55,
-      "vec_triggers": 16,
-      "size_kb": 689
+      "expect_color": "#ef4444",
+      "f0": 496.5,
+      "h3": 0.31,
+      "bhi": 3.11,
+      "size_kb": 369,
+      "audit": {
+        "vec": 6,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 6
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 496.5,
+        "h3_med": 0.31,
+        "bhi_med": 3.11
+      },
+      "audit_iphone13pm": {
+        "vec": 1,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 1
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 496.5,
+        "h3_med": 1.39,
+        "bhi_med": 3.99
+      }
     },
     {
-      "src": "audio/library/01_Aedes_aegypti_Dengue_Female/01_05_Aedes_aegypti_5D_cut9.wav",
-      "filename": "01_05_Aedes_aegypti_5D_cut9.wav",
-      "title": "Aedes aegypti Female #5 (5D_cut9)",
+      "rel_path": "01_Aedes_aegypti_Dengue_Female/01_05_Aedes_aegypti_5D_cut5_UNLOOPED.wav",
+      "src": "audio/library/01_Aedes_aegypti_Dengue_Female/01_05_Aedes_aegypti_5D_cut5_UNLOOPED.wav",
+      "folder": "01_Aedes_aegypti_Dengue_Female",
+      "filename": "01_05_Aedes_aegypti_5D_cut5_UNLOOPED.wav",
+      "title": "Aedes aegypti Female #5 (5D_cut5, Uncut)",
       "category": "aedes",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Ae.Aegypti_1F_5D_25C_SmallCylinder_cut5_16bit.wav",
+      "duration_s": 6.2,
       "expect": "AEDES (DENGUE) -> FAN ON 5.0s",
+      "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
       "color": "#ef4444",
+      "expect_color": "#ef4444",
       "f0": 480.9,
-      "h3": 0.2,
-      "bhi": 2.14,
-      "vec_triggers": 15,
-      "size_kb": 689
+      "h3": 0.24,
+      "bhi": 2.48,
+      "size_kb": 533,
+      "audit": {
+        "vec": 6,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 6
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 480.9,
+        "h3_med": 0.24,
+        "bhi_med": 2.48
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 480.9,
+        "h3_med": 1.24,
+        "bhi_med": 3.5
+      }
     },
     {
-      "src": "audio/library/01_Aedes_aegypti_Dengue_Female/01_06_Aedes_aegypti_5D_cut27.wav",
-      "filename": "01_06_Aedes_aegypti_5D_cut27.wav",
-      "title": "Aedes aegypti Female #6 (5D_cut27)",
+      "rel_path": "02_Aedes_albopictus_Tiger_Female/02_01_Aedes_albopictus_14D_Cut19_UNLOOPED.wav",
+      "src": "audio/library/02_Aedes_albopictus_Tiger_Female/02_01_Aedes_albopictus_14D_Cut19_UNLOOPED.wav",
+      "folder": "02_Aedes_albopictus_Tiger_Female",
+      "filename": "02_01_Aedes_albopictus_14D_Cut19_UNLOOPED.wav",
+      "title": "Aedes albopictus Tiger Female #1 (14D_Cut19, Uncut)",
       "category": "aedes",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Ae.Albopictus_1F_14D_25C_SmallCylinder_LowMic_Cut19_16bit.wav",
+      "duration_s": 5.5,
       "expect": "AEDES (DENGUE) -> FAN ON 5.0s",
+      "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
       "color": "#ef4444",
-      "f0": 512.1,
-      "h3": 0.19,
-      "bhi": 2.27,
-      "vec_triggers": 15,
-      "size_kb": 689
-    },
-    {
-      "src": "audio/library/02_Aedes_albopictus_Tiger_Female/02_01_Aedes_albopictus_14D_Cut18.wav",
-      "filename": "02_01_Aedes_albopictus_14D_Cut18.wav",
-      "title": "Aedes albopictus (Asian Tiger) Female #1 (14D_Cut18)",
-      "category": "aedes",
-      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
-      "expect": "AEDES (DENGUE) -> FAN ON 5.0s",
-      "color": "#ef4444",
-      "f0": 574.6,
-      "h3": 0.3,
-      "bhi": 2.46,
-      "vec_triggers": 30,
-      "size_kb": 689
-    },
-    {
-      "src": "audio/library/02_Aedes_albopictus_Tiger_Female/02_02_Aedes_albopictus_14D_Cut17.wav",
-      "filename": "02_02_Aedes_albopictus_14D_Cut17.wav",
-      "title": "Aedes albopictus (Asian Tiger) Female #2 (14D_Cut17)",
-      "category": "aedes",
-      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
-      "expect": "AEDES (DENGUE) -> FAN ON 5.0s",
-      "color": "#ef4444",
-      "f0": 590.2,
-      "h3": 0.29,
-      "bhi": 2.39,
-      "vec_triggers": 30,
-      "size_kb": 689
-    },
-    {
-      "src": "audio/library/02_Aedes_albopictus_Tiger_Female/02_03_Aedes_albopictus_14D_Cut17.wav",
-      "filename": "02_03_Aedes_albopictus_14D_Cut17.wav",
-      "title": "Aedes albopictus (Asian Tiger) Female #3 (14D_Cut17)",
-      "category": "aedes",
-      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
-      "expect": "AEDES (DENGUE) -> FAN ON 5.0s",
-      "color": "#ef4444",
-      "f0": 590.2,
-      "h3": 0.32,
-      "bhi": 2.42,
-      "vec_triggers": 24,
-      "size_kb": 689
-    },
-    {
-      "src": "audio/library/02_Aedes_albopictus_Tiger_Female/02_04_Aedes_albopictus_14D_Cut19.wav",
-      "filename": "02_04_Aedes_albopictus_14D_Cut19.wav",
-      "title": "Aedes albopictus (Asian Tiger) Female #4 (14D_Cut19)",
-      "category": "aedes",
-      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
-      "expect": "AEDES (DENGUE) -> FAN ON 5.0s",
-      "color": "#ef4444",
+      "expect_color": "#ef4444",
       "f0": 574.6,
       "h3": 0.36,
-      "bhi": 2.45,
-      "vec_triggers": 12,
-      "size_kb": 689
+      "bhi": 2.98,
+      "size_kb": 472,
+      "audit": {
+        "vec": 19,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 15,
+          "ANOPHELES": 4
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 574.6,
+        "h3_med": 0.36,
+        "bhi_med": 2.98
+      },
+      "audit_iphone13pm": {
+        "vec": 18,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 8,
+          "ANOPHELES": 10
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 574.6,
+        "h3_med": 1.12,
+        "bhi_med": 4.05
+      }
     },
     {
-      "src": "audio/library/02_Aedes_albopictus_Tiger_Female/02_05_Aedes_albopictus_14D_Cut18.wav",
-      "filename": "02_05_Aedes_albopictus_14D_Cut18.wav",
-      "title": "Aedes albopictus (Asian Tiger) Female #5 (14D_Cut18)",
+      "rel_path": "02_Aedes_albopictus_Tiger_Female/02_02_Aedes_albopictus_14D_Cut18_UNLOOPED.wav",
+      "src": "audio/library/02_Aedes_albopictus_Tiger_Female/02_02_Aedes_albopictus_14D_Cut18_UNLOOPED.wav",
+      "folder": "02_Aedes_albopictus_Tiger_Female",
+      "filename": "02_02_Aedes_albopictus_14D_Cut18_UNLOOPED.wav",
+      "title": "Aedes albopictus Tiger Female #2 (14D_Cut18, Uncut)",
       "category": "aedes",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Ae.Albopictus_1F_14D_25C_SmallCylinder_LowMic_Cut18_16bit.wav",
+      "duration_s": 4.6,
       "expect": "AEDES (DENGUE) -> FAN ON 5.0s",
+      "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
       "color": "#ef4444",
+      "expect_color": "#ef4444",
       "f0": 574.6,
       "h3": 0.35,
-      "bhi": 2.48,
-      "vec_triggers": 10,
-      "size_kb": 689
+      "bhi": 2.94,
+      "size_kb": 397,
+      "audit": {
+        "vec": 18,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 18
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 574.6,
+        "h3_med": 0.35,
+        "bhi_med": 2.94
+      },
+      "audit_iphone13pm": {
+        "vec": 15,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 7,
+          "ANOPHELES": 8
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 574.6,
+        "h3_med": 1.05,
+        "bhi_med": 4.12
+      }
     },
     {
-      "src": "audio/library/03_Anopheles_Malaria_Female/03_01_Anopheles_dirus_14D_cut10.wav",
-      "filename": "03_01_Anopheles_dirus_14D_cut10.wav",
-      "title": "Anopheles dirus (Malaria) Female #1 (14D_cut10)",
-      "category": "anopheles",
+      "rel_path": "02_Aedes_albopictus_Tiger_Female/02_03_Aedes_albopictus_14D_Cut16_UNLOOPED.wav",
+      "src": "audio/library/02_Aedes_albopictus_Tiger_Female/02_03_Aedes_albopictus_14D_Cut16_UNLOOPED.wav",
+      "folder": "02_Aedes_albopictus_Tiger_Female",
+      "filename": "02_03_Aedes_albopictus_14D_Cut16_UNLOOPED.wav",
+      "title": "Aedes albopictus Tiger Female #3 (14D_Cut16, Uncut)",
+      "category": "aedes",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
-      "expect": "ANOPH (MALARIA) -> FAN ON 5.0s",
-      "color": "#f97316",
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Ae.Albopictus_1F_14D_25C_SmallCylinder_LowMic_Cut16_16bit.wav",
+      "duration_s": 7.5,
+      "expect": "AEDES (DENGUE) -> FAN ON 5.0s",
+      "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
+      "color": "#ef4444",
+      "expect_color": "#ef4444",
+      "f0": 590.2,
+      "h3": 0.35,
+      "bhi": 3.65,
+      "size_kb": 648,
+      "audit": {
+        "vec": 14,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 12,
+          "ANOPHELES": 2
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 590.2,
+        "h3_med": 0.35,
+        "bhi_med": 3.65
+      },
+      "audit_iphone13pm": {
+        "vec": 13,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 12,
+          "ANOPHELES": 1
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 590.2,
+        "h3_med": 0.88,
+        "bhi_med": 4.3
+      }
+    },
+    {
+      "rel_path": "02_Aedes_albopictus_Tiger_Female/02_04_Aedes_albopictus_14D_Cut18_UNLOOPED.wav",
+      "src": "audio/library/02_Aedes_albopictus_Tiger_Female/02_04_Aedes_albopictus_14D_Cut18_UNLOOPED.wav",
+      "folder": "02_Aedes_albopictus_Tiger_Female",
+      "filename": "02_04_Aedes_albopictus_14D_Cut18_UNLOOPED.wav",
+      "title": "Aedes albopictus Tiger Female #4 (14D_Cut18, Uncut)",
+      "category": "aedes",
+      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Ae.Albopictus_1F_14D_25C_SmallCylinder_Cut18_16bit.wav",
+      "duration_s": 4.6,
+      "expect": "AEDES (DENGUE) -> FAN ON 5.0s",
+      "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
+      "color": "#ef4444",
+      "expect_color": "#ef4444",
+      "f0": 574.6,
+      "h3": 0.31,
+      "bhi": 2.73,
+      "size_kb": 396,
+      "audit": {
+        "vec": 15,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 7,
+          "ANOPHELES": 8
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 574.6,
+        "h3_med": 0.31,
+        "bhi_med": 2.73
+      },
+      "audit_iphone13pm": {
+        "vec": 14,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 8,
+          "ANOPHELES": 6
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 574.6,
+        "h3_med": 0.94,
+        "bhi_med": 4.02
+      }
+    },
+    {
+      "rel_path": "02_Aedes_albopictus_Tiger_Female/02_05_Aedes_albopictus_14D_Cut34_UNLOOPED.wav",
+      "src": "audio/library/02_Aedes_albopictus_Tiger_Female/02_05_Aedes_albopictus_14D_Cut34_UNLOOPED.wav",
+      "folder": "02_Aedes_albopictus_Tiger_Female",
+      "filename": "02_05_Aedes_albopictus_14D_Cut34_UNLOOPED.wav",
+      "title": "Aedes albopictus Tiger Female #5 (14D_Cut34, Uncut)",
+      "category": "aedes",
+      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Ae.Albopictus_1F_14D_25C_SmallCylinder_Cut34_16bit.wav",
+      "duration_s": 8.3,
+      "expect": "AEDES (DENGUE) -> FAN ON 5.0s",
+      "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
+      "color": "#ef4444",
+      "expect_color": "#ef4444",
       "f0": 605.9,
-      "h3": 0.27,
-      "bhi": 2.67,
-      "vec_triggers": 28,
-      "size_kb": 689
+      "h3": 0.31,
+      "bhi": 3.47,
+      "size_kb": 717,
+      "audit": {
+        "vec": 6,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 2,
+          "ANOPHELES": 4
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 605.9,
+        "h3_med": 0.31,
+        "bhi_med": 3.47
+      },
+      "audit_iphone13pm": {
+        "vec": 11,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 6,
+          "ANOPHELES": 5
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 605.9,
+        "h3_med": 0.73,
+        "bhi_med": 4.24
+      }
     },
     {
-      "src": "audio/library/03_Anopheles_Malaria_Female/03_02_Anopheles_dirus_14D_cut3.wav",
-      "filename": "03_02_Anopheles_dirus_14D_cut3.wav",
-      "title": "Anopheles dirus (Malaria) Female #2 (14D_cut3)",
+      "rel_path": "03_Anopheles_Malaria_Female/03_01_Anopheles_dirus_14D_cut3_UNLOOPED.wav",
+      "src": "audio/library/03_Anopheles_Malaria_Female/03_01_Anopheles_dirus_14D_cut3_UNLOOPED.wav",
+      "folder": "03_Anopheles_Malaria_Female",
+      "filename": "03_01_Anopheles_dirus_14D_cut3_UNLOOPED.wav",
+      "title": "Anopheles dirus Malaria Female #1 (14D_cut3, Uncut)",
       "category": "anopheles",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 10.0,
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "An.Dirus_1F_14D_25C_SmallCylinder_cut3_16bit.wav",
+      "duration_s": 14.0,
       "expect": "ANOPH (MALARIA) -> FAN ON 5.0s",
+      "expect_badge": "ANOPH (MALARIA) -> FAN ON 5.0s",
       "color": "#f97316",
+      "expect_color": "#f97316",
       "f0": 559.0,
       "h3": 0.26,
-      "bhi": 2.5,
-      "vec_triggers": 7,
-      "size_kb": 861
+      "bhi": 2.91,
+      "size_kb": 1206,
+      "audit": {
+        "vec": 4,
+        "genera": [
+          "ANOPHELES"
+        ],
+        "counts": {
+          "ANOPHELES": 4
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 559.0,
+        "h3_med": 0.26,
+        "bhi_med": 2.91
+      },
+      "audit_iphone13pm": {
+        "vec": 6,
+        "genera": [
+          "ANOPHELES"
+        ],
+        "counts": {
+          "ANOPHELES": 6
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 559.0,
+        "h3_med": 0.59,
+        "bhi_med": 3.79
+      }
     },
     {
-      "src": "audio/library/03_Anopheles_Malaria_Female/03_03_Anopheles_dirus_14D_cut1.wav",
-      "filename": "03_03_Anopheles_dirus_14D_cut1.wav",
-      "title": "Anopheles dirus (Malaria) Female #3 (14D_cut1)",
+      "rel_path": "03_Anopheles_Malaria_Female/03_02_Anopheles_dirus_14D_cut21_UNLOOPED.wav",
+      "src": "audio/library/03_Anopheles_Malaria_Female/03_02_Anopheles_dirus_14D_cut21_UNLOOPED.wav",
+      "folder": "03_Anopheles_Malaria_Female",
+      "filename": "03_02_Anopheles_dirus_14D_cut21_UNLOOPED.wav",
+      "title": "Anopheles dirus Malaria Female #2 (14D_cut21, Uncut)",
       "category": "anopheles",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "An.Dirus_1F_14D_25C_SmallCylinder_cut21_16bit.wav",
+      "duration_s": 2.5,
       "expect": "ANOPH (MALARIA) -> FAN ON 5.0s",
+      "expect_badge": "ANOPH (MALARIA) -> FAN ON 5.0s",
       "color": "#f97316",
+      "expect_color": "#f97316",
       "f0": 574.6,
-      "h3": 0.27,
-      "bhi": 2.7,
-      "vec_triggers": 7,
-      "size_kb": 689
-    },
-    {
-      "src": "audio/library/03_Anopheles_Malaria_Female/03_04_Anopheles_dirus_14D_cut47.wav",
-      "filename": "03_04_Anopheles_dirus_14D_cut47.wav",
-      "title": "Anopheles dirus (Malaria) Female #4 (14D_cut47)",
-      "category": "anopheles",
-      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
-      "expect": "ANOPH (MALARIA) -> FAN ON 5.0s",
-      "color": "#f97316",
-      "f0": 590.2,
-      "h3": 0.24,
-      "bhi": 2.87,
-      "vec_triggers": 6,
-      "size_kb": 689
-    },
-    {
-      "src": "audio/library/03_Anopheles_Malaria_Female/03_05_Anopheles_dirus_14D_cut19.wav",
-      "filename": "03_05_Anopheles_dirus_14D_cut19.wav",
-      "title": "Anopheles dirus (Malaria) Female #5 (14D_cut19)",
-      "category": "anopheles",
-      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
-      "expect": "ANOPH (MALARIA) -> FAN ON 5.0s",
-      "color": "#f97316",
-      "f0": 590.2,
-      "h3": 0.16,
-      "bhi": 2.34,
-      "vec_triggers": 6,
-      "size_kb": 689
-    },
-    {
-      "src": "audio/library/04_Culex_Filariasis_Female/04_01_Culex_quinq_14D_Cut36.wav",
-      "filename": "04_01_Culex_quinq_14D_Cut36.wav",
-      "title": "Culex quinquefasciatus Female #1 (14D_Cut36)",
-      "category": "culex",
-      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 10.0,
-      "expect": "CULEX (FILAR.) -> FAN ON 5.0s",
-      "color": "#eab308",
-      "f0": 449.6,
       "h3": 0.29,
-      "bhi": 2.44,
-      "vec_triggers": 22,
-      "size_kb": 861
+      "bhi": 3.11,
+      "size_kb": 213,
+      "audit": {
+        "vec": 2,
+        "genera": [
+          "ANOPHELES"
+        ],
+        "counts": {
+          "ANOPHELES": 2
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 574.6,
+        "h3_med": 0.29,
+        "bhi_med": 3.11
+      },
+      "audit_iphone13pm": {
+        "vec": 3,
+        "genera": [
+          "ANOPHELES"
+        ],
+        "counts": {
+          "ANOPHELES": 3
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 215.2,
+        "h3_med": 0.43,
+        "bhi_med": 3.89
+      }
     },
     {
-      "src": "audio/library/04_Culex_Filariasis_Female/04_02_Culex_quinq_14D_cut23.wav",
-      "filename": "04_02_Culex_quinq_14D_cut23.wav",
-      "title": "Culex quinquefasciatus Female #2 (14D_cut23)",
+      "rel_path": "04_Culex_and_HumBugDB_FreeFlight/04_01_Culex_quinq_14D_Cut36_UNLOOPED.wav",
+      "src": "audio/library/04_Culex_and_HumBugDB_FreeFlight/04_01_Culex_quinq_14D_Cut36_UNLOOPED.wav",
+      "folder": "04_Culex_and_HumBugDB_FreeFlight",
+      "filename": "04_01_Culex_quinq_14D_Cut36_UNLOOPED.wav",
+      "title": "Culex quinquefasciatus Female #1 (14D_Cut36, Uncut)",
       "category": "culex",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Cx.Quin_1F_14D_25C_SmallCylinder_Cut36_16bit.wav",
+      "duration_s": 14.0,
       "expect": "CULEX (FILAR.) -> FAN ON 5.0s",
+      "expect_badge": "CULEX (FILAR.) -> FAN ON 5.0s",
       "color": "#eab308",
-      "f0": 434.0,
-      "h3": 0.27,
-      "bhi": 2.4,
-      "vec_triggers": 18,
-      "size_kb": 689
-    },
-    {
-      "src": "audio/library/04_Culex_Filariasis_Female/04_03_Culex_quinq_14D_Cut12.wav",
-      "filename": "04_03_Culex_quinq_14D_Cut12.wav",
-      "title": "Culex quinquefasciatus Female #3 (14D_Cut12)",
-      "category": "culex",
-      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
-      "expect": "CULEX (FILAR.) -> FAN ON 5.0s",
-      "color": "#eab308",
+      "expect_color": "#eab308",
       "f0": 449.6,
-      "h3": 0.29,
-      "bhi": 2.5,
-      "vec_triggers": 19,
-      "size_kb": 689
+      "h3": 0.3,
+      "bhi": 2.64,
+      "size_kb": 1206,
+      "audit": {
+        "vec": 32,
+        "genera": [
+          "CULEX"
+        ],
+        "counts": {
+          "CULEX": 32
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 449.6,
+        "h3_med": 0.3,
+        "bhi_med": 2.64
+      },
+      "audit_iphone13pm": {
+        "vec": 1,
+        "genera": [
+          "CULEX"
+        ],
+        "counts": {
+          "CULEX": 1
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 449.6,
+        "h3_med": 2.04,
+        "bhi_med": 3.83
+      }
     },
     {
-      "src": "audio/library/04_Culex_Filariasis_Female/04_04_Culex_quinq_14D_Cut5.wav",
-      "filename": "04_04_Culex_quinq_14D_Cut5.wav",
-      "title": "Culex quinquefasciatus Female #4 (14D_Cut5)",
+      "rel_path": "04_Culex_and_HumBugDB_FreeFlight/04_02_Culex_quinq_14D_Cut26_UNLOOPED.wav",
+      "src": "audio/library/04_Culex_and_HumBugDB_FreeFlight/04_02_Culex_quinq_14D_Cut26_UNLOOPED.wav",
+      "folder": "04_Culex_and_HumBugDB_FreeFlight",
+      "filename": "04_02_Culex_quinq_14D_Cut26_UNLOOPED.wav",
+      "title": "Culex quinquefasciatus Female #2 (14D_Cut26, Uncut)",
       "category": "culex",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Cx.Quin_1F_14D_25C_SmallCylinder_Cut26_16bit.wav",
+      "duration_s": 10.8,
       "expect": "CULEX (FILAR.) -> FAN ON 5.0s",
+      "expect_badge": "CULEX (FILAR.) -> FAN ON 5.0s",
       "color": "#eab308",
+      "expect_color": "#eab308",
       "f0": 449.6,
-      "h3": 0.33,
-      "bhi": 2.61,
-      "vec_triggers": 18,
-      "size_kb": 689
+      "h3": 0.3,
+      "bhi": 2.81,
+      "size_kb": 932,
+      "audit": {
+        "vec": 13,
+        "genera": [
+          "CULEX"
+        ],
+        "counts": {
+          "CULEX": 13
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 449.6,
+        "h3_med": 0.3,
+        "bhi_med": 2.81
+      },
+      "audit_iphone13pm": {
+        "vec": 1,
+        "genera": [
+          "CULEX"
+        ],
+        "counts": {
+          "CULEX": 1
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 449.6,
+        "h3_med": 2.02,
+        "bhi_med": 4.0
+      }
     },
     {
-      "src": "audio/library/04_Culex_Filariasis_Female/04_05_Culex_quinq_14D_cut1.wav",
-      "filename": "04_05_Culex_quinq_14D_cut1.wav",
-      "title": "Culex quinquefasciatus Female #5 (14D_cut1)",
+      "rel_path": "04_Culex_and_HumBugDB_FreeFlight/04_03_Culex_quinq_14D_Cut28_UNLOOPED.wav",
+      "src": "audio/library/04_Culex_and_HumBugDB_FreeFlight/04_03_Culex_quinq_14D_Cut28_UNLOOPED.wav",
+      "folder": "04_Culex_and_HumBugDB_FreeFlight",
+      "filename": "04_03_Culex_quinq_14D_Cut28_UNLOOPED.wav",
+      "title": "Culex quinquefasciatus Female #3 (14D_Cut28, Uncut)",
       "category": "culex",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Cx.Quin_1F_14D_25C_SmallCylinder_Cut28_16bit.wav",
+      "duration_s": 11.3,
       "expect": "CULEX (FILAR.) -> FAN ON 5.0s",
+      "expect_badge": "CULEX (FILAR.) -> FAN ON 5.0s",
       "color": "#eab308",
+      "expect_color": "#eab308",
       "f0": 465.2,
-      "h3": 0.33,
-      "bhi": 2.72,
-      "vec_triggers": 15,
-      "size_kb": 689
+      "h3": 0.29,
+      "bhi": 2.81,
+      "size_kb": 972,
+      "audit": {
+        "vec": 10,
+        "genera": [
+          "CULEX"
+        ],
+        "counts": {
+          "CULEX": 10
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 465.2,
+        "h3_med": 0.29,
+        "bhi_med": 2.81
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 465.2,
+        "h3_med": 1.82,
+        "bhi_med": 3.85
+      }
     },
     {
-      "src": "audio/library/04_Culex_Filariasis_Female/04_07_Culex_FreeFlight_HumBugDB_R4_44k.wav",
-      "filename": "04_07_Culex_FreeFlight_HumBugDB_R4_44k.wav",
-      "title": "Culex Free-Flight Native 44.1kHz (HumBugDB R4 @ 588.6s)",
+      "rel_path": "04_Culex_and_HumBugDB_FreeFlight/04_04_Culex_quinq_14D_Cut33_UNLOOPED.wav",
+      "src": "audio/library/04_Culex_and_HumBugDB_FreeFlight/04_04_Culex_quinq_14D_Cut33_UNLOOPED.wav",
+      "folder": "04_Culex_and_HumBugDB_FreeFlight",
+      "filename": "04_04_Culex_quinq_14D_Cut33_UNLOOPED.wav",
+      "title": "Culex quinquefasciatus Female #4 (14D_Cut33, Uncut)",
+      "category": "culex",
+      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Cx.Quin_1F_14D_25C_SmallCylinder_Cut33_16bit.wav",
+      "duration_s": 6.8,
+      "expect": "CULEX (FILAR.) -> FAN ON 5.0s",
+      "expect_badge": "CULEX (FILAR.) -> FAN ON 5.0s",
+      "color": "#eab308",
+      "expect_color": "#eab308",
+      "f0": 449.6,
+      "h3": 0.32,
+      "bhi": 2.81,
+      "size_kb": 585,
+      "audit": {
+        "vec": 9,
+        "genera": [
+          "CULEX"
+        ],
+        "counts": {
+          "CULEX": 9
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 449.6,
+        "h3_med": 0.32,
+        "bhi_med": 2.81
+      },
+      "audit_iphone13pm": {
+        "vec": 1,
+        "genera": [
+          "CULEX"
+        ],
+        "counts": {
+          "CULEX": 1
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 449.6,
+        "h3_med": 2.14,
+        "bhi_med": 3.88
+      }
+    },
+    {
+      "rel_path": "04_Culex_and_HumBugDB_FreeFlight/04_05_Oxford_HumBugDB_R4_44k_210s.wav",
+      "src": "audio/library/04_Culex_and_HumBugDB_FreeFlight/04_05_Oxford_HumBugDB_R4_44k_210s.wav",
+      "folder": "04_Culex_and_HumBugDB_FreeFlight",
+      "filename": "04_05_Oxford_HumBugDB_R4_44k_210s.wav",
+      "title": "Oxford HumBugDB Real Free-Flight 44.1kHz (@ 210s)",
       "category": "culex",
       "dataset": "Oxford HumBugDB (NeurIPS 2021)",
-      "duration_s": 10.0,
-      "expect": "CULEX (FILAR.) -> FAN ON 5.0s",
+      "source_url": "https://github.com/HumBug-Mosquito/MozzBNN",
+      "orig_file": "R4_cleaned recording_17-10-17.wav",
+      "duration_s": 12.0,
+      "expect": "VECTOR (CULEX/AEDES) -> FAN ON 5.0s",
+      "expect_badge": "VECTOR (CULEX/AEDES) -> FAN ON 5.0s",
       "color": "#eab308",
-      "f0": 465.2,
-      "h3": 0.23,
-      "bhi": 2.32,
-      "vec_triggers": 9,
-      "size_kb": 861
+      "expect_color": "#eab308",
+      "f0": 621.5,
+      "h3": 0.5,
+      "bhi": 3.25,
+      "size_kb": 1034,
+      "audit": {
+        "vec": 9,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 3,
+          "ANOPHELES": 6
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 621.5,
+        "h3_med": 0.5,
+        "bhi_med": 3.25
+      },
+      "audit_iphone13pm": {
+        "vec": 23,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 12,
+          "ANOPHELES": 11
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 605.9,
+        "h3_med": 1.08,
+        "bhi_med": 4.14
+      }
     },
     {
-      "src": "audio/library/05_Male_Mosquitoes_NonBiting/05_01_Ae_Aegypti_1M.wav",
-      "filename": "05_01_Ae_Aegypti_1M.wav",
-      "title": "Male Aedes aegypti (Non-Biting) #1",
-      "category": "male",
-      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
-      "expect": "MALE IGN -> FAN OFF (0%)",
-      "color": "#38bdf8",
-      "f0": 777.8,
-      "h3": 0.21,
-      "bhi": 2.57,
-      "vec_triggers": 0,
-      "size_kb": 689
+      "rel_path": "04_Culex_and_HumBugDB_FreeFlight/04_06_Oxford_HumBugDB_R4_44k_460s.wav",
+      "src": "audio/library/04_Culex_and_HumBugDB_FreeFlight/04_06_Oxford_HumBugDB_R4_44k_460s.wav",
+      "folder": "04_Culex_and_HumBugDB_FreeFlight",
+      "filename": "04_06_Oxford_HumBugDB_R4_44k_460s.wav",
+      "title": "Oxford HumBugDB Real Free-Flight 44.1kHz (@ 460s)",
+      "category": "culex",
+      "dataset": "Oxford HumBugDB (NeurIPS 2021)",
+      "source_url": "https://github.com/HumBug-Mosquito/MozzBNN",
+      "orig_file": "R4_cleaned recording_17-10-17.wav",
+      "duration_s": 12.0,
+      "expect": "VECTOR (CULEX/AEDES) -> FAN ON 5.0s",
+      "expect_badge": "VECTOR (CULEX/AEDES) -> FAN ON 5.0s",
+      "color": "#eab308",
+      "expect_color": "#eab308",
+      "f0": 590.2,
+      "h3": 0.25,
+      "bhi": 2.8,
+      "size_kb": 1034,
+      "audit": {
+        "vec": 7,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 1,
+          "ANOPHELES": 6
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 590.2,
+        "h3_med": 0.25,
+        "bhi_med": 2.8
+      },
+      "audit_iphone13pm": {
+        "vec": 16,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 2,
+          "ANOPHELES": 14
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 590.2,
+        "h3_med": 0.53,
+        "bhi_med": 3.98
+      }
     },
     {
-      "src": "audio/library/05_Male_Mosquitoes_NonBiting/05_02_Ae_Aegypti_1M.wav",
-      "filename": "05_02_Ae_Aegypti_1M.wav",
-      "title": "Male Aedes aegypti (Non-Biting) #2",
+      "rel_path": "04_Culex_and_HumBugDB_FreeFlight/04_07_Oxford_HumBugDB_R4_44k_185s.wav",
+      "src": "audio/library/04_Culex_and_HumBugDB_FreeFlight/04_07_Oxford_HumBugDB_R4_44k_185s.wav",
+      "folder": "04_Culex_and_HumBugDB_FreeFlight",
+      "filename": "04_07_Oxford_HumBugDB_R4_44k_185s.wav",
+      "title": "Oxford HumBugDB Real Free-Flight 44.1kHz (@ 185s)",
+      "category": "culex",
+      "dataset": "Oxford HumBugDB (NeurIPS 2021)",
+      "source_url": "https://github.com/HumBug-Mosquito/MozzBNN",
+      "orig_file": "R4_cleaned recording_17-10-17.wav",
+      "duration_s": 12.0,
+      "expect": "VECTOR (CULEX/AEDES) -> FAN ON 5.0s",
+      "expect_badge": "VECTOR (CULEX/AEDES) -> FAN ON 5.0s",
+      "color": "#eab308",
+      "expect_color": "#eab308",
+      "f0": 621.5,
+      "h3": 0.53,
+      "bhi": 3.32,
+      "size_kb": 1034,
+      "audit": {
+        "vec": 17,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 4,
+          "ANOPHELES": 13
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 621.5,
+        "h3_med": 0.53,
+        "bhi_med": 3.32
+      },
+      "audit_iphone13pm": {
+        "vec": 13,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 6,
+          "ANOPHELES": 7
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 480.9,
+        "h3_med": 0.38,
+        "bhi_med": 3.93
+      }
+    },
+    {
+      "rel_path": "04_Culex_and_HumBugDB_FreeFlight/04_08_Oxford_HumBugDB_R4_44k_510s.wav",
+      "src": "audio/library/04_Culex_and_HumBugDB_FreeFlight/04_08_Oxford_HumBugDB_R4_44k_510s.wav",
+      "folder": "04_Culex_and_HumBugDB_FreeFlight",
+      "filename": "04_08_Oxford_HumBugDB_R4_44k_510s.wav",
+      "title": "Oxford HumBugDB Real Free-Flight 44.1kHz (@ 510s)",
+      "category": "culex",
+      "dataset": "Oxford HumBugDB (NeurIPS 2021)",
+      "source_url": "https://github.com/HumBug-Mosquito/MozzBNN",
+      "orig_file": "R4_cleaned recording_17-10-17.wav",
+      "duration_s": 12.0,
+      "expect": "VECTOR (CULEX/AEDES) -> FAN ON 5.0s",
+      "expect_badge": "VECTOR (CULEX/AEDES) -> FAN ON 5.0s",
+      "color": "#eab308",
+      "expect_color": "#eab308",
+      "f0": 590.2,
+      "h3": 0.84,
+      "bhi": 3.77,
+      "size_kb": 1034,
+      "audit": {
+        "vec": 14,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 5,
+          "ANOPHELES": 9
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 590.2,
+        "h3_med": 0.84,
+        "bhi_med": 3.77
+      },
+      "audit_iphone13pm": {
+        "vec": 3,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 2,
+          "ANOPHELES": 1
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 137.1,
+        "h3_med": 0.19,
+        "bhi_med": 3.34
+      }
+    },
+    {
+      "rel_path": "05_Male_Mosquitoes_NonBiting/05_01_Ae_Aegypti_1M_UNLOOPED.wav",
+      "src": "audio/library/05_Male_Mosquitoes_NonBiting/05_01_Ae_Aegypti_1M_UNLOOPED.wav",
+      "folder": "05_Male_Mosquitoes_NonBiting",
+      "filename": "05_01_Ae_Aegypti_1M_UNLOOPED.wav",
+      "title": "Male Aedes aegypti (Non-Biting, Uncut) #1",
       "category": "male",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
-      "expect": "MALE IGN -> FAN OFF (0%)",
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Ae.Aegypti_1M _21D_25C_SmallCylinder_cut18_16bit.wav",
+      "duration_s": 1.8,
+      "expect": "MALE IGN -> YELLOW LED + FAN OFF",
+      "expect_badge": "MALE IGN -> YELLOW LED + FAN OFF",
       "color": "#38bdf8",
+      "expect_color": "#38bdf8",
       "f0": 762.1,
-      "h3": 0.22,
-      "bhi": 2.47,
-      "vec_triggers": 0,
-      "size_kb": 689
+      "h3": 0.19,
+      "bhi": 2.58,
+      "size_kb": 157,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 2,
+        "f0_med": 762.1,
+        "h3_med": 0.19,
+        "bhi_med": 2.58
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 2,
+        "f0_med": 762.1,
+        "h3_med": 0.2,
+        "bhi_med": 3.35
+      }
     },
     {
-      "src": "audio/library/05_Male_Mosquitoes_NonBiting/05_03_Ae_Albopictus_1M.wav",
-      "filename": "05_03_Ae_Albopictus_1M.wav",
-      "title": "Male Aedes albopictus (Non-Biting) #3",
+      "rel_path": "05_Male_Mosquitoes_NonBiting/05_02_Ae_Aegypti_1M_UNLOOPED.wav",
+      "src": "audio/library/05_Male_Mosquitoes_NonBiting/05_02_Ae_Aegypti_1M_UNLOOPED.wav",
+      "folder": "05_Male_Mosquitoes_NonBiting",
+      "filename": "05_02_Ae_Aegypti_1M_UNLOOPED.wav",
+      "title": "Male Aedes aegypti (Non-Biting, Uncut) #2",
       "category": "male",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
-      "expect": "MALE IGN -> FAN OFF (0%)",
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Ae.Aegypti_1M _21D_25C_SmallCylinder_cut39_16bit.wav",
+      "duration_s": 1.7,
+      "expect": "MALE IGN -> YELLOW LED + FAN OFF",
+      "expect_badge": "MALE IGN -> YELLOW LED + FAN OFF",
       "color": "#38bdf8",
-      "f0": 996.5,
-      "h3": 0.18,
-      "bhi": 2.32,
-      "vec_triggers": 0,
-      "size_kb": 689
-    },
-    {
-      "src": "audio/library/05_Male_Mosquitoes_NonBiting/05_04_Ae_Albopictus_1M.wav",
-      "filename": "05_04_Ae_Albopictus_1M.wav",
-      "title": "Male Aedes albopictus (Non-Biting) #4",
-      "category": "male",
-      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
-      "expect": "MALE IGN -> FAN OFF (0%)",
-      "color": "#38bdf8",
-      "f0": 1012.1,
+      "expect_color": "#38bdf8",
+      "f0": 777.8,
       "h3": 0.2,
-      "bhi": 2.28,
-      "vec_triggers": 0,
-      "size_kb": 689
+      "bhi": 2.69,
+      "size_kb": 148,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 2,
+        "f0_med": 777.8,
+        "h3_med": 0.2,
+        "bhi_med": 2.69
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 1,
+        "f0_med": 762.1,
+        "h3_med": 0.21,
+        "bhi_med": 3.41
+      }
     },
     {
-      "src": "audio/library/05_Male_Mosquitoes_NonBiting/05_05_An_Dirus_1M.wav",
-      "filename": "05_05_An_Dirus_1M.wav",
-      "title": "Male Anopheles dirus (Non-Biting) #5",
+      "rel_path": "05_Male_Mosquitoes_NonBiting/05_03_Ae_Albopictus_1M_UNLOOPED.wav",
+      "src": "audio/library/05_Male_Mosquitoes_NonBiting/05_03_Ae_Albopictus_1M_UNLOOPED.wav",
+      "folder": "05_Male_Mosquitoes_NonBiting",
+      "filename": "05_03_Ae_Albopictus_1M_UNLOOPED.wav",
+      "title": "Male Aedes albopictus (Non-Biting, Uncut) #3",
       "category": "male",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
-      "expect": "MALE IGN -> FAN OFF (0%)",
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Ae.Albopictus_1M_14D_25C_SmallCylinder_Cut31_16bit.wav",
+      "duration_s": 2.3,
+      "expect": "MALE IGN -> YELLOW LED + FAN OFF",
+      "expect_badge": "MALE IGN -> YELLOW LED + FAN OFF",
       "color": "#38bdf8",
+      "expect_color": "#38bdf8",
+      "f0": 996.5,
+      "h3": 0.2,
+      "bhi": 2.4,
+      "size_kb": 197,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 1,
+        "f0_med": 996.5,
+        "h3_med": 0.2,
+        "bhi_med": 2.4
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 1,
+        "f0_med": 996.5,
+        "h3_med": 0.1,
+        "bhi_med": 3.18
+      }
+    },
+    {
+      "rel_path": "05_Male_Mosquitoes_NonBiting/05_04_Ae_Albopictus_1M_UNLOOPED.wav",
+      "src": "audio/library/05_Male_Mosquitoes_NonBiting/05_04_Ae_Albopictus_1M_UNLOOPED.wav",
+      "folder": "05_Male_Mosquitoes_NonBiting",
+      "filename": "05_04_Ae_Albopictus_1M_UNLOOPED.wav",
+      "title": "Male Aedes albopictus (Non-Biting, Uncut) #4",
+      "category": "male",
+      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Ae.Albopictus_1M_14D_25C_SmallCylinder_Cut27_16bit.wav",
+      "duration_s": 4.0,
+      "expect": "MALE IGN -> YELLOW LED + FAN OFF",
+      "expect_badge": "MALE IGN -> YELLOW LED + FAN OFF",
+      "color": "#38bdf8",
+      "expect_color": "#38bdf8",
+      "f0": 996.5,
+      "h3": 0.15,
+      "bhi": 1.85,
+      "size_kb": 343,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 1,
+        "f0_med": 996.5,
+        "h3_med": 0.15,
+        "bhi_med": 1.85
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 168.4,
+        "h3_med": 0.11,
+        "bhi_med": 3.24
+      }
+    },
+    {
+      "rel_path": "05_Male_Mosquitoes_NonBiting/05_05_An_Dirus_1M_UNLOOPED.wav",
+      "src": "audio/library/05_Male_Mosquitoes_NonBiting/05_05_An_Dirus_1M_UNLOOPED.wav",
+      "folder": "05_Male_Mosquitoes_NonBiting",
+      "filename": "05_05_An_Dirus_1M_UNLOOPED.wav",
+      "title": "Male Anopheles dirus (Non-Biting, Uncut) #5",
+      "category": "male",
+      "dataset": "MosquitoSong+ (PLOS ONE 2024)",
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "An.Dirus_1M_14D_25C_SmallCylinder_Cut21_16bit.wav",
+      "duration_s": 1.9,
+      "expect": "MALE IGN -> YELLOW LED + FAN OFF",
+      "expect_badge": "MALE IGN -> YELLOW LED + FAN OFF",
+      "color": "#38bdf8",
+      "expect_color": "#38bdf8",
       "f0": 809.0,
       "h3": 0.31,
-      "bhi": 3.01,
-      "vec_triggers": 0,
-      "size_kb": 689
+      "bhi": 3.03,
+      "size_kb": 164,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 1,
+        "f0_med": 809.0,
+        "h3_med": 0.31,
+        "bhi_med": 3.03
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 793.4,
+        "h3_med": 0.21,
+        "bhi_med": 3.74
+      }
     },
     {
-      "src": "audio/library/05_Male_Mosquitoes_NonBiting/05_06_Cx_Quin_1M.wav",
-      "filename": "05_06_Cx_Quin_1M.wav",
-      "title": "Male Culex quinquefasciatus (Non-Biting) #6",
+      "rel_path": "05_Male_Mosquitoes_NonBiting/05_06_Cx_Quin_1M_UNLOOPED.wav",
+      "src": "audio/library/05_Male_Mosquitoes_NonBiting/05_06_Cx_Quin_1M_UNLOOPED.wav",
+      "folder": "05_Male_Mosquitoes_NonBiting",
+      "filename": "05_06_Cx_Quin_1M_UNLOOPED.wav",
+      "title": "Male Culex quinquefasciatus (Non-Biting, Uncut) #6",
       "category": "male",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
-      "duration_s": 8.0,
-      "expect": "MALE IGN -> FAN OFF (0%)",
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "Cx.Quin_1M_14D_25C_SmallCylinder_Cut29_16bit.wav",
+      "duration_s": 7.3,
+      "expect": "MALE IGN -> YELLOW LED + FAN OFF",
+      "expect_badge": "MALE IGN -> YELLOW LED + FAN OFF",
       "color": "#38bdf8",
-      "f0": 824.6,
-      "h3": 0.21,
-      "bhi": 2.61,
-      "vec_triggers": 0,
-      "size_kb": 689
+      "expect_color": "#38bdf8",
+      "f0": 840.2,
+      "h3": 0.18,
+      "bhi": 2.85,
+      "size_kb": 633,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 2,
+        "f0_med": 840.2,
+        "h3_med": 0.18,
+        "bhi_med": 2.85
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 2,
+        "f0_med": 840.2,
+        "h3_med": 0.19,
+        "bhi_med": 3.6
+      }
     },
     {
-      "src": "audio/library/06_Pollinators_Bees_and_Flies/06_01_Honeybee_Pollinator_205Hz.wav",
-      "filename": "06_01_Honeybee_Pollinator_205Hz.wav",
-      "title": "Pollinator Honeybee (~205 Hz)",
+      "rel_path": "06_Real_Pollinators_Bees_Insects/06_01_Wikimedia_Real_Bumblebee_Hummel_Part1.wav",
+      "src": "audio/library/06_Real_Pollinators_Bees_Insects/06_01_Wikimedia_Real_Bumblebee_Hummel_Part1.wav",
+      "folder": "06_Real_Pollinators_Bees_Insects",
+      "filename": "06_01_Wikimedia_Real_Bumblebee_Hummel_Part1.wav",
+      "title": "Real Outdoor Bumblebee / Pollinator #1 (Wikimedia Hummel_bee.ogg)",
       "category": "bee",
-      "dataset": "Verified Bio-Acoustic Bee Sample",
-      "duration_s": 8.0,
-      "expect": "BEE SAFE -> FAN OFF (0%)",
+      "dataset": "Wikimedia Commons (CC Real Field)",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Hummel_bee.ogg",
+      "orig_file": "Hummel_bee.ogg",
+      "duration_s": 12.0,
+      "expect": "BEE SAFE -> GREEN LED + FAN OFF (0%)",
+      "expect_badge": "BEE SAFE -> GREEN LED + FAN OFF (0%)",
       "color": "#10b981",
-      "f0": 215.2,
-      "h3": 0.05,
-      "bhi": 0.01,
-      "vec_triggers": 0,
-      "size_kb": 689
+      "expect_color": "#10b981",
+      "f0": 324.6,
+      "h3": 0.17,
+      "bhi": 1.44,
+      "size_kb": 1034,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 4,
+        "male": 0,
+        "f0_med": 324.6,
+        "h3_med": 0.17,
+        "bhi_med": 1.44
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 824.6,
+        "h3_med": 0.1,
+        "bhi_med": 3.66
+      }
     },
     {
-      "src": "audio/library/06_Pollinators_Bees_and_Flies/06_02_ESC50_Real_Insects_1-17585-A-7.wav",
-      "filename": "06_02_ESC50_Real_Insects_1-17585-A-7.wav",
-      "title": "Real Outdoor Bee/Insect Buzz (ESC-50 #1)",
+      "rel_path": "06_Real_Pollinators_Bees_Insects/06_02_Wikimedia_Real_Bumblebee_Hummel_Part2.wav",
+      "src": "audio/library/06_Real_Pollinators_Bees_Insects/06_02_Wikimedia_Real_Bumblebee_Hummel_Part2.wav",
+      "folder": "06_Real_Pollinators_Bees_Insects",
+      "filename": "06_02_Wikimedia_Real_Bumblebee_Hummel_Part2.wav",
+      "title": "Real Outdoor Bumblebee / Pollinator #2 (Wikimedia Hummel_bee.ogg)",
       "category": "bee",
-      "dataset": "ESC-50 (Piczak 2015, Cat 7)",
-      "duration_s": 8.0,
-      "expect": "BEE SAFE / NOISE IGN -> FAN OFF",
+      "dataset": "Wikimedia Commons (CC Real Field)",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Hummel_bee.ogg",
+      "orig_file": "Hummel_bee.ogg",
+      "duration_s": 12.0,
+      "expect": "BEE SAFE -> GREEN LED + FAN OFF (0%)",
+      "expect_badge": "BEE SAFE -> GREEN LED + FAN OFF (0%)",
       "color": "#10b981",
-      "f0": 434.0,
+      "expect_color": "#10b981",
+      "f0": 324.6,
       "h3": 0.12,
-      "bhi": 2.06,
-      "vec_triggers": 0,
-      "size_kb": 689
+      "bhi": 1.27,
+      "size_kb": 1034,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 324.6,
+        "h3_med": 0.12,
+        "bhi_med": 1.27
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 496.5,
+        "h3_med": 0.19,
+        "bhi_med": 3.51
+      }
     },
     {
-      "src": "audio/library/06_Pollinators_Bees_and_Flies/06_03_ESC50_Real_Insects_1-19501-A-7.wav",
-      "filename": "06_03_ESC50_Real_Insects_1-19501-A-7.wav",
-      "title": "Real Outdoor Bee/Insect Buzz (ESC-50 #2)",
+      "rel_path": "06_Real_Pollinators_Bees_Insects/06_03_ESC50_Real_Insects_1-17585-A-7.wav",
+      "src": "audio/library/06_Real_Pollinators_Bees_Insects/06_03_ESC50_Real_Insects_1-17585-A-7.wav",
+      "folder": "06_Real_Pollinators_Bees_Insects",
+      "filename": "06_03_ESC50_Real_Insects_1-17585-A-7.wav",
+      "title": "Real Outdoor Insects (ESC-50 #1)",
       "category": "bee",
       "dataset": "ESC-50 (Piczak 2015, Cat 7)",
-      "duration_s": 8.0,
-      "expect": "BEE SAFE / NOISE IGN -> FAN OFF",
+      "source_url": "https://github.com/karolpiczak/ESC-50",
+      "orig_file": "1-17585-A-7.wav",
+      "duration_s": 5.0,
+      "expect": "NOISE IGN / BEE SAFE -> FAN OFF (0%)",
+      "expect_badge": "NOISE IGN / BEE SAFE -> FAN OFF (0%)",
       "color": "#10b981",
-      "f0": 371.5,
-      "h3": 0.11,
-      "bhi": 0.94,
-      "vec_triggers": 0,
-      "size_kb": 689
+      "expect_color": "#10b981",
+      "f0": 434.0,
+      "h3": 0.1,
+      "bhi": 1.84,
+      "size_kb": 431,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 434.0,
+        "h3_med": 0.1,
+        "bhi_med": 1.84
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 137.1,
+        "h3_med": 0.23,
+        "bhi_med": 2.66
+      }
     },
     {
-      "src": "audio/library/06_Pollinators_Bees_and_Flies/06_04_Housefly_160Hz.wav",
-      "filename": "06_04_Housefly_160Hz.wav",
-      "title": "Common Housefly (~160 Hz)",
+      "rel_path": "06_Real_Pollinators_Bees_Insects/06_04_ESC50_Real_Insects_1-19501-A-7.wav",
+      "src": "audio/library/06_Real_Pollinators_Bees_Insects/06_04_ESC50_Real_Insects_1-19501-A-7.wav",
+      "folder": "06_Real_Pollinators_Bees_Insects",
+      "filename": "06_04_ESC50_Real_Insects_1-19501-A-7.wav",
+      "title": "Real Outdoor Insects (ESC-50 #2)",
       "category": "bee",
-      "dataset": "Real Insect Wingbeat Sample",
-      "duration_s": 8.0,
-      "expect": "BEE SAFE / NOISE IGN -> FAN OFF",
+      "dataset": "ESC-50 (Piczak 2015, Cat 7)",
+      "source_url": "https://github.com/karolpiczak/ESC-50",
+      "orig_file": "1-19501-A-7.wav",
+      "duration_s": 5.0,
+      "expect": "NOISE IGN / BEE SAFE -> FAN OFF (0%)",
+      "expect_badge": "NOISE IGN / BEE SAFE -> FAN OFF (0%)",
       "color": "#10b981",
-      "f0": 152.8,
-      "h3": 0.2,
-      "bhi": 0.0,
-      "vec_triggers": 0,
-      "size_kb": 689
+      "expect_color": "#10b981",
+      "f0": 332.4,
+      "h3": 0.12,
+      "bhi": 1.43,
+      "size_kb": 431,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 332.4,
+        "h3_med": 0.12,
+        "bhi_med": 1.43
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 137.1,
+        "h3_med": 0.18,
+        "bhi_med": 0.0
+      }
     },
     {
-      "src": "audio/library/07_Field_Trap_Distractors_Noise/07_01_Commercial_CDC_Suction_Trap_Fan_No.wav",
-      "filename": "07_01_Commercial_CDC_Suction_Trap_Fan_No.wav",
-      "title": "Commercial CDC Suction Trap Fan Noise",
+      "rel_path": "07_Field_Trap_Distractors_Noise/07_01_Commercial_CDC_Suction_Trap_Fan.wav",
+      "src": "audio/library/07_Field_Trap_Distractors_Noise/07_01_Commercial_CDC_Suction_Trap_Fan.wav",
+      "folder": "07_Field_Trap_Distractors_Noise",
+      "filename": "07_01_Commercial_CDC_Suction_Trap_Fan.wav",
+      "title": "Commercial CDC Suction Trap Fan",
       "category": "noise",
       "dataset": "MosquitoSong+ Env",
-      "duration_s": 8.0,
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "JW CDC 30cm top_normalized_16bit.wav",
+      "duration_s": 1.1,
       "expect": "NOISE IGN -> FAN OFF (0%)",
+      "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#94a3b8",
+      "expect_color": "#94a3b8",
       "f0": 512.1,
-      "h3": 0.05,
-      "bhi": 2.08,
-      "vec_triggers": 0,
-      "size_kb": 689
+      "h3": 0.06,
+      "bhi": 1.81,
+      "size_kb": 95,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 512.1,
+        "h3_med": 0.06,
+        "bhi_med": 1.81
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 0.0,
+        "h3_med": 0.0,
+        "bhi_med": 0.0
+      }
     },
     {
+      "rel_path": "07_Field_Trap_Distractors_Noise/07_02_Outdoor_Grass_Cutter_Engine.wav",
       "src": "audio/library/07_Field_Trap_Distractors_Noise/07_02_Outdoor_Grass_Cutter_Engine.wav",
+      "folder": "07_Field_Trap_Distractors_Noise",
       "filename": "07_02_Outdoor_Grass_Cutter_Engine.wav",
       "title": "Outdoor Grass Cutter Engine",
       "category": "noise",
       "dataset": "MosquitoSong+ Env",
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "30cm_GrassCutter_normalized_16bit.wav",
       "duration_s": 10.0,
       "expect": "NOISE IGN -> FAN OFF (0%)",
+      "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#94a3b8",
+      "expect_color": "#94a3b8",
       "f0": 121.5,
-      "h3": 0.13,
-      "bhi": 3.62,
-      "vec_triggers": 0,
-      "size_kb": 861
+      "h3": 0.12,
+      "bhi": 3.56,
+      "size_kb": 861,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 121.5,
+        "h3_med": 0.12,
+        "bhi_med": 3.56
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 137.1,
+        "h3_med": 0.18,
+        "bhi_med": 4.24
+      }
     },
     {
+      "rel_path": "07_Field_Trap_Distractors_Noise/07_03_Passing_Motorcycle_Noise.wav",
       "src": "audio/library/07_Field_Trap_Distractors_Noise/07_03_Passing_Motorcycle_Noise.wav",
+      "folder": "07_Field_Trap_Distractors_Noise",
       "filename": "07_03_Passing_Motorcycle_Noise.wav",
       "title": "Passing Motorcycle Noise",
       "category": "noise",
       "dataset": "MosquitoSong+ Env",
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "30cm_motorcycle_normalized_16bit.wav",
       "duration_s": 10.0,
       "expect": "NOISE IGN -> FAN OFF (0%)",
+      "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#94a3b8",
+      "expect_color": "#94a3b8",
       "f0": 137.1,
       "h3": 0.1,
-      "bhi": 0.49,
-      "vec_triggers": 0,
-      "size_kb": 861
+      "bhi": 0.4,
+      "size_kb": 861,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 137.1,
+        "h3_med": 0.1,
+        "bhi_med": 0.4
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 215.2,
+        "h3_med": 0.21,
+        "bhi_med": 3.58
+      }
     },
     {
+      "rel_path": "07_Field_Trap_Distractors_Noise/07_04_Outdoor_Broom_Sweeping.wav",
       "src": "audio/library/07_Field_Trap_Distractors_Noise/07_04_Outdoor_Broom_Sweeping.wav",
+      "folder": "07_Field_Trap_Distractors_Noise",
       "filename": "07_04_Outdoor_Broom_Sweeping.wav",
       "title": "Outdoor Broom Sweeping",
       "category": "noise",
       "dataset": "MosquitoSong+ Env",
+      "source_url": "https://github.com/akaraspt/mosquitosongp",
+      "orig_file": "30cm_broom_normalized_16bit.wav",
       "duration_s": 10.0,
       "expect": "NOISE IGN -> FAN OFF (0%)",
+      "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#94a3b8",
+      "expect_color": "#94a3b8",
       "f0": 152.8,
       "h3": 0.09,
-      "bhi": 3.07,
-      "vec_triggers": 0,
-      "size_kb": 861
+      "bhi": 2.68,
+      "size_kb": 861,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 152.8,
+        "h3_med": 0.09,
+        "bhi_med": 2.68
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 137.1,
+        "h3_med": 0.17,
+        "bhi_med": 3.84
+      }
     },
     {
+      "rel_path": "07_Field_Trap_Distractors_Noise/07_05_Real_Human_Speech_Room_Background.wav",
       "src": "audio/library/07_Field_Trap_Distractors_Noise/07_05_Real_Human_Speech_Room_Background.wav",
+      "folder": "07_Field_Trap_Distractors_Noise",
       "filename": "07_05_Real_Human_Speech_Room_Background.wav",
       "title": "Real Human Speech & Room Background",
       "category": "noise",
       "dataset": "Oxford HumBugDB",
+      "source_url": "https://github.com/HumBug-Mosquito/MozzBNN",
+      "orig_file": "background_with_speech.wav",
       "duration_s": 10.0,
       "expect": "NOISE IGN -> FAN OFF (0%)",
+      "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#94a3b8",
-      "f0": 269.9,
-      "h3": 0.06,
-      "bhi": 1.07,
-      "vec_triggers": 0,
-      "size_kb": 861
+      "expect_color": "#94a3b8",
+      "f0": 246.5,
+      "h3": 0.07,
+      "bhi": 1.06,
+      "size_kb": 861,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 246.5,
+        "h3_med": 0.07,
+        "bhi_med": 1.06
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 324.6,
+        "h3_med": 0.14,
+        "bhi_med": 3.08
+      }
     },
     {
-      "src": "audio/library/07_Field_Trap_Distractors_Noise/07_06_Construction_Site_Machinery_Noise.wav",
-      "filename": "07_06_Construction_Site_Machinery_Noise.wav",
-      "title": "Construction Site Machinery Noise",
+      "rel_path": "07_Field_Trap_Distractors_Noise/07_06_Construction_Site_Machinery.wav",
+      "src": "audio/library/07_Field_Trap_Distractors_Noise/07_06_Construction_Site_Machinery.wav",
+      "folder": "07_Field_Trap_Distractors_Noise",
+      "filename": "07_06_Construction_Site_Machinery.wav",
+      "title": "Construction Site Machinery",
       "category": "noise",
       "dataset": "Oxford HumBugDB",
+      "source_url": "https://github.com/HumBug-Mosquito/MozzBNN",
+      "orig_file": "construction_site.wav",
       "duration_s": 10.0,
       "expect": "NOISE IGN -> FAN OFF (0%)",
+      "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#94a3b8",
-      "f0": 168.4,
-      "h3": 0.29,
-      "bhi": 2.52,
-      "vec_triggers": 0,
-      "size_kb": 861
+      "expect_color": "#94a3b8",
+      "f0": 152.8,
+      "h3": 0.24,
+      "bhi": 1.7,
+      "size_kb": 861,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 152.8,
+        "h3_med": 0.24,
+        "bhi_med": 1.7
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 152.8,
+        "h3_med": 0.18,
+        "bhi_med": 3.52
+      }
     },
     {
-      "src": "audio/library/07_Field_Trap_Distractors_Noise/07_07_HumBugDB_Continuous_CDC_Fan_Masking.wav",
-      "filename": "07_07_HumBugDB_Continuous_CDC_Fan_Masking.wav",
-      "title": "HumBugDB Continuous CDC Fan Masking (Proves Fan-Off Needed!)",
-      "category": "noise",
-      "dataset": "Oxford HumBugDB (NeurIPS 2021)",
-      "duration_s": 10.0,
-      "expect": "NOISE IGN -> Proves Running Fan Buries Mosquitoes",
-      "color": "#94a3b8",
-      "f0": 723.1,
-      "h3": 0.13,
-      "bhi": 2.34,
-      "vec_triggers": 0,
-      "size_kb": 861
-    },
-    {
+      "rel_path": "08_ESC50_and_Vocal_Torture_Tests/08_01_Car_Horn_ESC_50.wav",
       "src": "audio/library/08_ESC50_and_Vocal_Torture_Tests/08_01_Car_Horn_ESC_50.wav",
+      "folder": "08_ESC50_and_Vocal_Torture_Tests",
       "filename": "08_01_Car_Horn_ESC_50.wav",
       "title": "Car Horn (ESC-50)",
       "category": "torture",
       "dataset": "ESC-50 (Cat 43)",
-      "duration_s": 8.0,
+      "source_url": "https://github.com/karolpiczak/ESC-50",
+      "orig_file": "1-17124-A-43.wav",
+      "duration_s": 5.0,
       "expect": "NOISE IGN -> FAN OFF (0%)",
+      "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#64748b",
-      "f0": 988.7,
-      "h3": 0.3,
-      "bhi": 4.47,
-      "vec_triggers": 0,
-      "size_kb": 689
+      "expect_color": "#64748b",
+      "f0": 738.7,
+      "h3": 1.58,
+      "bhi": 4.46,
+      "size_kb": 431,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 738.7,
+        "h3_med": 1.58,
+        "bhi_med": 4.46
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 137.1,
+        "h3_med": 0.18,
+        "bhi_med": 0.0
+      }
     },
     {
+      "rel_path": "08_ESC50_and_Vocal_Torture_Tests/08_02_Emergency_Siren_ESC_50.wav",
       "src": "audio/library/08_ESC50_and_Vocal_Torture_Tests/08_02_Emergency_Siren_ESC_50.wav",
+      "folder": "08_ESC50_and_Vocal_Torture_Tests",
       "filename": "08_02_Emergency_Siren_ESC_50.wav",
       "title": "Emergency Siren (ESC-50)",
       "category": "torture",
       "dataset": "ESC-50 (Cat 42)",
-      "duration_s": 8.0,
+      "source_url": "https://github.com/karolpiczak/ESC-50",
+      "orig_file": "1-31482-A-42.wav",
+      "duration_s": 5.0,
       "expect": "NOISE IGN -> FAN OFF (0%)",
+      "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#64748b",
+      "expect_color": "#64748b",
       "f0": 605.9,
       "h3": 0.06,
-      "bhi": 0.94,
-      "vec_triggers": 0,
-      "size_kb": 689
+      "bhi": 0.95,
+      "size_kb": 431,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 605.9,
+        "h3_med": 0.06,
+        "bhi_med": 0.95
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 574.6,
+        "h3_med": 0.16,
+        "bhi_med": 2.14
+      }
     },
     {
+      "rel_path": "08_ESC50_and_Vocal_Torture_Tests/08_03_Chainsaw_ESC_50.wav",
       "src": "audio/library/08_ESC50_and_Vocal_Torture_Tests/08_03_Chainsaw_ESC_50.wav",
+      "folder": "08_ESC50_and_Vocal_Torture_Tests",
       "filename": "08_03_Chainsaw_ESC_50.wav",
       "title": "Chainsaw (ESC-50)",
       "category": "torture",
       "dataset": "ESC-50 (Cat 41)",
-      "duration_s": 8.0,
+      "source_url": "https://github.com/karolpiczak/ESC-50",
+      "orig_file": "1-116765-A-41.wav",
+      "duration_s": 5.0,
       "expect": "NOISE IGN -> FAN OFF (0%)",
+      "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#64748b",
+      "expect_color": "#64748b",
       "f0": 168.4,
-      "h3": 0.45,
-      "bhi": 2.16,
-      "vec_triggers": 0,
-      "size_kb": 689
+      "h3": 0.43,
+      "bhi": 2.31,
+      "size_kb": 431,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 168.4,
+        "h3_med": 0.43,
+        "bhi_med": 2.31
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 699.6,
+        "h3_med": 0.16,
+        "bhi_med": 3.22
+      }
     },
     {
+      "rel_path": "08_ESC50_and_Vocal_Torture_Tests/08_04_Chirping_Birds_ESC_50.wav",
       "src": "audio/library/08_ESC50_and_Vocal_Torture_Tests/08_04_Chirping_Birds_ESC_50.wav",
+      "folder": "08_ESC50_and_Vocal_Torture_Tests",
       "filename": "08_04_Chirping_Birds_ESC_50.wav",
       "title": "Chirping Birds (ESC-50)",
       "category": "torture",
       "dataset": "ESC-50 (Cat 14)",
-      "duration_s": 8.0,
+      "source_url": "https://github.com/karolpiczak/ESC-50",
+      "orig_file": "1-100038-A-14.wav",
+      "duration_s": 5.0,
       "expect": "NOISE IGN -> FAN OFF (0%)",
+      "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#64748b",
-      "f0": 387.1,
-      "h3": 0.27,
+      "expect_color": "#64748b",
+      "f0": 371.5,
+      "h3": 0.26,
       "bhi": 3.69,
-      "vec_triggers": 0,
-      "size_kb": 689
+      "size_kb": 431,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 371.5,
+        "h3_med": 0.26,
+        "bhi_med": 3.69
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 137.1,
+        "h3_med": 0.19,
+        "bhi_med": 3.94
+      }
     },
     {
+      "rel_path": "08_ESC50_and_Vocal_Torture_Tests/08_05_Night_Crickets_ESC_50.wav",
       "src": "audio/library/08_ESC50_and_Vocal_Torture_Tests/08_05_Night_Crickets_ESC_50.wav",
+      "folder": "08_ESC50_and_Vocal_Torture_Tests",
       "filename": "08_05_Night_Crickets_ESC_50.wav",
       "title": "Night Crickets (ESC-50)",
       "category": "torture",
       "dataset": "ESC-50 (Cat 13)",
-      "duration_s": 8.0,
+      "source_url": "https://github.com/karolpiczak/ESC-50",
+      "orig_file": "1-57316-A-13.wav",
+      "duration_s": 5.0,
       "expect": "NOISE IGN -> FAN OFF (0%)",
+      "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#64748b",
+      "expect_color": "#64748b",
       "f0": 121.5,
-      "h3": 0.17,
-      "bhi": 3.48,
-      "vec_triggers": 0,
-      "size_kb": 689
+      "h3": 0.29,
+      "bhi": 3.15,
+      "size_kb": 431,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 121.5,
+        "h3_med": 0.29,
+        "bhi_med": 3.15
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 137.1,
+        "h3_med": 0.17,
+        "bhi_med": 3.88
+      }
     },
     {
+      "rel_path": "08_ESC50_and_Vocal_Torture_Tests/08_06_Heavy_Rain_ESC_50.wav",
       "src": "audio/library/08_ESC50_and_Vocal_Torture_Tests/08_06_Heavy_Rain_ESC_50.wav",
+      "folder": "08_ESC50_and_Vocal_Torture_Tests",
       "filename": "08_06_Heavy_Rain_ESC_50.wav",
       "title": "Heavy Rain (ESC-50)",
       "category": "torture",
       "dataset": "ESC-50 (Cat 10)",
-      "duration_s": 8.0,
+      "source_url": "https://github.com/karolpiczak/ESC-50",
+      "orig_file": "1-17367-A-10.wav",
+      "duration_s": 5.0,
       "expect": "NOISE IGN -> FAN OFF (0%)",
+      "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#64748b",
-      "f0": 129.3,
-      "h3": 0.18,
-      "bhi": 4.24,
-      "vec_triggers": 0,
-      "size_kb": 689
+      "expect_color": "#64748b",
+      "f0": 144.9,
+      "h3": 0.19,
+      "bhi": 4.06,
+      "size_kb": 431,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 144.9,
+        "h3_med": 0.19,
+        "bhi_med": 4.06
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 137.1,
+        "h3_med": 0.2,
+        "bhi_med": 4.41
+      }
     },
     {
+      "rel_path": "08_ESC50_and_Vocal_Torture_Tests/08_07_Sakib_MewMew_Vocal_Defense_Test.wav",
       "src": "audio/library/08_ESC50_and_Vocal_Torture_Tests/08_07_Sakib_MewMew_Vocal_Defense_Test.wav",
+      "folder": "08_ESC50_and_Vocal_Torture_Tests",
       "filename": "08_07_Sakib_MewMew_Vocal_Defense_Test.wav",
-      "title": "Sakib 'Mew-Mew' Vocal Imitation Torture Test",
+      "title": "Sakib 'Mew-Mew' Vocal Imitation Defense Test",
       "category": "torture",
-      "dataset": "Live Bench Recording (vid2 t=15-25s)",
+      "dataset": "Live Bench Recording (vid2)",
+      "source_url": "",
+      "orig_file": "vid2_8k.wav",
       "duration_s": 10.0,
-      "expect": "NOISE IGN (v5.1 BLOCKED!) -> FAN OFF",
+      "expect": "NOISE IGN (v5.2 BLOCKED!) -> FAN OFF",
+      "expect_badge": "NOISE IGN (v5.2 BLOCKED!) -> FAN OFF",
       "color": "#64748b",
-      "f0": 418.4,
-      "h3": 0.02,
-      "bhi": 0.35,
-      "vec_triggers": 0,
-      "size_kb": 861
+      "expect_color": "#64748b",
+      "f0": 402.8,
+      "h3": 0.03,
+      "bhi": 0.33,
+      "size_kb": 861,
+      "audit": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 402.8,
+        "h3_med": 0.03,
+        "bhi_med": 0.33
+      },
+      "audit_iphone13pm": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 152.8,
+        "h3_med": 0.12,
+        "bhi_med": 1.51
+      }
     }
   ]
 }

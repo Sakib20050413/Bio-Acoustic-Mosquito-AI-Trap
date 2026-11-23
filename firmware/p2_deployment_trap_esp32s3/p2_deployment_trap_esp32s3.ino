@@ -298,7 +298,7 @@ void setup() {
 
   dht.begin();
   u8g2.begin();
-  showToastOLED("WingBeat v5.1", "Anti-Vocal QAT", 400);
+  showToastOLED("WingBeat v5.2", "Phone+Live QAT", 400);
 
   // 3-Zone LED Hardware Self-Test on Boot (Green -> Yellow -> Red)
   digitalWrite(LED_GREEN, HIGH);  delay(220); digitalWrite(LED_GREEN, LOW);
@@ -324,7 +324,7 @@ void setup() {
   };
   i2s_driver_install(I2S_NUM_0, &cfg, 0, NULL);
   i2s_set_pin(I2S_NUM_0, &pins);
-  Serial.println("\n=== PROJECT 2 (CSE 326) WINGBEAT-TINYNET v5.1 (6-CLASS Q1 QAT + VOCAL GUARD) STARTED ===");
+  Serial.println("\n=== PROJECT 2 (CSE 326) WINGBEAT-TINYNET v5.2 (PHONE+LIVE OCTAVE RECOVERY + VOCAL GUARD) STARTED ===");
 }
 
 void loop() {
@@ -449,10 +449,40 @@ void loop() {
     if (m > peak_mag) { peak_mag = m; peak_bin = k; }
   }
 
-  double f0_raw = peak_bin * ((double)SAMPLE_RATE / FFT_SAMPLES);
-  float f0_corr = (float)(f0_raw - df_t);
   double noise_avg = (mag_sum - peak_mag) / (double)(band_len - 1) + 1e-6;
   double snr_db = 20.0 * log10((peak_mag + 1e-6) / noise_avg);
+
+  // Smartphone micro-speaker octave-jump recovery (v5.2):
+  // Small phone speakers attenuate 350-550 Hz so 2*f0 (700-1100 Hz) can exceed f0!
+  // A true 665-1020 Hz Male has flat noise at 0.5*peak & 1.5*peak; a Female whose 2*f0 peaked has sharp tonal peaks at BOTH!
+  if (peak_bin >= clampK(42) && peak_bin <= clampK(78)) {
+    int hb = peak_bin / 2;
+    int h3b = (peak_bin * 3) / 2;
+    if (hb >= clampK(22) && hb <= clampK(41) && h3b < 250) {
+      int best_hb = hb;
+      for (int k = max(5, hb - 1); k <= min(80, hb + 1); k++) {
+        if (vReal[k] > vReal[best_hb]) best_hb = k;
+      }
+      double m_half = vReal[best_hb];
+      double sk_half = 0.25 * (vReal[max(2, best_hb - 3)] + vReal[max(2, best_hb - 2)] +
+                               vReal[min(254, best_hb + 2)] + vReal[min(254, best_hb + 3)]) + 1e-6;
+      int best_3h = h3b;
+      for (int k = max(5, h3b - 1); k <= min(252, h3b + 1); k++) {
+        if (vReal[k] > vReal[best_3h]) best_3h = k;
+      }
+      double m_3half = vReal[best_3h];
+      double sk_3h = 0.25 * (vReal[max(2, best_3h - 3)] + vReal[max(2, best_3h - 2)] +
+                             vReal[min(254, best_3h + 2)] + vReal[min(254, best_3h + 3)]) + 1e-6;
+      if (m_half >= 0.04 * peak_mag && m_half >= 2.2 * sk_half &&
+          m_3half >= 0.08 * peak_mag && m_3half >= 2.2 * sk_3h) {
+        peak_bin = best_hb;
+        peak_mag = m_half;
+      }
+    }
+  }
+
+  double f0_raw = peak_bin * ((double)SAMPLE_RATE / FFT_SAMPLES);
+  float f0_corr = (float)(f0_raw - df_t);
 
   double h2_mag = maxMagAround(peak_bin * 2);
   double h3_mag = maxMagAround(peak_bin * 3);
@@ -462,10 +492,13 @@ void loop() {
   double h4_h1 = h4_mag / (peak_mag + 1e-6);
   double harm_comb = (peak_mag + h2_mag + h3_mag) / (meanMag(8, 130) * 3.0 + 1e-6);
 
+  // Ceiling-fan-safe sub-harmonic ratio: ignore f0/3 if it falls inside 120-165 Hz ceiling-fan band (< bin 12)
   int b2 = max(4, peak_bin / 2);
-  int b3 = max(4, peak_bin / 3);
+  int b3 = peak_bin / 3;
   int b23 = max(4, (2 * peak_bin) / 3);
-  double sub_pk = max(maxMagAround(b2), max(maxMagAround(b3), maxMagAround(b23))) / (peak_mag + 1e-6);
+  double sub_mag = max(maxMagAround(b2), maxMagAround(b23));
+  if (b3 >= 12) sub_mag = max(sub_mag, maxMagAround(b3));
+  double sub_pk = sub_mag / (peak_mag + 1e-6);
 
   int k12 = clampK(12), k21 = clampK(21), k22 = clampK(22);
   int k28 = clampK(28), k35 = clampK(35), k42 = clampK(42);
@@ -531,10 +564,10 @@ void loop() {
   int tier1 = 0;
   float tier1_prob = probs[0];
 
-  // Bio-acoustic wing-edge harmonic guard: real chitin wingbeats ALWAYS carry 3rd harmonic & >1.15 kHz buzz,
-  // whereas human nasal hum / "mew-mew" / falsetto rolls off steeply (h3 < 0.09, b_1150_2800 < 0.85).
-  bool vec_harm_ok = (h2_h1 >= 0.085 && h2_h1 <= 1.15 && h3_h1 >= 0.095 && b_1150_2800 >= 0.90 && sub_pk <= 0.58);
-  bool mal_harm_ok = (h2_h1 >= 0.085 && h2_h1 <= 1.15 && h3_h1 >= 0.080 && b_1150_2800 >= 0.85 && sub_pk <= 0.58);
+  // Bio-acoustic wing-edge harmonic guard (v5.2 — supports BOTH live flat mic AND bright iPhone speaker H2 up to 4.8x!):
+  // Real chitin wingbeats ALWAYS carry 3rd harmonic & >1.15 kHz buzz, whereas human "mew-mew" / falsetto has h3 < 0.07 & bhi < 0.70.
+  bool vec_harm_ok = (h2_h1 >= 0.085 && h3_h1 >= 0.085 && b_1150_2800 >= 0.90 && sub_pk <= 0.65);
+  bool mal_harm_ok = (h2_h1 >= 0.085 && h2_h1 <= 1.80 && h3_h1 >= 0.080 && b_1150_2800 >= 0.85 && sub_pk <= 0.58);
 
   if (above_floor) {
     if (p_vec >= VEC_PROB_MIN && f0_corr >= 345.0f && f0_corr <= 655.0f && vec_harm_ok) {
@@ -560,7 +593,7 @@ void loop() {
   // 4-Frame Pitch-Locked Streak + Total-Drift Anchor Lock (rejects vocal pitch glides like "mew-mew"!)
   if (tier1 == 2) {
     bool stable_pitch = (vector_streak == 0) ||
-                        (fabsf(f0_corr - prev_vec_f0) <= 34.0f && fabsf(f0_corr - streak_anchor_f0) <= 36.0f);
+                        (fabsf(f0_corr - prev_vec_f0) <= 36.0f && fabsf(f0_corr - streak_anchor_f0) <= 42.0f);
     if (stable_pitch) {
       if (vector_streak == 0) streak_anchor_f0 = f0_corr;
       vector_streak = min((uint8_t)10, (uint8_t)(vector_streak + 1));
@@ -657,7 +690,7 @@ void loop() {
   }
 
   if (serial_verbose && above_floor) {
-    Serial.printf("[P2v5.1] F0:%.1fHz T:%.1fC T1:%d P:%.2f STK:%u [A:%.2f N:%.2f C:%.2f] SNR:%.1f RMS:%.0f H2:%.2f H3:%.2f BHI:%.2f SUB:%.2f IR:%s/%s AED:%lu ANO:%lu CUL:%lu BEE:%lu MAL:%lu CAT:%lu\n",
+    Serial.printf("[P2v5.2] F0:%.1fHz T:%.1fC T1:%d P:%.2f STK:%u [A:%.2f N:%.2f C:%.2f] SNR:%.1f RMS:%.0f H2:%.2f H3:%.2f BHI:%.2f SUB:%.2f IR:%s/%s AED:%lu ANO:%lu CUL:%lu BEE:%lu MAL:%lu CAT:%lu\n",
                   f0_corr, cached_t, tier1, tier1_prob, vector_streak, probs[2], probs[3], probs[4],
                   snr_db, e_rms, h2_h1, h3_h1, b_1150_2800, sub_pk,
                   ir1_stuck ? "POT" : "OK", ir2_stuck ? "POT" : "OK",

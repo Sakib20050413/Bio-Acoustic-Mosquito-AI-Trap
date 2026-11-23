@@ -1,9 +1,9 @@
 {
   "champion": {
-    "seed": 102,
+    "seed": 105,
     "lr": 0.0085,
-    "l2": 0.00018,
-    "score": 844.721
+    "l2": 0.00022,
+    "score": 838.914
   },
   "rounds": [
     {
@@ -11,72 +11,72 @@
       "seed": 101,
       "lr": 0.008,
       "l2": 0.00015,
-      "val_acc6": 94.57,
-      "val_f1": 91.53,
-      "val_guild": 97.92,
+      "val_acc6": 93.02,
+      "val_f1": 90.03,
+      "val_guild": 96.22,
       "val_bee_safe": 100.0,
-      "val_noise_rej": 98.98,
-      "composite_score": 842.604
+      "val_noise_rej": 98.65,
+      "composite_score": 836.793
     },
     {
       "round": 2,
       "seed": 102,
       "lr": 0.0085,
       "l2": 0.00018,
-      "val_acc6": 95.05,
-      "val_f1": 92.21,
-      "val_guild": 98.2,
+      "val_acc6": 93.24,
+      "val_f1": 90.41,
+      "val_guild": 96.26,
       "val_bee_safe": 100.0,
-      "val_noise_rej": 99.27,
-      "composite_score": 844.721
+      "val_noise_rej": 98.29,
+      "composite_score": 836.477
     },
     {
       "round": 3,
       "seed": 103,
       "lr": 0.009,
       "l2": 0.0002,
-      "val_acc6": 94.65,
-      "val_f1": 91.57,
-      "val_guild": 97.96,
+      "val_acc6": 92.83,
+      "val_f1": 89.74,
+      "val_guild": 96.26,
       "val_bee_safe": 100.0,
-      "val_noise_rej": 99.12,
-      "composite_score": 843.109
+      "val_noise_rej": 98.93,
+      "composite_score": 837.157
     },
     {
       "round": 4,
       "seed": 104,
       "lr": 0.0075,
       "l2": 0.00016,
-      "val_acc6": 94.05,
-      "val_f1": 90.66,
-      "val_guild": 97.88,
+      "val_acc6": 92.49,
+      "val_f1": 89.16,
+      "val_guild": 96.26,
       "val_bee_safe": 100.0,
-      "val_noise_rej": 99.05,
-      "composite_score": 841.541
+      "val_noise_rej": 98.72,
+      "composite_score": 835.844
     },
     {
       "round": 5,
       "seed": 105,
       "lr": 0.0085,
       "l2": 0.00022,
-      "val_acc6": 94.33,
-      "val_f1": 90.98,
-      "val_guild": 97.84,
+      "val_acc6": 93.43,
+      "val_f1": 90.62,
+      "val_guild": 96.6,
       "val_bee_safe": 100.0,
-      "val_noise_rej": 99.12,
-      "composite_score": 842.151
+      "val_noise_rej": 98.93,
+      "composite_score": 838.914
     },
     {
       "round": 6,
       "seed": 106,
       "lr": 0.0095,
       "l2": 0.00018,
-      "val_acc6": 94.33,
-      "val_f1": 90.91,
-      "val_guild": 97.92,
+      "val_acc6": 92.94,
+      "val_f1": 90.04,
+      "val_guild": 96.15,
       "val_bee_safe": 100.0,
-      "val_noise_rej": 99.12,
-      "composite_score": 842.201
+      "val_noise_rej": 98.86,
+      "composite_score": 837.174
     }
   ]
 }
