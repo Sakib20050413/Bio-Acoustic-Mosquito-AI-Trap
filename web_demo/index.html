@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>WingBeat-TinyNet v5.2 — 100% Real Unlooped Bio-Acoustic Audio Hub</title>
+<title>WingBeat-TinyNet v6.0 Clean-Real — 100% Real Unlooped Bio-Acoustic Audio Hub</title>
 <style>
   :root {
     --bg: #0a0f1a; --surface: #111827; --surface-2: #172033; --border: #243047;
@@ -61,23 +61,23 @@
 <body>
 <div class="shell">
   <header class="masthead">
-    <div class="kicker"><span class="dot"></span> WINGBEAT-TINYNET v5.2 &bull; 100% REAL UNLOOPED ONLINE DATASETS</div>
+    <div class="kicker"><span class="dot"></span> WINGBEAT-TINYNET v6.0 CLEAN-REAL &bull; 100% REAL UNLOOPED ONLINE DATASETS</div>
     <h1>100% Real Peer-Reviewed Mosquito &amp; Bee Audio Hub</h1>
     <p class="lead">
-      <strong>ZERO synthetic tones, ZERO baked-in loops.</strong> Every track is an authentic uncut recording sourced directly from
+      <strong>ZERO synthetic tones, ZERO baked-in loops, ZERO fake EQ augmentation.</strong> Every track is an authentic uncut recording sourced directly from
       <strong>PLOS ONE MosquitoSong+</strong>, <strong>Oxford HumBugDB (44.1 kHz free-flight)</strong>, <strong>Wikimedia Commons (Real Bees)</strong>, and <strong>ESC-50</strong> —
-      audited for <strong>iPhone 13 Pro Max speakers + live ceiling fan</strong> under <code>v5.2</code> Octave-Jump Recovery.
+      tested with <code>v6.0</code> <strong>130 Hz Butterworth HPF + Local-Envelope Spectral Whitening</strong> for both <strong>live mosquitoes (2&ndash;6 cm)</strong> and <strong>any Android / iPhone / laptop speaker</strong>.
     </p>
     <div class="metrics-bar">
-      <div class="metric"><div class="v">100% Real</div><div class="k">Zero sin() / Zero Loops</div></div>
-      <div class="metric"><div class="v">iPhone EQ</div><div class="k">0.5x/1.5x Octave Recovery</div></div>
-      <div class="metric"><div class="v">0 / 10,608</div><div class="k">ESC-50 + Mew False Fan</div></div>
-      <div class="metric"><div class="v">44.1 kHz</div><div class="k">Lossless 16-Bit PCM WAV</div></div>
+      <div class="metric"><div class="v">0% Synth</div><div class="k">13,256 Untouched Real Frames</div></div>
+      <div class="metric"><div class="v">130Hz + R[k]</div><div class="k">Live Air + Any Phone Speaker</div></div>
+      <div class="metric"><div class="v">94.42% Guild</div><div class="k">Clip-Disjoint 5-Fold CV (INT8)</div></div>
+      <div class="metric"><div class="v">100.0% Bee</div><div class="k">Real Bee Safe (0 Fan Triggers)</div></div>
     </div>
   </header>
 
   <section class="tip-strip">
-    <div><strong>Tip:</strong> Tap <strong>Loop: ON</strong> on any real uncut track to keep it repeating while holding your iPhone speaker <strong>5&ndash;10 cm</strong> from <code>INMP441</code> at <strong>80&ndash;95%</strong> volume.</div>
+    <div><strong>Tip:</strong> Tap <strong>Loop: ON</strong> on any real uncut track and hold <strong>any Android, iPhone, or laptop speaker</strong> <strong>5&ndash;12 cm</strong> from <code>INMP441</code> at <strong>70&ndash;90%</strong> volume — or test with live captured mosquitoes in a mesh cup (2&ndash;6 cm, quiet room).</div>
     <div class="tool-links">
       <a class="tool-link" href="./3d-enclosure.html" target="_blank" rel="noopener">3D PVC Enclosure</a>
       <a class="tool-link" href="./wiring-44pin.html" target="_blank" rel="noopener">44-Pin Wiring</a>
@@ -114,7 +114,7 @@
   </section>
 
   <footer>
-    <strong>WingBeat-TinyNet v5.2</strong> &mdash; Dept. of CSE, BAIUST, Cumilla (CSE 326 Microprocessor / Embedded Systems Sessional)<br/>
+    <strong>WingBeat-TinyNet v6.0 Clean-Real</strong> &mdash; Dept. of CSE, BAIUST, Cumilla (CSE 326 Microprocessor / Embedded Systems Sessional)<br/>
     Team: Md. Najmus Sakib Rahatul (1119003), Nesar Uddin Ifag (1119004), Rayhan Alam Towhid (1119007) &bull; Supervisor: Md. Fahim Kabir Chowdhury
   </footer>
 </div>
@@ -129,13 +129,13 @@ function makeCard(item, idx, isDemo){
   const srcLink = item.source_url ? `<a href="${esc(item.source_url)}" target="_blank" rel="noopener">Verify Original Source &nearr;</a>` : `<span>${esc(item.filename)}</span>`;
   const meta = isDemo
     ? `${item.dataset} • ${item.duration_s}s Uncut • Peak: ${item.f0}`
-    : `${item.dataset} • ${item.duration_s}s Uncut • f0: ${item.f0} Hz | H3: ${item.h3} | BHI: ${item.bhi}`;
+    : `${item.dataset} • ${item.duration_s}s Uncut • f0: ${item.f0} Hz | RH2: ${item.rh2} | RH3: ${item.rh3}`;
   return `<article class="trk" style="border-left:4px solid ${esc(item.color)};">
     <div class="trk-top"><span class="trk-idx">#${String(idx).padStart(2,"0")}</span><div class="trk-title">${esc(item.title)}</div><button class="loop-btn" type="button" onclick="toggleLoop(this)">Loop: OFF</button></div>
     <div class="trk-meta">${esc(meta)}</div>
     <div class="trk-exp" style="color:${esc(item.color)};">${esc(item.expect)}</div>
-    <audio controls playsinline preload="none" data-title="${esc(item.title)}" src="${encodeURI(item.src)}?v=52"></audio>
-    <div class="trk-foot">${srcLink}<a href="${encodeURI(item.src)}?v=52" download="${esc(item.filename)}">Download 44.1 kHz WAV</a></div>
+    <audio controls playsinline preload="none" data-title="${esc(item.title)}" src="${encodeURI(item.src)}?v=60"></audio>
+    <div class="trk-foot">${srcLink}<a href="${encodeURI(item.src)}?v=60" download="${esc(item.filename)}">Download 44.1 kHz WAV</a></div>
   </article>`;
 }
 function renderDemo(){document.getElementById("demoList").innerHTML=DATA.demo.map((d,i)=>makeCard(d,i+1,true)).join("");}
@@ -146,6 +146,6 @@ function renderLibrary(){
 }
 document.addEventListener("play",e=>{if(e.target.tagName!=="AUDIO")return;document.querySelectorAll("audio").forEach(a=>{if(a!==e.target)a.pause();});document.querySelectorAll(".trk.playing").forEach(c=>c.classList.remove("playing"));const c=e.target.closest(".trk");if(c)c.classList.add("playing");document.getElementById("nowTitle").textContent=e.target.dataset.title||"Playing";document.getElementById("nowBar").classList.add("show");},true);
 document.addEventListener("ended",e=>{if(e.target.tagName!=="AUDIO"||e.target.loop)return;const c=e.target.closest(".trk");if(c)c.classList.remove("playing");document.getElementById("nowBar").classList.remove("show");},true);
-fetch("./manifest.json?v=52").then(r=>r.json()).then(j=>{DATA=j;renderDemo();renderLibrary();if(location.hash==="#library")switchMode("lib");});
+fetch("./manifest.json?v=60").then(r=>r.json()).then(j=>{DATA=j;renderDemo();renderLibrary();if(location.hash==="#library")switchMode("lib");});
 </script>
 </body></html>

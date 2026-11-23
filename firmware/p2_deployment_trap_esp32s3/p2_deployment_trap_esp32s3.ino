@@ -1,15 +1,21 @@
 /*
  * ============================================================================
- * PROJECT 2 (CSE 326): WINGBEAT-TINYNET v5.0 — 6-CLASS HIERARCHICAL Q1 FIRMWARE
+ * PROJECT 2 (CSE 326): WINGBEAT-TINYNET v6.0 CLEAN-REAL — 6-CLASS Q1 FIRMWARE
  * Hardware: ESP32-S3 N16R8 | Sequential Fan Gating (Fan 0% OFF during listening)
  *
- * 6-Class Multi-Genus Bio-Acoustic TinyML (24 -> 96 -> 48 -> 6, 10-Round QAT INT8):
- *   Class 0: NOISE / ENV         (ESC-50 birds/horn/sawmill/rain/speech/fan -> Fan OFF)
- *   Class 1: POLLINATOR (BEE)    (145-265 Hz + Optical 26-60ms Bee Veto    -> Fan OFF)
- *   Class 2: AEDES (DENGUE/CHIK) (Female Ae. aegypti & Ae. albopictus      -> Fan 5.0s!)
- *   Class 3: ANOPHELES (MALARIA) (Female An. dirus                         -> Fan 5.0s!)
- *   Class 4: CULEX (FILARIASIS)  (Female Cx. quinquefasciatus              -> Fan 5.0s!)
- *   Class 5: MALE MOSQUITO       (Non-biting Males >665 Hz                 -> Fan OFF)
+ * 100% Untouched Real Audio Training (0% synthetic sin(), 0% artificial EQ/aug)
+ * + 130 Hz 2nd-Order Butterworth HPF (strips mains, ceiling fan & lab rumble)
+ * + Local-Envelope Spectral Whitening R[k] (device-neutral across live air,
+ *   3D funnel, Android, iPhone, and laptop speakers)
+ * + Unified 0.5x/1.5x Sub-Octave Fundamental Recovery (Bees + Small Speakers)
+ *
+ * 6-Class Multi-Genus Bio-Acoustic TinyML (24 -> 96 -> 48 -> 6, QAT INT8):
+ *   Class 0: NOISE / ENV         (ESC-50 + Room + Sawmill + Speech       -> Fan OFF)
+ *   Class 1: POLLINATOR (BEE)    (135-290 Hz + Optical 26-60ms Bee Veto  -> Fan OFF)
+ *   Class 2: AEDES (DENGUE/CHIK) (Female Ae. aegypti & Ae. albopictus    -> Fan 5.0s!)
+ *   Class 3: ANOPHELES (MALARIA) (Female An. dirus                       -> Fan 5.0s!)
+ *   Class 4: CULEX (FILARIASIS)  (Female Cx. quinquefasciatus            -> Fan 5.0s!)
+ *   Class 5: MALE MOSQUITO       (Non-biting Males 665-1020 Hz           -> Fan OFF)
  * ============================================================================
  */
 
@@ -44,24 +50,34 @@
 
 #define SAMPLE_RATE         8000
 #define FFT_SAMPLES         512
-#define MIN_ACTIVE_RMS      1100.0f
-#define MIN_ACTIVE_SNR      13.0f
+#define MIN_ACTIVE_RMS      160.0f
+#define MIN_ACTIVE_SNR      11.5f
 #define VECTOR_STREAK_REQ   4
 #define MALE_STREAK_REQ     4
 #define POL_STREAK_REQ      4
-#define VEC_PROB_MIN        0.75f
-#define MAL_PROB_MIN        0.76f
-#define POL_PROB_MIN        0.75f
+#define VEC_PROB_MIN        0.72f
+#define MAL_PROB_MIN        0.72f
+#define POL_PROB_MIN        0.70f
 #define FAN_COOLDOWN_MS     1500UL
 #define OLED_REFRESH_MS     400UL
 #define IR_STUCK_MS         150UL
+
+// Exact 2nd-order Butterworth High-Pass Filter (fc = 130 Hz, fs = 8000 Hz)
+// Bit-exact match with Python training pipeline (strips 50/60/120 Hz mains & ceiling fan)
+static const double HP_B0 =  0.9303447533;
+static const double HP_B1 = -1.8606895066;
+static const double HP_B2 =  0.9303447533;
+static const double HP_A1 = -1.8558317538;
+static const double HP_A2 =  0.8655472595;
 
 DHT dht(PIN_DHT22, DHT22);
 U8G2_SH1106_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, U8X8_PIN_NONE);
 Preferences prefs;
 
 double vReal[FFT_SAMPLES], vImag[FFT_SAMPLES];
-double fftPow[FFT_SAMPLES / 2];
+double specR[FFT_SAMPLES / 2];
+double specE[FFT_SAMPLES / 2];
+double specEp[FFT_SAMPLES / 2];
 ArduinoFFT<double> FFT = ArduinoFFT<double>(vReal, vImag, FFT_SAMPLES, SAMPLE_RATE);
 
 uint32_t cnt_aedes = 0, cnt_anoph = 0, cnt_culex = 0;
@@ -93,7 +109,7 @@ bool ir1_stuck = false;
 bool ir2_stuck = false;
 float last_valid_dt_ms = 12.0f;
 uint32_t last_ir1_pulse_ms = 0;
-float ambient_rms_ema = 1100.0f;
+float ambient_rms_ema = 220.0f;
 
 bool show_diag_page = false;
 bool serial_verbose = true;
@@ -103,29 +119,21 @@ void setRelay(bool on) {
   digitalWrite(PIN_RELAY_FAN, (on == RELAY_ACTIVE_HIGH) ? HIGH : LOW);
 }
 
-static inline double sumPow(int k_start, int k_end_excl) {
+static inline double sumEp(int k_start, int k_end_excl) {
   int ks = max(0, k_start);
   int ke = min(FFT_SAMPLES / 2, k_end_excl);
   double s = 0.0;
-  for (int k = ks; k < ke; k++) s += fftPow[k];
+  for (int k = ks; k < ke; k++) s += specEp[k];
   return s;
 }
 
-static inline double meanMag(int k_start, int k_end_excl) {
-  int ks = max(0, k_start);
-  int ke = min(FFT_SAMPLES / 2, k_end_excl);
-  if (ke <= ks) return 0.0;
-  double s = 0.0;
-  for (int k = ks; k < ke; k++) s += vReal[k];
-  return s / (double)(ke - ks);
-}
-
-static inline double maxMagAround(int center_bin) {
-  int lo = max(1, center_bin - 1);
-  int hi = min(255, center_bin + 1);
+static inline double maxRAround(int center_bin) {
+  if (center_bin < 5 || center_bin > 247) return 0.0;
+  int lo = max(5, center_bin - 1);
+  int hi = min(247, center_bin + 1);
   double mx = 0.0;
   for (int k = lo; k <= hi; k++) {
-    if (vReal[k] > mx) mx = vReal[k];
+    if (specR[k] > mx) mx = specR[k];
   }
   return mx;
 }
@@ -298,7 +306,7 @@ void setup() {
 
   dht.begin();
   u8g2.begin();
-  showToastOLED("WingBeat v5.2", "Phone+Live QAT", 400);
+  showToastOLED("WingBeat v6.0", "100% Real QAT", 400);
 
   // 3-Zone LED Hardware Self-Test on Boot (Green -> Yellow -> Red)
   digitalWrite(LED_GREEN, HIGH);  delay(220); digitalWrite(LED_GREEN, LOW);
@@ -324,7 +332,7 @@ void setup() {
   };
   i2s_driver_install(I2S_NUM_0, &cfg, 0, NULL);
   i2s_set_pin(I2S_NUM_0, &pins);
-  Serial.println("\n=== PROJECT 2 (CSE 326) WINGBEAT-TINYNET v5.2 (PHONE+LIVE OCTAVE RECOVERY + VOCAL GUARD) STARTED ===");
+  Serial.println("\n=== PROJECT 2 (CSE 326) WINGBEAT-TINYNET v6.0 CLEAN-REAL (130Hz HPF + WHITENED QAT INT8) STARTED ===");
 }
 
 void loop() {
@@ -406,24 +414,48 @@ void loop() {
   }
   mean /= FFT_SAMPLES;
 
-  double e_rms = 0.0;
-  int zcr_cnt = 0;
+  // 130 Hz 2nd-order Butterworth High-Pass Filter (bit-exact with Python hpf_130hz)
+  // Strips 50/60/120 Hz mains hum, ceiling-fan motor rumble & low-frequency vibration
+  double x1 = 0.0, x2 = 0.0, y1 = 0.0, y2 = 0.0;
+  double hpf_mean = 0.0;
   for (int i = 0; i < FFT_SAMPLES; i++) {
-    vReal[i] -= mean;
+    double x0 = vReal[i] - mean;
+    double y0 = HP_B0 * x0 + HP_B1 * x1 + HP_B2 * x2 - HP_A1 * y1 - HP_A2 * y2;
+    vReal[i] = y0;
+    hpf_mean += y0;
+    x2 = x1; x1 = x0;
+    y2 = y1; y1 = y0;
+  }
+  hpf_mean /= FFT_SAMPLES;
+
+  double e_rms = 0.0;
+  for (int i = 0; i < FFT_SAMPLES; i++) {
+    vReal[i] -= hpf_mean;
     e_rms += vReal[i] * vReal[i];
-    if (i > 0 && ((vReal[i] >= 0.0) != (vReal[i - 1] >= 0.0))) {
-      zcr_cnt++;
-    }
   }
   e_rms = sqrt(e_rms / FFT_SAMPLES);
-  double zcr = (double)zcr_cnt / FFT_SAMPLES;
 
   FFT.windowing(FFTWindow::Hann, FFTDirection::Forward);
   FFT.compute(FFTDirection::Forward);
   FFT.complexToMagnitude();
 
+  // Local-Envelope Spectral Whitening R[k] = spec[k] / flank_mean[k] (+-8 bins excluding +-2)
+  // Cancels smooth microphone, 3D-printed funnel, Android, iPhone & laptop speaker EQ tilt!
   for (int k = 0; k < FFT_SAMPLES / 2; k++) {
-    fftPow[k] = vReal[k] * vReal[k];
+    specR[k] = 0.0; specE[k] = 0.0; specEp[k] = 0.0;
+  }
+  for (int k = 5; k < 248; k++) {
+    int lo1 = max(2, k - 8), hi1 = max(3, k - 2);
+    int lo2 = min(253, k + 3), hi2 = min(255, k + 9);
+    double sfl = 0.0;
+    for (int j = lo1; j < hi1; j++) sfl += vReal[j];
+    for (int j = lo2; j < hi2; j++) sfl += vReal[j];
+    int cnt = max(1, (hi1 - lo1) + (hi2 - lo2));
+    double rk = vReal[k] / (sfl / (double)cnt + 1e-6);
+    specR[k] = rk;
+    double ek = (rk > 1.35) ? (rk - 1.35) : 0.0;
+    specE[k] = ek;
+    specEp[k] = ek * ek;
   }
 
   // Universal DHT22 Thermal Spectral Bin Warping (+7.0 Hz/degC ref 28.0C)
@@ -431,52 +463,56 @@ void loop() {
   double t_eff = max(10.0, min(45.0, (double)cached_t));
   double df_t = 7.0 * (t_eff - 28.0);
   int bsh = (int)lround(df_t / ((double)SAMPLE_RATE / FFT_SAMPLES));
-  auto clampK = [bsh](int k) -> int { return max(5, min(175, k + bsh)); };
+  auto clampK = [bsh](int k) -> int { return max(9, min(175, k + bsh)); };
 
-  int k_lo = max(6, 8 + bsh);
+  int k_lo = max(9, 9 + bsh);
   int k_hi = min(80, 68 + bsh);
   int band_len = max(2, k_hi - k_lo);
 
-  int peak_bin = k_lo;
-  double peak_mag = 0.0, mag_sum = 0.0, w_freq = 0.0, log_sum = 0.0, p_band_sum = 0.0;
+  double max_raw_bio = 0.0;
   for (int k = k_lo; k < k_hi; k++) {
-    double m = vReal[k];
-    double f = k * ((double)SAMPLE_RATE / FFT_SAMPLES);
-    mag_sum += m;
-    w_freq += f * m;
-    log_sum += log(max(m, 1e-6));
-    p_band_sum += fftPow[k];
-    if (m > peak_mag) { peak_mag = m; peak_bin = k; }
+    if (vReal[k] > max_raw_bio) max_raw_bio = vReal[k];
   }
+  max_raw_bio += 1e-6;
 
-  double noise_avg = (mag_sum - peak_mag) / (double)(band_len - 1) + 1e-6;
-  double snr_db = 20.0 * log10((peak_mag + 1e-6) / noise_avg);
+  int peak_bin = k_lo;
+  double best_R_cand = -1.0;
+  for (int k = k_lo; k < k_hi; k++) {
+    double rc = (vReal[k] >= 0.08 * max_raw_bio) ? specR[k] : 0.0;
+    if (rc > best_R_cand) {
+      best_R_cand = rc;
+      peak_bin = k;
+    }
+  }
+  double pk_R = specR[peak_bin];
+  double pk_raw = vReal[peak_bin];
+  double snr_db = 20.0 * log10(max(pk_R, 1.0));
 
-  // Smartphone micro-speaker octave-jump recovery (v5.2):
-  // Small phone speakers attenuate 350-550 Hz so 2*f0 (700-1100 Hz) can exceed f0!
-  // A true 665-1020 Hz Male has flat noise at 0.5*peak & 1.5*peak; a Female whose 2*f0 peaked has sharp tonal peaks at BOTH!
-  if (peak_bin >= clampK(42) && peak_bin <= clampK(78)) {
+  // Unified 0.5x / 1.5x Sub-Octave Fundamental Recovery in Whitened Space R[k]:
+  //   - Snaps 2*f0-dominant Bees (280-570 Hz) back to true Bee f0 (140-285 Hz) -> BEE SAFE
+  //   - Snaps small-speaker 2*f0-peaking Females (680-1218 Hz) back to true f0 (340-640 Hz)
+  if (peak_bin >= clampK(19) && peak_bin <= clampK(78)) {
     int hb = peak_bin / 2;
     int h3b = (peak_bin * 3) / 2;
-    if (hb >= clampK(22) && hb <= clampK(41) && h3b < 250) {
-      int best_hb = hb;
-      for (int k = max(5, hb - 1); k <= min(80, hb + 1); k++) {
-        if (vReal[k] > vReal[best_hb]) best_hb = k;
+    if (hb >= clampK(9) && hb <= clampK(41) && h3b < 246) {
+      int best_hb = max(9, hb - 1);
+      for (int k = max(9, hb - 1); k <= min(80, hb + 1); k++) {
+        if (specR[k] > specR[best_hb]) best_hb = k;
       }
+      double r_half = specR[best_hb];
       double m_half = vReal[best_hb];
-      double sk_half = 0.25 * (vReal[max(2, best_hb - 3)] + vReal[max(2, best_hb - 2)] +
-                               vReal[min(254, best_hb + 2)] + vReal[min(254, best_hb + 3)]) + 1e-6;
-      int best_3h = h3b;
-      for (int k = max(5, h3b - 1); k <= min(252, h3b + 1); k++) {
-        if (vReal[k] > vReal[best_3h]) best_3h = k;
+
+      int best_3h = max(9, h3b - 1);
+      for (int k = max(9, h3b - 1); k <= min(246, h3b + 1); k++) {
+        if (specR[k] > specR[best_3h]) best_3h = k;
       }
-      double m_3half = vReal[best_3h];
-      double sk_3h = 0.25 * (vReal[max(2, best_3h - 3)] + vReal[max(2, best_3h - 2)] +
-                             vReal[min(254, best_3h + 2)] + vReal[min(254, best_3h + 3)]) + 1e-6;
-      if (m_half >= 0.04 * peak_mag && m_half >= 2.2 * sk_half &&
-          m_3half >= 0.08 * peak_mag && m_3half >= 2.2 * sk_3h) {
+      double r_3h = specR[best_3h];
+      double min_raw_frac = (peak_bin < clampK(42)) ? 0.14 : 0.03;
+      if (r_half >= 2.3 && r_3h >= 2.2 && m_half >= min_raw_frac * pk_raw) {
         peak_bin = best_hb;
-        peak_mag = m_half;
+        pk_R = r_half;
+        pk_raw = m_half;
+        snr_db = 20.0 * log10(max(pk_R, 1.0));
       }
     }
   }
@@ -484,73 +520,91 @@ void loop() {
   double f0_raw = peak_bin * ((double)SAMPLE_RATE / FFT_SAMPLES);
   float f0_corr = (float)(f0_raw - df_t);
 
-  double h2_mag = maxMagAround(peak_bin * 2);
-  double h3_mag = maxMagAround(peak_bin * 3);
-  double h4_mag = (peak_bin * 4 < 255) ? maxMagAround(peak_bin * 4) : 0.0;
-  double h2_h1 = h2_mag / (peak_mag + 1e-6);
-  double h3_h1 = h3_mag / (peak_mag + 1e-6);
-  double h4_h1 = h4_mag / (peak_mag + 1e-6);
-  double harm_comb = (peak_mag + h2_mag + h3_mag) / (meanMag(8, 130) * 3.0 + 1e-6);
+  double r_h2 = maxRAround(peak_bin * 2);
+  double r_h3 = maxRAround(peak_bin * 3);
+  double r_h4 = (peak_bin * 4 < 247) ? maxRAround(peak_bin * 4) : 0.0;
 
-  // Ceiling-fan-safe sub-harmonic ratio: ignore f0/3 if it falls inside 120-165 Hz ceiling-fan band (< bin 12)
-  int b2 = max(4, peak_bin / 2);
+  double h2_prom = log1p(r_h2);
+  double h3_prom = log1p(r_h3);
+  double h4_prom = log1p(r_h4);
+  double h2_h1_w = log1p(min(r_h2 / (pk_R + 1e-6), 3.0));
+  double h3_h1_w = log1p(min(r_h3 / (pk_R + 1e-6), 3.0));
+  double h3_h2_w = log1p(min(r_h3 / (r_h2 + 1e-6), 3.0));
+  double harm_comb_w = log1p((pk_R + r_h2 + r_h3) / 3.0);
+
+  // Ceiling-fan-safe whitened sub-harmonic ratio (ignore f0/3 if < bin 12 / 187.5 Hz)
+  int b2 = max(9, peak_bin / 2);
   int b3 = peak_bin / 3;
-  int b23 = max(4, (2 * peak_bin) / 3);
-  double sub_mag = max(maxMagAround(b2), maxMagAround(b23));
-  if (b3 >= 12) sub_mag = max(sub_mag, maxMagAround(b3));
-  double sub_pk = sub_mag / (peak_mag + 1e-6);
+  int b23 = max(9, (2 * peak_bin) / 3);
+  double sub_R = max(maxRAround(b2), maxRAround(b23));
+  if (b3 >= 12) sub_R = max(sub_R, maxRAround(b3));
+  double sub_pk_w = min(sub_R / (pk_R + 1e-6), 2.5);
 
-  int k12 = clampK(12), k21 = clampK(21), k22 = clampK(22);
-  int k28 = clampK(28), k35 = clampK(35), k42 = clampK(42);
-  int k74 = clampK(74), k86 = clampK(86);
+  int k9 = clampK(9), k14 = clampK(14), k21 = clampK(21);
+  int k28 = clampK(28), k35 = clampK(35), k42 = clampK(42), k68 = clampK(68);
+  double ep_bio = sumEp(k9, k68) + 1e-6;
 
-  double e_tot = sumPow(5, 180) + 1e-8;
-  double e_80_1050 = sumPow(5, clampK(68)) + 1e-8;
-  double e_vec = sumPow(k22, k42) + 1e-8;
+  double pk3_tonal_w = sumEp(max(9, peak_bin - 1), min(80, peak_bin + 2)) / ep_bio;
+  double skirt_w = (specR[max(9, peak_bin - 3)] + specR[max(9, peak_bin - 2)] +
+                    specR[min(80, peak_bin + 2)] + specR[min(80, peak_bin + 3)]) / (4.0 * pk_R + 1e-6);
 
-  double pk3_tonal = sumPow(max(5, peak_bin - 1), min(80, peak_bin + 2)) / e_80_1050;
-  double skirt = (vReal[max(5, peak_bin - 3)] + vReal[max(5, peak_bin - 2)] +
-                  vReal[min(80, peak_bin + 2)] + vReal[min(80, peak_bin + 3)]) / (4.0 * peak_mag + 1e-6);
-  double flatness = exp(log_sum / (double)band_len) / (mag_sum / (double)band_len + 1e-6);
+  double r_sum = 0.0, r_log_sum = 0.0;
+  double ep_b_sum = 0.0, e_b_sum = 0.0, w_freq = 0.0;
+  for (int k = k_lo; k < k_hi; k++) {
+    double rp = max(specR[k], 1e-4);
+    r_sum += rp;
+    r_log_sum += log(rp);
+    ep_b_sum += (specEp[k] + 1e-8);
+    double eb = specE[k] + 1e-6;
+    e_b_sum += eb;
+    w_freq += (k * ((double)SAMPLE_RATE / FFT_SAMPLES)) * eb;
+  }
+  double flatness_w = exp(r_log_sum / (double)band_len) / (r_sum / (double)band_len + 1e-6);
 
   double ent_sum = 0.0;
-  double p_denom = p_band_sum + 1e-8;
   for (int k = k_lo; k < k_hi; k++) {
-    double pp = fftPow[k] / p_denom;
+    double pp = (specEp[k] + 1e-8) / ep_b_sum;
     ent_sum -= pp * log(pp + 1e-12);
   }
-  double spec_entropy = ent_sum / log((double)band_len);
+  double spec_entropy_w = ent_sum / log((double)band_len);
 
-  double centroid_raw = w_freq / (mag_sum + 1e-6);
-  double centroid = centroid_raw - df_t;
+  double w_cent_raw = w_freq / e_b_sum;
+  double w_centroid = w_cent_raw - df_t;
   double var_sum = 0.0;
   for (int k = k_lo; k < k_hi; k++) {
-    double df = k * ((double)SAMPLE_RATE / FFT_SAMPLES) - centroid_raw;
-    var_sum += df * df * vReal[k];
+    double df = k * ((double)SAMPLE_RATE / FFT_SAMPLES) - w_cent_raw;
+    var_sum += df * df * (specE[k] + 1e-6);
   }
-  double spec_spread = sqrt(var_sum / (mag_sum + 1e-6));
+  double w_spread = sqrt(var_sum / e_b_sum);
 
-  double log_low_vec = log1p(sumPow(5, k21) / e_vec);
-  double log_h2_vec  = log1p(sumPow(k42, k86) / e_vec);
-  double log_hi_vec  = log1p(sumPow(k86, 160) / e_vec);
+  double wb_140_220  = log1p(100.0 * sumEp(k9, k14) / ep_bio);
+  double wb_220_328  = log1p(100.0 * sumEp(k14, k21) / ep_bio);
+  double wb_328_438  = log1p(100.0 * sumEp(k21, k28) / ep_bio);
+  double wb_438_547  = log1p(100.0 * sumEp(k28, k35) / ep_bio);
+  double wb_547_656  = log1p(100.0 * sumEp(k35, k42) / ep_bio);
+  double wb_656_1062 = log1p(100.0 * sumEp(k42, k68) / ep_bio);
 
-  double b_78_188    = log1p(100.0 * sumPow(5, k12) / e_tot);
-  double b_188_328   = log1p(100.0 * sumPow(k12, k21) / e_tot);
-  double b_328_438   = log1p(100.0 * sumPow(k21, k28) / e_tot);
-  double b_438_547   = log1p(100.0 * sumPow(k28, k35) / e_tot);
-  double b_547_656   = log1p(100.0 * sumPow(k35, k42) / e_tot);
-  double b_656_1150  = log1p(100.0 * sumPow(k42, k74) / e_tot);
-  double b_1150_2800 = log1p(100.0 * sumPow(k74, 180) / e_tot);
+  double hi_max_R = 0.0;
+  int hi_tonal = 0;
+  int hi_len = max(1, 180 - k68);
+  for (int k = k68; k < 180; k++) {
+    if (specR[k] > hi_max_R) hi_max_R = specR[k];
+    if (specR[k] >= 2.5) hi_tonal++;
+  }
+  double hi_crest_w = log1p(hi_max_R);
+  double hi_tonal_cnt = (double)hi_tonal / (double)hi_len;
 
   float feats[P2_N_FEATURES] = {
-    f0_corr, (float)snr_db, (float)h2_h1, (float)h3_h1, (float)h4_h1, (float)harm_comb, (float)sub_pk,
-    (float)pk3_tonal, (float)skirt, (float)flatness, (float)spec_entropy, (float)centroid, (float)spec_spread, (float)zcr,
-    (float)log_low_vec, (float)log_h2_vec, (float)log_hi_vec,
-    (float)b_78_188, (float)b_188_328, (float)b_328_438, (float)b_438_547, (float)b_547_656, (float)b_656_1150, (float)b_1150_2800
+    f0_corr, (float)snr_db, (float)h2_prom, (float)h3_prom, (float)h4_prom,
+    (float)h2_h1_w, (float)h3_h1_w, (float)h3_h2_w,
+    (float)harm_comb_w, (float)sub_pk_w, (float)pk3_tonal_w, (float)skirt_w,
+    (float)flatness_w, (float)spec_entropy_w, (float)w_centroid, (float)w_spread,
+    (float)wb_140_220, (float)wb_220_328, (float)wb_328_438, (float)wb_438_547, (float)wb_547_656, (float)wb_656_1062,
+    (float)hi_crest_w, (float)hi_tonal_cnt
   };
 
   bool in_cooldown = (millis() < fan_cooldown_until_ms);
-  float dyn_rms_floor = max(MIN_ACTIVE_RMS, min(2400.0f, ambient_rms_ema * 1.12f));
+  float dyn_rms_floor = max(MIN_ACTIVE_RMS, min(2000.0f, ambient_rms_ema * 1.18f));
   bool above_floor = (!in_cooldown && snr_db >= MIN_ACTIVE_SNR && e_rms >= dyn_rms_floor);
 
   float probs[P2_N_CLASSES] = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
@@ -558,29 +612,27 @@ void loop() {
     runWingBeatQ1Probs(feats, probs);
   }
 
-  // Hierarchical Tier-1 Guild Decision:
+  // Hierarchical Tier-1 Guild Decision (v6.0 Clean-Real — Device-Neutral Whitened Physics):
   //   tier1: 0=Noise/Env, 1=Bee, 2=Female Vector {Aedes(2)+Anopheles(3)+Culex(4)}, 5=Male
   float p_vec = probs[2] + probs[3] + probs[4];
   int tier1 = 0;
   float tier1_prob = probs[0];
 
-  // Bio-acoustic wing-edge harmonic guard (v5.2 — supports BOTH live flat mic AND bright iPhone speaker H2 up to 4.8x!):
-  // Real chitin wingbeats ALWAYS carry 3rd harmonic & >1.15 kHz buzz, whereas human "mew-mew" / falsetto has h3 < 0.07 & bhi < 0.70.
-  bool vec_harm_ok = (h2_h1 >= 0.085 && h3_h1 >= 0.085 && b_1150_2800 >= 0.90 && sub_pk <= 0.65);
-  bool mal_harm_ok = (h2_h1 >= 0.085 && h2_h1 <= 1.80 && h3_h1 >= 0.080 && b_1150_2800 >= 0.85 && sub_pk <= 0.58);
+  bool vec_harm_ok = (r_h2 >= 2.2 && r_h3 >= 2.0 && sub_pk_w <= 0.58);
+  bool mal_harm_ok = (r_h2 >= 2.0 && r_h3 >= 1.8 && sub_pk_w <= 0.58);
 
   if (above_floor) {
-    if (p_vec >= VEC_PROB_MIN && f0_corr >= 345.0f && f0_corr <= 655.0f && vec_harm_ok) {
+    if (p_vec >= VEC_PROB_MIN && f0_corr >= 340.0f && f0_corr <= 660.0f && vec_harm_ok) {
       tier1 = 2; tier1_prob = p_vec;
     } else if (probs[5] >= MAL_PROB_MIN && f0_corr >= 665.0f && f0_corr <= 1020.0f && mal_harm_ok) {
       tier1 = 5; tier1_prob = probs[5];
-    } else if (probs[1] >= POL_PROB_MIN && f0_corr >= 140.0f && f0_corr <= 280.0f && h2_h1 >= 0.10) {
+    } else if (probs[1] >= POL_PROB_MIN && f0_corr >= 135.0f && f0_corr <= 290.0f && r_h2 >= 1.7) {
       tier1 = 1; tier1_prob = probs[1];
     }
   }
 
-  if (!in_cooldown && tier1 == 0 && e_rms < 2600.0) {
-    ambient_rms_ema = 0.94f * ambient_rms_ema + 0.06f * (float)e_rms;
+  if (!in_cooldown && tier1 == 0 && e_rms < 2200.0) {
+    ambient_rms_ema = 0.92f * ambient_rms_ema + 0.08f * (float)e_rms;
   }
 
   // Stage-2 Optical Pollinator Veto (only when IR1 is healthy & saw a slow 26-60ms bee pulse)
@@ -590,10 +642,10 @@ void loop() {
     tier1 = 1;
   }
 
-  // 4-Frame Pitch-Locked Streak + Total-Drift Anchor Lock (rejects vocal pitch glides like "mew-mew"!)
+  // 4-Frame Pitch-Locked Streak + Anchor Lock (rejects vocal pitch glides like "mew-mew"!)
   if (tier1 == 2) {
     bool stable_pitch = (vector_streak == 0) ||
-                        (fabsf(f0_corr - prev_vec_f0) <= 36.0f && fabsf(f0_corr - streak_anchor_f0) <= 42.0f);
+                        (fabsf(f0_corr - prev_vec_f0) <= 38.0f && fabsf(f0_corr - streak_anchor_f0) <= 46.0f);
     if (stable_pitch) {
       if (vector_streak == 0) streak_anchor_f0 = f0_corr;
       vector_streak = min((uint8_t)10, (uint8_t)(vector_streak + 1));
@@ -626,7 +678,7 @@ void loop() {
       last_male_count_ms = millis();
     }
     held_status_code = 3; status_hold_until_ms = millis() + 1500UL;
-  } else if (above_floor && tier1 == 0 && e_rms >= max(2000.0, (double)ambient_rms_ema * 1.45) && millis() >= status_hold_until_ms) {
+  } else if (above_floor && tier1 == 0 && e_rms >= max(1000.0, (double)ambient_rms_ema * 1.55) && millis() >= status_hold_until_ms) {
     held_status_code = 1; status_hold_until_ms = millis() + 700UL;
   }
 
@@ -689,10 +741,13 @@ void loop() {
     last_oled_ms = 0;
   }
 
-  if (serial_verbose && above_floor) {
-    Serial.printf("[P2v5.2] F0:%.1fHz T:%.1fC T1:%d P:%.2f STK:%u [A:%.2f N:%.2f C:%.2f] SNR:%.1f RMS:%.0f H2:%.2f H3:%.2f BHI:%.2f SUB:%.2f IR:%s/%s AED:%lu ANO:%lu CUL:%lu BEE:%lu MAL:%lu CAT:%lu\n",
+  static uint32_t last_idle_log_ms = 0;
+  if (serial_verbose && (above_floor || (millis() - last_idle_log_ms >= 2000UL))) {
+    if (!above_floor) last_idle_log_ms = millis();
+    Serial.printf("[P2v6.0] %s F0:%.1fHz T:%.1fC T1:%d P:%.2f STK:%u [A:%.2f N:%.2f C:%.2f] SNR:%.1f RMS:%.0f FLR:%.0f RH2:%.2f RH3:%.2f SUB:%.2f IR:%s/%s AED:%lu ANO:%lu CUL:%lu BEE:%lu MAL:%lu CAT:%lu\n",
+                  above_floor ? "ACT" : "IDL",
                   f0_corr, cached_t, tier1, tier1_prob, vector_streak, probs[2], probs[3], probs[4],
-                  snr_db, e_rms, h2_h1, h3_h1, b_1150_2800, sub_pk,
+                  snr_db, e_rms, dyn_rms_floor, r_h2, r_h3, sub_pk_w,
                   ir1_stuck ? "POT" : "OK", ir2_stuck ? "POT" : "OK",
                   cnt_aedes, cnt_anoph, cnt_culex, cnt_pollinator, cnt_male, cnt_caught);
   }

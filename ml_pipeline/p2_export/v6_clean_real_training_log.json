@@ -1,0 +1,145 @@
+{
+  "version": "v6.0-clean-real",
+  "cv_mode": "Strict Clip-Disjoint 5-Fold GroupCV (Zero Frame Leakage)",
+  "n_total": 13256,
+  "n_unique_clips": 1580,
+  "synthetic_rows": 0,
+  "artificial_aug_rows": 0,
+  "ablation_5fold_cv": {
+    "A. Bandpass Rule Only": {
+      "acc6": 59.12,
+      "f1_6": 58.73,
+      "tier1_guild": 72.21,
+      "bee_safe": 100.0,
+      "noise_rej": 77.71
+    },
+    "B. Logistic Regression": {
+      "acc6": 79.47,
+      "f1_6": 74.77,
+      "tier1_guild": 88.22,
+      "bee_safe": 99.69,
+      "noise_rej": 95.74
+    },
+    "C. WingBeat-TinyNet FP32": {
+      "acc6": 87.09,
+      "f1_6": 83.21,
+      "tier1_guild": 94.43,
+      "bee_safe": 100.0,
+      "noise_rej": 97.09
+    },
+    "D. WingBeat-TinyNet INT8": {
+      "acc6": 87.08,
+      "f1_6": 83.22,
+      "tier1_guild": 94.42,
+      "bee_safe": 100.0,
+      "noise_rej": 97.03
+    }
+  },
+  "per_class_recall_int8_cv": {
+    "Noise/Env": {
+      "recall_pct": 92.79,
+      "n": 5800
+    },
+    "Pollinator": {
+      "recall_pct": 93.37,
+      "n": 1613
+    },
+    "Aedes": {
+      "recall_pct": 74.3,
+      "n": 2210
+    },
+    "Anopheles": {
+      "recall_pct": 70.62,
+      "n": 650
+    },
+    "Culex": {
+      "recall_pct": 79.18,
+      "n": 1873
+    },
+    "Male": {
+      "recall_pct": 96.49,
+      "n": 1110
+    }
+  },
+  "holdout_n": 2658,
+  "champion": {
+    "seed": 106,
+    "lr": 0.0095,
+    "l2": 0.00018,
+    "score": 818.111
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "seed": 101,
+      "lr": 0.008,
+      "l2": 0.00015,
+      "val_acc6": 86.91,
+      "val_f1": 82.9,
+      "val_guild": 93.98,
+      "val_bee_safe": 100.0,
+      "val_noise_rej": 95.78,
+      "composite_score": 815.454
+    },
+    {
+      "round": 2,
+      "seed": 102,
+      "lr": 0.0085,
+      "l2": 0.00018,
+      "val_acc6": 86.87,
+      "val_f1": 83.04,
+      "val_guild": 93.6,
+      "val_bee_safe": 100.0,
+      "val_noise_rej": 96.21,
+      "composite_score": 816.085
+    },
+    {
+      "round": 3,
+      "seed": 103,
+      "lr": 0.009,
+      "l2": 0.0002,
+      "val_acc6": 87.17,
+      "val_f1": 83.76,
+      "val_guild": 94.09,
+      "val_bee_safe": 100.0,
+      "val_noise_rej": 96.03,
+      "composite_score": 817.293
+    },
+    {
+      "round": 4,
+      "seed": 104,
+      "lr": 0.0075,
+      "l2": 0.00016,
+      "val_acc6": 87.13,
+      "val_f1": 83.91,
+      "val_guild": 93.72,
+      "val_bee_safe": 100.0,
+      "val_noise_rej": 95.86,
+      "composite_score": 816.419
+    },
+    {
+      "round": 5,
+      "seed": 105,
+      "lr": 0.0085,
+      "l2": 0.00022,
+      "val_acc6": 86.61,
+      "val_f1": 83.13,
+      "val_guild": 93.79,
+      "val_bee_safe": 100.0,
+      "val_noise_rej": 95.86,
+      "composite_score": 815.434
+    },
+    {
+      "round": 6,
+      "seed": 106,
+      "lr": 0.0095,
+      "l2": 0.00018,
+      "val_acc6": 87.17,
+      "val_f1": 83.46,
+      "val_guild": 93.98,
+      "val_bee_safe": 100.0,
+      "val_noise_rej": 96.55,
+      "composite_score": 818.111
+    }
+  ]
+}

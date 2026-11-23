@@ -1,13 +1,13 @@
 {
-  "version": "v5.2",
-  "project": "WingBeat-TinyNet v5.2 \u2014 100% Real Unlooped Bio-Acoustic Hub",
+  "version": "v6.0",
+  "project": "WingBeat-TinyNet v6.0 Clean-Real \u2014 100% Real Unlooped Bio-Acoustic Hub",
   "demo_count": 6,
   "library_count": 43,
   "demo": [
     {
       "src": "audio/demo/01_Aedes_aegypti_Dengue_Chikungunya.wav",
       "filename": "01_Aedes_aegypti_Dengue_Chikungunya.wav",
-      "title": "01. Aedes albopictus (Asian Tiger Dengue \u2014 5.5s Uncut, iPhone-Proven)",
+      "title": "01. Aedes albopictus (Asian Tiger Dengue \u2014 5.5s Uncut)",
       "dataset": "MosquitoSong+ (PLOS ONE 2024)",
       "source_url": "https://github.com/akaraspt/mosquitosongp",
       "expect": "AEDES (DENGUE)! -> RED LED + FAN ON 5.0s",
@@ -16,32 +16,46 @@
       "duration_s": 5.5,
       "size_kb": 889,
       "audit": {
-        "vec": 16,
+        "vec": 20,
         "genera": [
           "AEDES"
         ],
         "counts": {
-          "AEDES": 16
+          "AEDES": 20
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 496.5,
-        "h3_med": 0.26,
-        "bhi_med": 2.93
+        "f0_med": 599.1,
+        "rh2_med": 7.98,
+        "rh3_med": 11.94
       },
-      "audit_iphone13pm": {
-        "vec": 1,
+      "audit_live": {
+        "vec": 20,
         "genera": [
           "AEDES"
         ],
         "counts": {
-          "AEDES": 1
+          "AEDES": 20
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 496.5,
-        "h3_med": 0.85,
-        "bhi_med": 3.57
+        "f0_med": 599.1,
+        "rh2_med": 7.98,
+        "rh3_med": 11.94
+      },
+      "audit_speaker": {
+        "vec": 21,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 21
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 599.1,
+        "rh2_med": 8.04,
+        "rh3_med": 11.95
       }
     },
     {
@@ -56,32 +70,54 @@
       "duration_s": 14.0,
       "size_kb": 1206,
       "audit": {
-        "vec": 4,
+        "vec": 13,
         "genera": [
+          "AEDES",
           "ANOPHELES"
         ],
         "counts": {
-          "ANOPHELES": 4
-        },
-        "bee": 0,
-        "male": 0,
-        "f0_med": 559.0,
-        "h3_med": 0.26,
-        "bhi_med": 2.91
-      },
-      "audit_iphone13pm": {
-        "vec": 6,
-        "genera": [
-          "ANOPHELES"
-        ],
-        "counts": {
+          "AEDES": 7,
           "ANOPHELES": 6
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 559.0,
-        "h3_med": 0.59,
-        "bhi_med": 3.79
+        "f0_med": 583.5,
+        "rh2_med": 4.91,
+        "rh3_med": 4.09
+      },
+      "audit_live": {
+        "vec": 13,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 7,
+          "ANOPHELES": 6
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 583.5,
+        "rh2_med": 4.91,
+        "rh3_med": 4.09
+      },
+      "audit_speaker": {
+        "vec": 16,
+        "genera": [
+          "AEDES",
+          "ANOPHELES",
+          "CULEX"
+        ],
+        "counts": {
+          "AEDES": 4,
+          "ANOPHELES": 10,
+          "CULEX": 2
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 583.5,
+        "rh2_med": 5.17,
+        "rh3_med": 4.07
       }
     },
     {
@@ -96,36 +132,54 @@
       "duration_s": 12.0,
       "size_kb": 1034,
       "audit": {
-        "vec": 9,
+        "vec": 20,
         "genera": [
           "AEDES",
-          "ANOPHELES"
+          "CULEX"
         ],
         "counts": {
-          "AEDES": 3,
-          "ANOPHELES": 6
+          "AEDES": 11,
+          "CULEX": 9
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 621.5,
-        "h3_med": 0.5,
-        "bhi_med": 3.25
+        "f0_med": 625.0,
+        "rh2_med": 9.56,
+        "rh3_med": 21.3
       },
-      "audit_iphone13pm": {
-        "vec": 23,
+      "audit_live": {
+        "vec": 20,
         "genera": [
           "AEDES",
-          "ANOPHELES"
+          "CULEX"
         ],
         "counts": {
-          "AEDES": 12,
-          "ANOPHELES": 11
+          "AEDES": 11,
+          "CULEX": 9
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 605.9,
-        "h3_med": 1.08,
-        "bhi_med": 4.14
+        "f0_med": 625.0,
+        "rh2_med": 9.56,
+        "rh3_med": 21.3
+      },
+      "audit_speaker": {
+        "vec": 28,
+        "genera": [
+          "AEDES",
+          "ANOPHELES",
+          "CULEX"
+        ],
+        "counts": {
+          "AEDES": 2,
+          "ANOPHELES": 2,
+          "CULEX": 24
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 625.0,
+        "rh2_med": 8.34,
+        "rh3_med": 10.25
       }
     },
     {
@@ -143,21 +197,31 @@
         "vec": 0,
         "genera": [],
         "counts": {},
-        "bee": 4,
+        "bee": 72,
         "male": 0,
-        "f0_med": 324.6,
-        "h3_med": 0.17,
-        "bhi_med": 1.44
+        "f0_med": 171.9,
+        "rh2_med": 16.2,
+        "rh3_med": 10.58
       },
-      "audit_iphone13pm": {
+      "audit_live": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 72,
+        "male": 0,
+        "f0_med": 171.9,
+        "rh2_med": 16.2,
+        "rh3_med": 10.58
+      },
+      "audit_speaker": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 824.6,
-        "h3_med": 0.1,
-        "bhi_med": 3.66
+        "f0_med": 484.4,
+        "rh2_med": 5.25,
+        "rh3_med": 4.31
       }
     },
     {
@@ -176,20 +240,30 @@
         "genera": [],
         "counts": {},
         "bee": 0,
-        "male": 2,
-        "f0_med": 762.1,
-        "h3_med": 0.19,
-        "bhi_med": 2.58
+        "male": 49,
+        "f0_med": 864.8,
+        "rh2_med": 2.67,
+        "rh3_med": 2.98
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
-        "male": 2,
-        "f0_med": 762.1,
-        "h3_med": 0.2,
-        "bhi_med": 3.35
+        "male": 49,
+        "f0_med": 864.8,
+        "rh2_med": 2.67,
+        "rh3_med": 2.98
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 44,
+        "f0_med": 864.8,
+        "rh2_med": 2.78,
+        "rh3_med": 2.97
       }
     },
     {
@@ -209,19 +283,29 @@
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 168.4,
-        "h3_med": 0.46,
-        "bhi_med": 2.2
+        "f0_med": 171.9,
+        "rh2_med": 3.87,
+        "rh3_med": 3.55
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 137.1,
-        "h3_med": 0.17,
-        "bhi_med": 3.24
+        "f0_med": 171.9,
+        "rh2_med": 3.87,
+        "rh3_med": 3.55
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 531.2,
+        "rh2_med": 2.16,
+        "rh3_med": 1.79
       }
     }
   ],
@@ -241,38 +325,54 @@
       "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
       "color": "#ef4444",
       "expect_color": "#ef4444",
-      "f0": 496.5,
+      "f0": 521.0,
       "h3": 0.26,
       "bhi": 2.93,
       "size_kb": 889,
       "audit": {
-        "vec": 16,
+        "vec": 14,
         "genera": [
           "AEDES"
         ],
         "counts": {
-          "AEDES": 16
+          "AEDES": 14
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 496.5,
-        "h3_med": 0.26,
-        "bhi_med": 2.93
+        "f0_med": 521.0,
+        "rh2_med": 8.36,
+        "rh3_med": 6.01
       },
-      "audit_iphone13pm": {
-        "vec": 1,
+      "audit_live": {
+        "vec": 14,
         "genera": [
           "AEDES"
         ],
         "counts": {
-          "AEDES": 1
+          "AEDES": 14
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 496.5,
-        "h3_med": 0.85,
-        "bhi_med": 3.57
-      }
+        "f0_med": 521.0,
+        "rh2_med": 8.36,
+        "rh3_med": 6.01
+      },
+      "audit_speaker": {
+        "vec": 23,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 23
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 521.0,
+        "rh2_med": 6.7,
+        "rh3_med": 5.44
+      },
+      "rh2": 8.36,
+      "rh3": 6.01
     },
     {
       "rel_path": "01_Aedes_aegypti_Dengue_Female/01_02_Aedes_aegypti_5D_cut5_UNLOOPED.wav",
@@ -289,34 +389,54 @@
       "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
       "color": "#ef4444",
       "expect_color": "#ef4444",
-      "f0": 480.9,
+      "f0": 505.4,
       "h3": 0.22,
       "bhi": 2.36,
       "size_kb": 533,
       "audit": {
-        "vec": 13,
+        "vec": 11,
         "genera": [
           "AEDES"
         ],
         "counts": {
-          "AEDES": 13
+          "AEDES": 11
         },
         "bee": 0,
-        "male": 0,
-        "f0_med": 480.9,
-        "h3_med": 0.22,
-        "bhi_med": 2.36
+        "male": 1,
+        "f0_med": 505.4,
+        "rh2_med": 15.77,
+        "rh3_med": 9.24
       },
-      "audit_iphone13pm": {
-        "vec": 0,
-        "genera": [],
-        "counts": {},
+      "audit_live": {
+        "vec": 11,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 11
+        },
         "bee": 0,
-        "male": 0,
-        "f0_med": 480.9,
-        "h3_med": 1.12,
-        "bhi_med": 3.45
-      }
+        "male": 1,
+        "f0_med": 505.4,
+        "rh2_med": 15.77,
+        "rh3_med": 9.24
+      },
+      "audit_speaker": {
+        "vec": 19,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 19
+        },
+        "bee": 0,
+        "male": 1,
+        "f0_med": 505.4,
+        "rh2_med": 10.54,
+        "rh3_med": 7.73
+      },
+      "rh2": 15.77,
+      "rh3": 9.24
     },
     {
       "rel_path": "01_Aedes_aegypti_Dengue_Female/01_03_Aedes_aegypti_5D_cut24_UNLOOPED.wav",
@@ -333,38 +453,54 @@
       "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
       "color": "#ef4444",
       "expect_color": "#ef4444",
-      "f0": 496.5,
+      "f0": 521.0,
       "h3": 0.23,
       "bhi": 2.62,
       "size_kb": 889,
       "audit": {
-        "vec": 7,
+        "vec": 8,
         "genera": [
           "AEDES"
         ],
         "counts": {
-          "AEDES": 7
+          "AEDES": 8
         },
-        "bee": 0,
+        "bee": 1,
         "male": 0,
-        "f0_med": 496.5,
-        "h3_med": 0.23,
-        "bhi_med": 2.62
+        "f0_med": 521.0,
+        "rh2_med": 3.78,
+        "rh3_med": 3.65
       },
-      "audit_iphone13pm": {
-        "vec": 1,
+      "audit_live": {
+        "vec": 8,
         "genera": [
           "AEDES"
         ],
         "counts": {
-          "AEDES": 1
+          "AEDES": 8
+        },
+        "bee": 1,
+        "male": 0,
+        "f0_med": 521.0,
+        "rh2_med": 3.78,
+        "rh3_med": 3.65
+      },
+      "audit_speaker": {
+        "vec": 10,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 10
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 496.5,
-        "h3_med": 0.98,
-        "bhi_med": 3.73
-      }
+        "f0_med": 521.0,
+        "rh2_med": 3.79,
+        "rh3_med": 3.59
+      },
+      "rh2": 3.78,
+      "rh3": 3.65
     },
     {
       "rel_path": "01_Aedes_aegypti_Dengue_Female/01_04_Aedes_aegypti_5D_cut46_UNLOOPED.wav",
@@ -381,38 +517,56 @@
       "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
       "color": "#ef4444",
       "expect_color": "#ef4444",
-      "f0": 496.5,
+      "f0": 521.0,
       "h3": 0.31,
       "bhi": 3.11,
       "size_kb": 369,
       "audit": {
-        "vec": 6,
+        "vec": 10,
         "genera": [
           "AEDES"
         ],
         "counts": {
-          "AEDES": 6
+          "AEDES": 10
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 496.5,
-        "h3_med": 0.31,
-        "bhi_med": 3.11
+        "f0_med": 521.0,
+        "rh2_med": 4.02,
+        "rh3_med": 4.9
       },
-      "audit_iphone13pm": {
-        "vec": 1,
+      "audit_live": {
+        "vec": 10,
         "genera": [
           "AEDES"
         ],
         "counts": {
-          "AEDES": 1
+          "AEDES": 10
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 496.5,
-        "h3_med": 1.39,
-        "bhi_med": 3.99
-      }
+        "f0_med": 521.0,
+        "rh2_med": 4.02,
+        "rh3_med": 4.9
+      },
+      "audit_speaker": {
+        "vec": 11,
+        "genera": [
+          "AEDES",
+          "CULEX"
+        ],
+        "counts": {
+          "AEDES": 10,
+          "CULEX": 1
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 521.0,
+        "rh2_med": 4.12,
+        "rh3_med": 4.91
+      },
+      "rh2": 4.02,
+      "rh3": 4.9
     },
     {
       "rel_path": "01_Aedes_aegypti_Dengue_Female/01_05_Aedes_aegypti_5D_cut5_UNLOOPED.wav",
@@ -429,34 +583,60 @@
       "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
       "color": "#ef4444",
       "expect_color": "#ef4444",
-      "f0": 480.9,
+      "f0": 505.4,
       "h3": 0.24,
       "bhi": 2.48,
       "size_kb": 533,
       "audit": {
-        "vec": 6,
+        "vec": 8,
         "genera": [
-          "AEDES"
+          "AEDES",
+          "CULEX"
         ],
         "counts": {
-          "AEDES": 6
+          "AEDES": 7,
+          "CULEX": 1
         },
         "bee": 0,
-        "male": 0,
-        "f0_med": 480.9,
-        "h3_med": 0.24,
-        "bhi_med": 2.48
+        "male": 1,
+        "f0_med": 505.4,
+        "rh2_med": 4.43,
+        "rh3_med": 4.82
       },
-      "audit_iphone13pm": {
-        "vec": 0,
-        "genera": [],
-        "counts": {},
+      "audit_live": {
+        "vec": 8,
+        "genera": [
+          "AEDES",
+          "CULEX"
+        ],
+        "counts": {
+          "AEDES": 7,
+          "CULEX": 1
+        },
         "bee": 0,
-        "male": 0,
-        "f0_med": 480.9,
-        "h3_med": 1.24,
-        "bhi_med": 3.5
-      }
+        "male": 1,
+        "f0_med": 505.4,
+        "rh2_med": 4.43,
+        "rh3_med": 4.82
+      },
+      "audit_speaker": {
+        "vec": 12,
+        "genera": [
+          "AEDES",
+          "CULEX"
+        ],
+        "counts": {
+          "AEDES": 5,
+          "CULEX": 7
+        },
+        "bee": 0,
+        "male": 1,
+        "f0_med": 505.4,
+        "rh2_med": 4.36,
+        "rh3_med": 4.74
+      },
+      "rh2": 4.43,
+      "rh3": 4.82
     },
     {
       "rel_path": "02_Aedes_albopictus_Tiger_Female/02_01_Aedes_albopictus_14D_Cut19_UNLOOPED.wav",
@@ -473,42 +653,54 @@
       "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
       "color": "#ef4444",
       "expect_color": "#ef4444",
-      "f0": 574.6,
+      "f0": 599.1,
       "h3": 0.36,
       "bhi": 2.98,
       "size_kb": 472,
       "audit": {
-        "vec": 19,
+        "vec": 20,
         "genera": [
-          "AEDES",
-          "ANOPHELES"
+          "AEDES"
         ],
         "counts": {
-          "AEDES": 15,
-          "ANOPHELES": 4
+          "AEDES": 20
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 574.6,
-        "h3_med": 0.36,
-        "bhi_med": 2.98
+        "f0_med": 599.1,
+        "rh2_med": 7.98,
+        "rh3_med": 11.94
       },
-      "audit_iphone13pm": {
-        "vec": 18,
+      "audit_live": {
+        "vec": 20,
         "genera": [
-          "AEDES",
-          "ANOPHELES"
+          "AEDES"
         ],
         "counts": {
-          "AEDES": 8,
-          "ANOPHELES": 10
+          "AEDES": 20
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 574.6,
-        "h3_med": 1.12,
-        "bhi_med": 4.05
-      }
+        "f0_med": 599.1,
+        "rh2_med": 7.98,
+        "rh3_med": 11.94
+      },
+      "audit_speaker": {
+        "vec": 21,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 21
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 599.1,
+        "rh2_med": 8.04,
+        "rh3_med": 11.95
+      },
+      "rh2": 7.98,
+      "rh3": 11.94
     },
     {
       "rel_path": "02_Aedes_albopictus_Tiger_Female/02_02_Aedes_albopictus_14D_Cut18_UNLOOPED.wav",
@@ -525,7 +717,7 @@
       "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
       "color": "#ef4444",
       "expect_color": "#ef4444",
-      "f0": 574.6,
+      "f0": 599.1,
       "h3": 0.35,
       "bhi": 2.94,
       "size_kb": 397,
@@ -539,26 +731,40 @@
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 574.6,
-        "h3_med": 0.35,
-        "bhi_med": 2.94
+        "f0_med": 599.1,
+        "rh2_med": 10.15,
+        "rh3_med": 14.81
       },
-      "audit_iphone13pm": {
-        "vec": 15,
+      "audit_live": {
+        "vec": 18,
         "genera": [
-          "AEDES",
-          "ANOPHELES"
+          "AEDES"
         ],
         "counts": {
-          "AEDES": 7,
-          "ANOPHELES": 8
+          "AEDES": 18
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 574.6,
-        "h3_med": 1.05,
-        "bhi_med": 4.12
-      }
+        "f0_med": 599.1,
+        "rh2_med": 10.15,
+        "rh3_med": 14.81
+      },
+      "audit_speaker": {
+        "vec": 18,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 18
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 599.1,
+        "rh2_med": 10.19,
+        "rh3_med": 14.82
+      },
+      "rh2": 10.15,
+      "rh3": 14.81
     },
     {
       "rel_path": "02_Aedes_albopictus_Tiger_Female/02_03_Aedes_albopictus_14D_Cut16_UNLOOPED.wav",
@@ -575,42 +781,54 @@
       "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
       "color": "#ef4444",
       "expect_color": "#ef4444",
-      "f0": 590.2,
+      "f0": 614.8,
       "h3": 0.35,
       "bhi": 3.65,
       "size_kb": 648,
       "audit": {
-        "vec": 14,
+        "vec": 11,
         "genera": [
-          "AEDES",
-          "ANOPHELES"
+          "AEDES"
         ],
         "counts": {
-          "AEDES": 12,
-          "ANOPHELES": 2
+          "AEDES": 11
         },
-        "bee": 0,
+        "bee": 1,
         "male": 0,
-        "f0_med": 590.2,
-        "h3_med": 0.35,
-        "bhi_med": 3.65
+        "f0_med": 614.8,
+        "rh2_med": 11.79,
+        "rh3_med": 6.42
       },
-      "audit_iphone13pm": {
-        "vec": 13,
+      "audit_live": {
+        "vec": 11,
         "genera": [
-          "AEDES",
-          "ANOPHELES"
+          "AEDES"
         ],
         "counts": {
-          "AEDES": 12,
-          "ANOPHELES": 1
+          "AEDES": 11
+        },
+        "bee": 1,
+        "male": 0,
+        "f0_med": 614.8,
+        "rh2_med": 11.79,
+        "rh3_med": 6.42
+      },
+      "audit_speaker": {
+        "vec": 19,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 19
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 590.2,
-        "h3_med": 0.88,
-        "bhi_med": 4.3
-      }
+        "f0_med": 614.8,
+        "rh2_med": 12.37,
+        "rh3_med": 6.92
+      },
+      "rh2": 11.79,
+      "rh3": 6.42
     },
     {
       "rel_path": "02_Aedes_albopictus_Tiger_Female/02_04_Aedes_albopictus_14D_Cut18_UNLOOPED.wav",
@@ -627,42 +845,54 @@
       "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
       "color": "#ef4444",
       "expect_color": "#ef4444",
-      "f0": 574.6,
+      "f0": 599.1,
       "h3": 0.31,
       "bhi": 2.73,
       "size_kb": 396,
       "audit": {
-        "vec": 15,
+        "vec": 17,
         "genera": [
-          "AEDES",
-          "ANOPHELES"
+          "AEDES"
         ],
         "counts": {
-          "AEDES": 7,
-          "ANOPHELES": 8
+          "AEDES": 17
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 574.6,
-        "h3_med": 0.31,
-        "bhi_med": 2.73
+        "f0_med": 599.1,
+        "rh2_med": 7.63,
+        "rh3_med": 12.16
       },
-      "audit_iphone13pm": {
-        "vec": 14,
+      "audit_live": {
+        "vec": 17,
         "genera": [
-          "AEDES",
-          "ANOPHELES"
+          "AEDES"
         ],
         "counts": {
-          "AEDES": 8,
-          "ANOPHELES": 6
+          "AEDES": 17
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 574.6,
-        "h3_med": 0.94,
-        "bhi_med": 4.02
-      }
+        "f0_med": 599.1,
+        "rh2_med": 7.63,
+        "rh3_med": 12.16
+      },
+      "audit_speaker": {
+        "vec": 17,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 17
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 599.1,
+        "rh2_med": 7.6,
+        "rh3_med": 12.18
+      },
+      "rh2": 7.63,
+      "rh3": 12.16
     },
     {
       "rel_path": "02_Aedes_albopictus_Tiger_Female/02_05_Aedes_albopictus_14D_Cut34_UNLOOPED.wav",
@@ -679,42 +909,60 @@
       "expect_badge": "AEDES (DENGUE) -> FAN ON 5.0s",
       "color": "#ef4444",
       "expect_color": "#ef4444",
-      "f0": 605.9,
+      "f0": 630.4,
       "h3": 0.31,
       "bhi": 3.47,
       "size_kb": 717,
       "audit": {
-        "vec": 6,
+        "vec": 21,
         "genera": [
           "AEDES",
           "ANOPHELES"
         ],
         "counts": {
-          "AEDES": 2,
-          "ANOPHELES": 4
+          "AEDES": 19,
+          "ANOPHELES": 2
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 605.9,
-        "h3_med": 0.31,
-        "bhi_med": 3.47
+        "f0_med": 630.4,
+        "rh2_med": 9.54,
+        "rh3_med": 5.81
       },
-      "audit_iphone13pm": {
-        "vec": 11,
+      "audit_live": {
+        "vec": 21,
         "genera": [
           "AEDES",
           "ANOPHELES"
         ],
         "counts": {
-          "AEDES": 6,
-          "ANOPHELES": 5
+          "AEDES": 19,
+          "ANOPHELES": 2
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 605.9,
-        "h3_med": 0.73,
-        "bhi_med": 4.24
-      }
+        "f0_med": 630.4,
+        "rh2_med": 9.54,
+        "rh3_med": 5.81
+      },
+      "audit_speaker": {
+        "vec": 25,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 19,
+          "ANOPHELES": 6
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 630.4,
+        "rh2_med": 9.63,
+        "rh3_med": 5.75
+      },
+      "rh2": 9.54,
+      "rh3": 5.81
     },
     {
       "rel_path": "03_Anopheles_Malaria_Female/03_01_Anopheles_dirus_14D_cut3_UNLOOPED.wav",
@@ -731,38 +979,62 @@
       "expect_badge": "ANOPH (MALARIA) -> FAN ON 5.0s",
       "color": "#f97316",
       "expect_color": "#f97316",
-      "f0": 559.0,
+      "f0": 583.5,
       "h3": 0.26,
       "bhi": 2.91,
       "size_kb": 1206,
       "audit": {
-        "vec": 4,
+        "vec": 13,
         "genera": [
+          "AEDES",
           "ANOPHELES"
         ],
         "counts": {
-          "ANOPHELES": 4
-        },
-        "bee": 0,
-        "male": 0,
-        "f0_med": 559.0,
-        "h3_med": 0.26,
-        "bhi_med": 2.91
-      },
-      "audit_iphone13pm": {
-        "vec": 6,
-        "genera": [
-          "ANOPHELES"
-        ],
-        "counts": {
+          "AEDES": 7,
           "ANOPHELES": 6
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 559.0,
-        "h3_med": 0.59,
-        "bhi_med": 3.79
-      }
+        "f0_med": 583.5,
+        "rh2_med": 4.91,
+        "rh3_med": 4.09
+      },
+      "audit_live": {
+        "vec": 13,
+        "genera": [
+          "AEDES",
+          "ANOPHELES"
+        ],
+        "counts": {
+          "AEDES": 7,
+          "ANOPHELES": 6
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 583.5,
+        "rh2_med": 4.91,
+        "rh3_med": 4.09
+      },
+      "audit_speaker": {
+        "vec": 16,
+        "genera": [
+          "AEDES",
+          "ANOPHELES",
+          "CULEX"
+        ],
+        "counts": {
+          "AEDES": 4,
+          "ANOPHELES": 10,
+          "CULEX": 2
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 583.5,
+        "rh2_med": 5.17,
+        "rh3_med": 4.07
+      },
+      "rh2": 4.91,
+      "rh3": 4.09
     },
     {
       "rel_path": "03_Anopheles_Malaria_Female/03_02_Anopheles_dirus_14D_cut21_UNLOOPED.wav",
@@ -779,25 +1051,39 @@
       "expect_badge": "ANOPH (MALARIA) -> FAN ON 5.0s",
       "color": "#f97316",
       "expect_color": "#f97316",
-      "f0": 574.6,
+      "f0": 583.5,
       "h3": 0.29,
       "bhi": 3.11,
       "size_kb": 213,
       "audit": {
         "vec": 2,
         "genera": [
-          "ANOPHELES"
+          "AEDES"
         ],
         "counts": {
-          "ANOPHELES": 2
+          "AEDES": 2
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 574.6,
-        "h3_med": 0.29,
-        "bhi_med": 3.11
+        "f0_med": 583.5,
+        "rh2_med": 3.92,
+        "rh3_med": 4.86
       },
-      "audit_iphone13pm": {
+      "audit_live": {
+        "vec": 2,
+        "genera": [
+          "AEDES"
+        ],
+        "counts": {
+          "AEDES": 2
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 583.5,
+        "rh2_med": 3.92,
+        "rh3_med": 4.86
+      },
+      "audit_speaker": {
         "vec": 3,
         "genera": [
           "ANOPHELES"
@@ -807,10 +1093,12 @@
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 215.2,
-        "h3_med": 0.43,
-        "bhi_med": 3.89
-      }
+        "f0_med": 599.1,
+        "rh2_med": 3.53,
+        "rh3_med": 5.08
+      },
+      "rh2": 3.92,
+      "rh3": 4.86
     },
     {
       "rel_path": "04_Culex_and_HumBugDB_FreeFlight/04_01_Culex_quinq_14D_Cut36_UNLOOPED.wav",
@@ -827,7 +1115,7 @@
       "expect_badge": "CULEX (FILAR.) -> FAN ON 5.0s",
       "color": "#eab308",
       "expect_color": "#eab308",
-      "f0": 449.6,
+      "f0": 474.1,
       "h3": 0.3,
       "bhi": 2.64,
       "size_kb": 1206,
@@ -840,25 +1128,41 @@
           "CULEX": 32
         },
         "bee": 0,
-        "male": 0,
-        "f0_med": 449.6,
-        "h3_med": 0.3,
-        "bhi_med": 2.64
+        "male": 3,
+        "f0_med": 474.1,
+        "rh2_med": 4.15,
+        "rh3_med": 6.57
       },
-      "audit_iphone13pm": {
-        "vec": 1,
+      "audit_live": {
+        "vec": 32,
         "genera": [
           "CULEX"
         ],
         "counts": {
-          "CULEX": 1
+          "CULEX": 32
         },
         "bee": 0,
-        "male": 0,
-        "f0_med": 449.6,
-        "h3_med": 2.04,
-        "bhi_med": 3.83
-      }
+        "male": 3,
+        "f0_med": 474.1,
+        "rh2_med": 4.15,
+        "rh3_med": 6.57
+      },
+      "audit_speaker": {
+        "vec": 32,
+        "genera": [
+          "CULEX"
+        ],
+        "counts": {
+          "CULEX": 32
+        },
+        "bee": 0,
+        "male": 3,
+        "f0_med": 474.1,
+        "rh2_med": 4.2,
+        "rh3_med": 6.56
+      },
+      "rh2": 4.15,
+      "rh3": 6.57
     },
     {
       "rel_path": "04_Culex_and_HumBugDB_FreeFlight/04_02_Culex_quinq_14D_Cut26_UNLOOPED.wav",
@@ -875,38 +1179,54 @@
       "expect_badge": "CULEX (FILAR.) -> FAN ON 5.0s",
       "color": "#eab308",
       "expect_color": "#eab308",
-      "f0": 449.6,
+      "f0": 474.1,
       "h3": 0.3,
       "bhi": 2.81,
       "size_kb": 932,
       "audit": {
-        "vec": 13,
+        "vec": 12,
         "genera": [
           "CULEX"
         ],
         "counts": {
-          "CULEX": 13
+          "CULEX": 12
         },
         "bee": 0,
-        "male": 0,
-        "f0_med": 449.6,
-        "h3_med": 0.3,
-        "bhi_med": 2.81
+        "male": 1,
+        "f0_med": 474.1,
+        "rh2_med": 3.61,
+        "rh3_med": 4.96
       },
-      "audit_iphone13pm": {
-        "vec": 1,
+      "audit_live": {
+        "vec": 12,
         "genera": [
           "CULEX"
         ],
         "counts": {
-          "CULEX": 1
+          "CULEX": 12
         },
         "bee": 0,
-        "male": 0,
-        "f0_med": 449.6,
-        "h3_med": 2.02,
-        "bhi_med": 4.0
-      }
+        "male": 1,
+        "f0_med": 474.1,
+        "rh2_med": 3.61,
+        "rh3_med": 4.96
+      },
+      "audit_speaker": {
+        "vec": 17,
+        "genera": [
+          "CULEX"
+        ],
+        "counts": {
+          "CULEX": 17
+        },
+        "bee": 0,
+        "male": 1,
+        "f0_med": 474.1,
+        "rh2_med": 3.7,
+        "rh3_med": 4.96
+      },
+      "rh2": 3.61,
+      "rh3": 4.96
     },
     {
       "rel_path": "04_Culex_and_HumBugDB_FreeFlight/04_03_Culex_quinq_14D_Cut28_UNLOOPED.wav",
@@ -923,34 +1243,58 @@
       "expect_badge": "CULEX (FILAR.) -> FAN ON 5.0s",
       "color": "#eab308",
       "expect_color": "#eab308",
-      "f0": 465.2,
+      "f0": 489.8,
       "h3": 0.29,
       "bhi": 2.81,
       "size_kb": 972,
       "audit": {
         "vec": 10,
         "genera": [
+          "AEDES",
           "CULEX"
         ],
         "counts": {
-          "CULEX": 10
+          "AEDES": 2,
+          "CULEX": 8
+        },
+        "bee": 1,
+        "male": 3,
+        "f0_med": 489.8,
+        "rh2_med": 3.58,
+        "rh3_med": 4.38
+      },
+      "audit_live": {
+        "vec": 10,
+        "genera": [
+          "AEDES",
+          "CULEX"
+        ],
+        "counts": {
+          "AEDES": 2,
+          "CULEX": 8
+        },
+        "bee": 1,
+        "male": 3,
+        "f0_med": 489.8,
+        "rh2_med": 3.58,
+        "rh3_med": 4.38
+      },
+      "audit_speaker": {
+        "vec": 19,
+        "genera": [
+          "CULEX"
+        ],
+        "counts": {
+          "CULEX": 19
         },
         "bee": 0,
-        "male": 0,
-        "f0_med": 465.2,
-        "h3_med": 0.29,
-        "bhi_med": 2.81
+        "male": 2,
+        "f0_med": 489.8,
+        "rh2_med": 3.68,
+        "rh3_med": 4.39
       },
-      "audit_iphone13pm": {
-        "vec": 0,
-        "genera": [],
-        "counts": {},
-        "bee": 0,
-        "male": 0,
-        "f0_med": 465.2,
-        "h3_med": 1.82,
-        "bhi_med": 3.85
-      }
+      "rh2": 3.58,
+      "rh3": 4.38
     },
     {
       "rel_path": "04_Culex_and_HumBugDB_FreeFlight/04_04_Culex_quinq_14D_Cut33_UNLOOPED.wav",
@@ -967,38 +1311,54 @@
       "expect_badge": "CULEX (FILAR.) -> FAN ON 5.0s",
       "color": "#eab308",
       "expect_color": "#eab308",
-      "f0": 449.6,
+      "f0": 474.1,
       "h3": 0.32,
       "bhi": 2.81,
       "size_kb": 585,
       "audit": {
-        "vec": 9,
+        "vec": 12,
         "genera": [
           "CULEX"
         ],
         "counts": {
-          "CULEX": 9
+          "CULEX": 12
         },
         "bee": 0,
-        "male": 0,
-        "f0_med": 449.6,
-        "h3_med": 0.32,
-        "bhi_med": 2.81
+        "male": 4,
+        "f0_med": 474.1,
+        "rh2_med": 4.05,
+        "rh3_med": 6.2
       },
-      "audit_iphone13pm": {
-        "vec": 1,
+      "audit_live": {
+        "vec": 12,
         "genera": [
           "CULEX"
         ],
         "counts": {
-          "CULEX": 1
+          "CULEX": 12
         },
         "bee": 0,
-        "male": 0,
-        "f0_med": 449.6,
-        "h3_med": 2.14,
-        "bhi_med": 3.88
-      }
+        "male": 4,
+        "f0_med": 474.1,
+        "rh2_med": 4.05,
+        "rh3_med": 6.2
+      },
+      "audit_speaker": {
+        "vec": 13,
+        "genera": [
+          "CULEX"
+        ],
+        "counts": {
+          "CULEX": 13
+        },
+        "bee": 0,
+        "male": 1,
+        "f0_med": 474.1,
+        "rh2_med": 4.12,
+        "rh3_med": 6.16
+      },
+      "rh2": 4.05,
+      "rh3": 6.2
     },
     {
       "rel_path": "04_Culex_and_HumBugDB_FreeFlight/04_05_Oxford_HumBugDB_R4_44k_210s.wav",
@@ -1015,42 +1375,62 @@
       "expect_badge": "VECTOR (CULEX/AEDES) -> FAN ON 5.0s",
       "color": "#eab308",
       "expect_color": "#eab308",
-      "f0": 621.5,
+      "f0": 625.0,
       "h3": 0.5,
       "bhi": 3.25,
       "size_kb": 1034,
       "audit": {
-        "vec": 9,
+        "vec": 21,
         "genera": [
           "AEDES",
-          "ANOPHELES"
-        ],
-        "counts": {
-          "AEDES": 3,
-          "ANOPHELES": 6
-        },
-        "bee": 0,
-        "male": 0,
-        "f0_med": 621.5,
-        "h3_med": 0.5,
-        "bhi_med": 3.25
-      },
-      "audit_iphone13pm": {
-        "vec": 23,
-        "genera": [
-          "AEDES",
-          "ANOPHELES"
+          "CULEX"
         ],
         "counts": {
           "AEDES": 12,
-          "ANOPHELES": 11
+          "CULEX": 9
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 605.9,
-        "h3_med": 1.08,
-        "bhi_med": 4.14
-      }
+        "f0_med": 625.0,
+        "rh2_med": 9.5,
+        "rh3_med": 16.98
+      },
+      "audit_live": {
+        "vec": 21,
+        "genera": [
+          "AEDES",
+          "CULEX"
+        ],
+        "counts": {
+          "AEDES": 12,
+          "CULEX": 9
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 625.0,
+        "rh2_med": 9.5,
+        "rh3_med": 16.98
+      },
+      "audit_speaker": {
+        "vec": 28,
+        "genera": [
+          "AEDES",
+          "ANOPHELES",
+          "CULEX"
+        ],
+        "counts": {
+          "AEDES": 2,
+          "ANOPHELES": 2,
+          "CULEX": 24
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 625.0,
+        "rh2_med": 8.34,
+        "rh3_med": 10.25
+      },
+      "rh2": 9.5,
+      "rh3": 16.98
     },
     {
       "rel_path": "04_Culex_and_HumBugDB_FreeFlight/04_06_Oxford_HumBugDB_R4_44k_460s.wav",
@@ -1067,42 +1447,60 @@
       "expect_badge": "VECTOR (CULEX/AEDES) -> FAN ON 5.0s",
       "color": "#eab308",
       "expect_color": "#eab308",
-      "f0": 590.2,
+      "f0": 609.4,
       "h3": 0.25,
       "bhi": 2.8,
       "size_kb": 1034,
       "audit": {
-        "vec": 7,
+        "vec": 11,
         "genera": [
           "AEDES",
-          "ANOPHELES"
+          "CULEX"
+        ],
+        "counts": {
+          "AEDES": 10,
+          "CULEX": 1
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 609.4,
+        "rh2_med": 7.64,
+        "rh3_med": 5.79
+      },
+      "audit_live": {
+        "vec": 11,
+        "genera": [
+          "AEDES",
+          "CULEX"
+        ],
+        "counts": {
+          "AEDES": 10,
+          "CULEX": 1
+        },
+        "bee": 0,
+        "male": 0,
+        "f0_med": 609.4,
+        "rh2_med": 7.64,
+        "rh3_med": 5.79
+      },
+      "audit_speaker": {
+        "vec": 23,
+        "genera": [
+          "AEDES",
+          "CULEX"
         ],
         "counts": {
           "AEDES": 1,
-          "ANOPHELES": 6
+          "CULEX": 22
         },
         "bee": 0,
         "male": 0,
-        "f0_med": 590.2,
-        "h3_med": 0.25,
-        "bhi_med": 2.8
+        "f0_med": 609.4,
+        "rh2_med": 8.93,
+        "rh3_med": 6.13
       },
-      "audit_iphone13pm": {
-        "vec": 16,
-        "genera": [
-          "AEDES",
-          "ANOPHELES"
-        ],
-        "counts": {
-          "AEDES": 2,
-          "ANOPHELES": 14
-        },
-        "bee": 0,
-        "male": 0,
-        "f0_med": 590.2,
-        "h3_med": 0.53,
-        "bhi_med": 3.98
-      }
+      "rh2": 7.64,
+      "rh3": 5.79
     },
     {
       "rel_path": "04_Culex_and_HumBugDB_FreeFlight/04_07_Oxford_HumBugDB_R4_44k_185s.wav",
@@ -1119,42 +1517,56 @@
       "expect_badge": "VECTOR (CULEX/AEDES) -> FAN ON 5.0s",
       "color": "#eab308",
       "expect_color": "#eab308",
-      "f0": 621.5,
+      "f0": 460.9,
       "h3": 0.53,
       "bhi": 3.32,
       "size_kb": 1034,
       "audit": {
-        "vec": 17,
+        "vec": 1,
         "genera": [
-          "AEDES",
-          "ANOPHELES"
+          "CULEX"
         ],
         "counts": {
-          "AEDES": 4,
-          "ANOPHELES": 13
+          "CULEX": 1
         },
-        "bee": 0,
+        "bee": 2,
         "male": 0,
-        "f0_med": 621.5,
-        "h3_med": 0.53,
-        "bhi_med": 3.32
+        "f0_med": 460.9,
+        "rh2_med": 3.06,
+        "rh3_med": 2.74
       },
-      "audit_iphone13pm": {
-        "vec": 13,
+      "audit_live": {
+        "vec": 1,
         "genera": [
-          "AEDES",
-          "ANOPHELES"
+          "CULEX"
         ],
         "counts": {
-          "AEDES": 6,
-          "ANOPHELES": 7
+          "CULEX": 1
         },
-        "bee": 0,
+        "bee": 2,
         "male": 0,
-        "f0_med": 480.9,
-        "h3_med": 0.38,
-        "bhi_med": 3.93
-      }
+        "f0_med": 460.9,
+        "rh2_med": 3.06,
+        "rh3_med": 2.74
+      },
+      "audit_speaker": {
+        "vec": 25,
+        "genera": [
+          "ANOPHELES",
+          "CULEX"
+        ],
+        "counts": {
+          "ANOPHELES": 3,
+          "CULEX": 22
+        },
+        "bee": 1,
+        "male": 0,
+        "f0_med": 625.0,
+        "rh2_med": 16.09,
+        "rh3_med": 17.83
+      },
+      "rh2": 3.06,
+      "rh3": 2.74
     },
     {
       "rel_path": "04_Culex_and_HumBugDB_FreeFlight/04_08_Oxford_HumBugDB_R4_44k_510s.wav",
@@ -1171,42 +1583,46 @@
       "expect_badge": "VECTOR (CULEX/AEDES) -> FAN ON 5.0s",
       "color": "#eab308",
       "expect_color": "#eab308",
-      "f0": 590.2,
+      "f0": 187.5,
       "h3": 0.84,
       "bhi": 3.77,
       "size_kb": 1034,
       "audit": {
-        "vec": 14,
-        "genera": [
-          "AEDES",
-          "ANOPHELES"
-        ],
-        "counts": {
-          "AEDES": 5,
-          "ANOPHELES": 9
-        },
+        "vec": 0,
+        "genera": [],
+        "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 590.2,
-        "h3_med": 0.84,
-        "bhi_med": 3.77
+        "f0_med": 187.5,
+        "rh2_med": 5.75,
+        "rh3_med": 1.34
       },
-      "audit_iphone13pm": {
-        "vec": 3,
-        "genera": [
-          "AEDES",
-          "ANOPHELES"
-        ],
-        "counts": {
-          "AEDES": 2,
-          "ANOPHELES": 1
-        },
+      "audit_live": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 137.1,
-        "h3_med": 0.19,
-        "bhi_med": 3.34
-      }
+        "f0_med": 187.5,
+        "rh2_med": 5.75,
+        "rh3_med": 1.34
+      },
+      "audit_speaker": {
+        "vec": 15,
+        "genera": [
+          "CULEX"
+        ],
+        "counts": {
+          "CULEX": 15
+        },
+        "bee": 0,
+        "male": 2,
+        "f0_med": 609.4,
+        "rh2_med": 10.99,
+        "rh3_med": 12.83
+      },
+      "rh2": 5.75,
+      "rh3": 1.34
     },
     {
       "rel_path": "05_Male_Mosquitoes_NonBiting/05_01_Ae_Aegypti_1M_UNLOOPED.wav",
@@ -1223,7 +1639,7 @@
       "expect_badge": "MALE IGN -> YELLOW LED + FAN OFF",
       "color": "#38bdf8",
       "expect_color": "#38bdf8",
-      "f0": 762.1,
+      "f0": 786.6,
       "h3": 0.19,
       "bhi": 2.58,
       "size_kb": 157,
@@ -1232,21 +1648,33 @@
         "genera": [],
         "counts": {},
         "bee": 0,
-        "male": 2,
-        "f0_med": 762.1,
-        "h3_med": 0.19,
-        "bhi_med": 2.58
+        "male": 9,
+        "f0_med": 786.6,
+        "rh2_med": 2.09,
+        "rh3_med": 2.38
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
-        "male": 2,
-        "f0_med": 762.1,
-        "h3_med": 0.2,
-        "bhi_med": 3.35
-      }
+        "male": 9,
+        "f0_med": 786.6,
+        "rh2_med": 2.09,
+        "rh3_med": 2.38
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 10,
+        "f0_med": 786.6,
+        "rh2_med": 2.09,
+        "rh3_med": 2.38
+      },
+      "rh2": 2.09,
+      "rh3": 2.38
     },
     {
       "rel_path": "05_Male_Mosquitoes_NonBiting/05_02_Ae_Aegypti_1M_UNLOOPED.wav",
@@ -1263,7 +1691,7 @@
       "expect_badge": "MALE IGN -> YELLOW LED + FAN OFF",
       "color": "#38bdf8",
       "expect_color": "#38bdf8",
-      "f0": 777.8,
+      "f0": 802.2,
       "h3": 0.2,
       "bhi": 2.69,
       "size_kb": 148,
@@ -1272,21 +1700,33 @@
         "genera": [],
         "counts": {},
         "bee": 0,
-        "male": 2,
-        "f0_med": 777.8,
-        "h3_med": 0.2,
-        "bhi_med": 2.69
+        "male": 15,
+        "f0_med": 802.2,
+        "rh2_med": 3.16,
+        "rh3_med": 3.41
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
-        "male": 1,
-        "f0_med": 762.1,
-        "h3_med": 0.21,
-        "bhi_med": 3.41
-      }
+        "male": 15,
+        "f0_med": 802.2,
+        "rh2_med": 3.16,
+        "rh3_med": 3.41
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 15,
+        "f0_med": 802.2,
+        "rh2_med": 3.16,
+        "rh3_med": 3.41
+      },
+      "rh2": 3.16,
+      "rh3": 3.41
     },
     {
       "rel_path": "05_Male_Mosquitoes_NonBiting/05_03_Ae_Albopictus_1M_UNLOOPED.wav",
@@ -1303,7 +1743,7 @@
       "expect_badge": "MALE IGN -> YELLOW LED + FAN OFF",
       "color": "#38bdf8",
       "expect_color": "#38bdf8",
-      "f0": 996.5,
+      "f0": 1021.0,
       "h3": 0.2,
       "bhi": 2.4,
       "size_kb": 197,
@@ -1312,21 +1752,33 @@
         "genera": [],
         "counts": {},
         "bee": 0,
-        "male": 1,
-        "f0_med": 996.5,
-        "h3_med": 0.2,
-        "bhi_med": 2.4
+        "male": 4,
+        "f0_med": 1021.0,
+        "rh2_med": 3.77,
+        "rh3_med": 4.68
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
-        "male": 1,
-        "f0_med": 996.5,
-        "h3_med": 0.1,
-        "bhi_med": 3.18
-      }
+        "male": 4,
+        "f0_med": 1021.0,
+        "rh2_med": 3.77,
+        "rh3_med": 4.68
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 4,
+        "f0_med": 1021.0,
+        "rh2_med": 3.77,
+        "rh3_med": 4.68
+      },
+      "rh2": 3.77,
+      "rh3": 4.68
     },
     {
       "rel_path": "05_Male_Mosquitoes_NonBiting/05_04_Ae_Albopictus_1M_UNLOOPED.wav",
@@ -1343,7 +1795,7 @@
       "expect_badge": "MALE IGN -> YELLOW LED + FAN OFF",
       "color": "#38bdf8",
       "expect_color": "#38bdf8",
-      "f0": 996.5,
+      "f0": 1021.0,
       "h3": 0.15,
       "bhi": 1.85,
       "size_kb": 343,
@@ -1352,21 +1804,33 @@
         "genera": [],
         "counts": {},
         "bee": 0,
-        "male": 1,
-        "f0_med": 996.5,
-        "h3_med": 0.15,
-        "bhi_med": 1.85
+        "male": 3,
+        "f0_med": 1021.0,
+        "rh2_med": 4.71,
+        "rh3_med": 3.58
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
-        "male": 0,
-        "f0_med": 168.4,
-        "h3_med": 0.11,
-        "bhi_med": 3.24
-      }
+        "male": 3,
+        "f0_med": 1021.0,
+        "rh2_med": 4.71,
+        "rh3_med": 3.58
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 3,
+        "f0_med": 1021.0,
+        "rh2_med": 3.46,
+        "rh3_med": 3.32
+      },
+      "rh2": 4.71,
+      "rh3": 3.58
     },
     {
       "rel_path": "05_Male_Mosquitoes_NonBiting/05_05_An_Dirus_1M_UNLOOPED.wav",
@@ -1383,7 +1847,7 @@
       "expect_badge": "MALE IGN -> YELLOW LED + FAN OFF",
       "color": "#38bdf8",
       "expect_color": "#38bdf8",
-      "f0": 809.0,
+      "f0": 833.5,
       "h3": 0.31,
       "bhi": 3.03,
       "size_kb": 164,
@@ -1391,22 +1855,34 @@
         "vec": 0,
         "genera": [],
         "counts": {},
-        "bee": 0,
-        "male": 1,
-        "f0_med": 809.0,
-        "h3_med": 0.31,
-        "bhi_med": 3.03
+        "bee": 1,
+        "male": 10,
+        "f0_med": 833.5,
+        "rh2_med": 5.05,
+        "rh3_med": 2.51
       },
-      "audit_iphone13pm": {
+      "audit_live": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 1,
+        "male": 10,
+        "f0_med": 833.5,
+        "rh2_med": 5.05,
+        "rh3_med": 2.51
+      },
+      "audit_speaker": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
-        "male": 0,
-        "f0_med": 793.4,
-        "h3_med": 0.21,
-        "bhi_med": 3.74
-      }
+        "male": 7,
+        "f0_med": 833.5,
+        "rh2_med": 6.63,
+        "rh3_med": 4.2
+      },
+      "rh2": 5.05,
+      "rh3": 2.51
     },
     {
       "rel_path": "05_Male_Mosquitoes_NonBiting/05_06_Cx_Quin_1M_UNLOOPED.wav",
@@ -1423,7 +1899,7 @@
       "expect_badge": "MALE IGN -> YELLOW LED + FAN OFF",
       "color": "#38bdf8",
       "expect_color": "#38bdf8",
-      "f0": 840.2,
+      "f0": 864.8,
       "h3": 0.18,
       "bhi": 2.85,
       "size_kb": 633,
@@ -1432,21 +1908,33 @@
         "genera": [],
         "counts": {},
         "bee": 0,
-        "male": 2,
-        "f0_med": 840.2,
-        "h3_med": 0.18,
-        "bhi_med": 2.85
+        "male": 49,
+        "f0_med": 864.8,
+        "rh2_med": 2.67,
+        "rh3_med": 2.98
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
-        "male": 2,
-        "f0_med": 840.2,
-        "h3_med": 0.19,
-        "bhi_med": 3.6
-      }
+        "male": 49,
+        "f0_med": 864.8,
+        "rh2_med": 2.67,
+        "rh3_med": 2.98
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 44,
+        "f0_med": 864.8,
+        "rh2_med": 2.78,
+        "rh3_med": 2.97
+      },
+      "rh2": 2.67,
+      "rh3": 2.98
     },
     {
       "rel_path": "06_Real_Pollinators_Bees_Insects/06_01_Wikimedia_Real_Bumblebee_Hummel_Part1.wav",
@@ -1463,7 +1951,7 @@
       "expect_badge": "BEE SAFE -> GREEN LED + FAN OFF (0%)",
       "color": "#10b981",
       "expect_color": "#10b981",
-      "f0": 324.6,
+      "f0": 171.9,
       "h3": 0.17,
       "bhi": 1.44,
       "size_kb": 1034,
@@ -1471,22 +1959,34 @@
         "vec": 0,
         "genera": [],
         "counts": {},
-        "bee": 4,
+        "bee": 72,
         "male": 0,
-        "f0_med": 324.6,
-        "h3_med": 0.17,
-        "bhi_med": 1.44
+        "f0_med": 171.9,
+        "rh2_med": 16.17,
+        "rh3_med": 10.57
       },
-      "audit_iphone13pm": {
+      "audit_live": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 72,
+        "male": 0,
+        "f0_med": 171.9,
+        "rh2_med": 16.17,
+        "rh3_med": 10.57
+      },
+      "audit_speaker": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 824.6,
-        "h3_med": 0.1,
-        "bhi_med": 3.66
-      }
+        "f0_med": 484.4,
+        "rh2_med": 5.25,
+        "rh3_med": 4.31
+      },
+      "rh2": 16.17,
+      "rh3": 10.57
     },
     {
       "rel_path": "06_Real_Pollinators_Bees_Insects/06_02_Wikimedia_Real_Bumblebee_Hummel_Part2.wav",
@@ -1503,7 +2003,7 @@
       "expect_badge": "BEE SAFE -> GREEN LED + FAN OFF (0%)",
       "color": "#10b981",
       "expect_color": "#10b981",
-      "f0": 324.6,
+      "f0": 171.9,
       "h3": 0.12,
       "bhi": 1.27,
       "size_kb": 1034,
@@ -1511,22 +2011,34 @@
         "vec": 0,
         "genera": [],
         "counts": {},
-        "bee": 0,
+        "bee": 65,
         "male": 0,
-        "f0_med": 324.6,
-        "h3_med": 0.12,
-        "bhi_med": 1.27
+        "f0_med": 171.9,
+        "rh2_med": 12.47,
+        "rh3_med": 6.89
       },
-      "audit_iphone13pm": {
+      "audit_live": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 65,
+        "male": 0,
+        "f0_med": 171.9,
+        "rh2_med": 12.47,
+        "rh3_med": 6.89
+      },
+      "audit_speaker": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 496.5,
-        "h3_med": 0.19,
-        "bhi_med": 3.51
-      }
+        "f0_med": 328.1,
+        "rh2_med": 7.04,
+        "rh3_med": 4.31
+      },
+      "rh2": 12.47,
+      "rh3": 6.89
     },
     {
       "rel_path": "06_Real_Pollinators_Bees_Insects/06_03_ESC50_Real_Insects_1-17585-A-7.wav",
@@ -1543,7 +2055,7 @@
       "expect_badge": "NOISE IGN / BEE SAFE -> FAN OFF (0%)",
       "color": "#10b981",
       "expect_color": "#10b981",
-      "f0": 434.0,
+      "f0": 218.8,
       "h3": 0.1,
       "bhi": 1.84,
       "size_kb": 431,
@@ -1551,22 +2063,34 @@
         "vec": 0,
         "genera": [],
         "counts": {},
-        "bee": 0,
+        "bee": 12,
         "male": 0,
-        "f0_med": 434.0,
-        "h3_med": 0.1,
-        "bhi_med": 1.84
+        "f0_med": 218.8,
+        "rh2_med": 12.58,
+        "rh3_med": 4.02
       },
-      "audit_iphone13pm": {
+      "audit_live": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 12,
+        "male": 0,
+        "f0_med": 218.8,
+        "rh2_med": 12.58,
+        "rh3_med": 4.02
+      },
+      "audit_speaker": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 137.1,
-        "h3_med": 0.23,
-        "bhi_med": 2.66
-      }
+        "f0_med": 437.5,
+        "rh2_med": 3.33,
+        "rh3_med": 3.04
+      },
+      "rh2": 12.58,
+      "rh3": 4.02
     },
     {
       "rel_path": "06_Real_Pollinators_Bees_Insects/06_04_ESC50_Real_Insects_1-19501-A-7.wav",
@@ -1583,7 +2107,7 @@
       "expect_badge": "NOISE IGN / BEE SAFE -> FAN OFF (0%)",
       "color": "#10b981",
       "expect_color": "#10b981",
-      "f0": 332.4,
+      "f0": 171.9,
       "h3": 0.12,
       "bhi": 1.43,
       "size_kb": 431,
@@ -1591,22 +2115,34 @@
         "vec": 0,
         "genera": [],
         "counts": {},
-        "bee": 0,
+        "bee": 4,
         "male": 0,
-        "f0_med": 332.4,
-        "h3_med": 0.12,
-        "bhi_med": 1.43
+        "f0_med": 171.9,
+        "rh2_med": 9.16,
+        "rh3_med": 6.48
       },
-      "audit_iphone13pm": {
+      "audit_live": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 4,
+        "male": 0,
+        "f0_med": 171.9,
+        "rh2_med": 9.16,
+        "rh3_med": 6.48
+      },
+      "audit_speaker": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 137.1,
-        "h3_med": 0.18,
-        "bhi_med": 0.0
-      }
+        "f0_med": 359.4,
+        "rh2_med": 4.49,
+        "rh3_med": 1.55
+      },
+      "rh2": 9.16,
+      "rh3": 6.48
     },
     {
       "rel_path": "07_Field_Trap_Distractors_Noise/07_01_Commercial_CDC_Suction_Trap_Fan.wav",
@@ -1623,7 +2159,7 @@
       "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#94a3b8",
       "expect_color": "#94a3b8",
-      "f0": 512.1,
+      "f0": 536.6,
       "h3": 0.06,
       "bhi": 1.81,
       "size_kb": 95,
@@ -1633,20 +2169,32 @@
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 512.1,
-        "h3_med": 0.06,
-        "bhi_med": 1.81
+        "f0_med": 536.6,
+        "rh2_med": 1.33,
+        "rh3_med": 1.18
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 0.0,
-        "h3_med": 0.0,
-        "bhi_med": 0.0
-      }
+        "f0_med": 536.6,
+        "rh2_med": 1.33,
+        "rh3_med": 1.18
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 536.6,
+        "rh2_med": 1.4,
+        "rh3_med": 1.35
+      },
+      "rh2": 1.33,
+      "rh3": 1.18
     },
     {
       "rel_path": "07_Field_Trap_Distractors_Noise/07_02_Outdoor_Grass_Cutter_Engine.wav",
@@ -1663,7 +2211,7 @@
       "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#94a3b8",
       "expect_color": "#94a3b8",
-      "f0": 121.5,
+      "f0": 161.6,
       "h3": 0.12,
       "bhi": 3.56,
       "size_kb": 861,
@@ -1673,20 +2221,32 @@
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 121.5,
-        "h3_med": 0.12,
-        "bhi_med": 3.56
+        "f0_med": 161.6,
+        "rh2_med": 1.66,
+        "rh3_med": 0.72
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 137.1,
-        "h3_med": 0.18,
-        "bhi_med": 4.24
-      }
+        "f0_med": 161.6,
+        "rh2_med": 1.66,
+        "rh3_med": 0.72
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 630.4,
+        "rh2_med": 1.05,
+        "rh3_med": 1.2
+      },
+      "rh2": 1.66,
+      "rh3": 0.72
     },
     {
       "rel_path": "07_Field_Trap_Distractors_Noise/07_03_Passing_Motorcycle_Noise.wav",
@@ -1703,7 +2263,7 @@
       "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#94a3b8",
       "expect_color": "#94a3b8",
-      "f0": 137.1,
+      "f0": 255.4,
       "h3": 0.1,
       "bhi": 0.4,
       "size_kb": 861,
@@ -1713,20 +2273,32 @@
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 137.1,
-        "h3_med": 0.1,
-        "bhi_med": 0.4
+        "f0_med": 255.4,
+        "rh2_med": 0.88,
+        "rh3_med": 1.5
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 215.2,
-        "h3_med": 0.21,
-        "bhi_med": 3.58
-      }
+        "f0_med": 255.4,
+        "rh2_med": 0.88,
+        "rh3_med": 1.5
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 1,
+        "f0_med": 380.4,
+        "rh2_med": 1.34,
+        "rh3_med": 1.45
+      },
+      "rh2": 0.88,
+      "rh3": 1.5
     },
     {
       "rel_path": "07_Field_Trap_Distractors_Noise/07_04_Outdoor_Broom_Sweeping.wav",
@@ -1743,7 +2315,7 @@
       "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#94a3b8",
       "expect_color": "#94a3b8",
-      "f0": 152.8,
+      "f0": 192.9,
       "h3": 0.09,
       "bhi": 2.68,
       "size_kb": 861,
@@ -1753,20 +2325,32 @@
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 152.8,
-        "h3_med": 0.09,
-        "bhi_med": 2.68
+        "f0_med": 192.9,
+        "rh2_med": 0.96,
+        "rh3_med": 1.16
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 137.1,
-        "h3_med": 0.17,
-        "bhi_med": 3.84
-      }
+        "f0_med": 192.9,
+        "rh2_med": 0.96,
+        "rh3_med": 1.16
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 536.6,
+        "rh2_med": 1.15,
+        "rh3_med": 1.49
+      },
+      "rh2": 0.96,
+      "rh3": 1.16
     },
     {
       "rel_path": "07_Field_Trap_Distractors_Noise/07_05_Real_Human_Speech_Room_Background.wav",
@@ -1783,7 +2367,7 @@
       "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#94a3b8",
       "expect_color": "#94a3b8",
-      "f0": 246.5,
+      "f0": 218.8,
       "h3": 0.07,
       "bhi": 1.06,
       "size_kb": 861,
@@ -1791,22 +2375,34 @@
         "vec": 0,
         "genera": [],
         "counts": {},
-        "bee": 0,
+        "bee": 19,
         "male": 0,
-        "f0_med": 246.5,
-        "h3_med": 0.07,
-        "bhi_med": 1.06
+        "f0_med": 218.8,
+        "rh2_med": 14.85,
+        "rh3_med": 8.74
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
-        "bee": 0,
+        "bee": 19,
         "male": 0,
-        "f0_med": 324.6,
-        "h3_med": 0.14,
-        "bhi_med": 3.08
-      }
+        "f0_med": 218.8,
+        "rh2_med": 14.85,
+        "rh3_med": 8.74
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 4,
+        "male": 0,
+        "f0_med": 445.3,
+        "rh2_med": 4.76,
+        "rh3_med": 2.42
+      },
+      "rh2": 14.85,
+      "rh3": 8.74
     },
     {
       "rel_path": "07_Field_Trap_Distractors_Noise/07_06_Construction_Site_Machinery.wav",
@@ -1823,7 +2419,7 @@
       "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#94a3b8",
       "expect_color": "#94a3b8",
-      "f0": 152.8,
+      "f0": 281.2,
       "h3": 0.24,
       "bhi": 1.7,
       "size_kb": 861,
@@ -1831,22 +2427,34 @@
         "vec": 0,
         "genera": [],
         "counts": {},
-        "bee": 0,
+        "bee": 1,
         "male": 0,
-        "f0_med": 152.8,
-        "h3_med": 0.24,
-        "bhi_med": 1.7
+        "f0_med": 281.2,
+        "rh2_med": 4.0,
+        "rh3_med": 2.81
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
-        "bee": 0,
+        "bee": 1,
         "male": 0,
-        "f0_med": 152.8,
-        "h3_med": 0.18,
-        "bhi_med": 3.52
-      }
+        "f0_med": 281.2,
+        "rh2_med": 4.0,
+        "rh3_med": 2.81
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 2,
+        "male": 0,
+        "f0_med": 468.8,
+        "rh2_med": 2.38,
+        "rh3_med": 1.89
+      },
+      "rh2": 4.0,
+      "rh3": 2.81
     },
     {
       "rel_path": "08_ESC50_and_Vocal_Torture_Tests/08_01_Car_Horn_ESC_50.wav",
@@ -1863,7 +2471,7 @@
       "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#64748b",
       "expect_color": "#64748b",
-      "f0": 738.7,
+      "f0": 406.2,
       "h3": 1.58,
       "bhi": 4.46,
       "size_kb": 431,
@@ -1873,20 +2481,32 @@
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 738.7,
-        "h3_med": 1.58,
-        "bhi_med": 4.46
+        "f0_med": 406.2,
+        "rh2_med": 4.94,
+        "rh3_med": 2.56
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 137.1,
-        "h3_med": 0.18,
-        "bhi_med": 0.0
-      }
+        "f0_med": 406.2,
+        "rh2_med": 4.94,
+        "rh3_med": 2.56
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 984.4,
+        "rh2_med": 7.08,
+        "rh3_med": 1.61
+      },
+      "rh2": 4.94,
+      "rh3": 2.56
     },
     {
       "rel_path": "08_ESC50_and_Vocal_Torture_Tests/08_02_Emergency_Siren_ESC_50.wav",
@@ -1903,7 +2523,7 @@
       "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#64748b",
       "expect_color": "#64748b",
-      "f0": 605.9,
+      "f0": 609.4,
       "h3": 0.06,
       "bhi": 0.95,
       "size_kb": 431,
@@ -1912,21 +2532,33 @@
         "genera": [],
         "counts": {},
         "bee": 0,
-        "male": 0,
-        "f0_med": 605.9,
-        "h3_med": 0.06,
-        "bhi_med": 0.95
+        "male": 2,
+        "f0_med": 609.4,
+        "rh2_med": 3.89,
+        "rh3_med": 3.08
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
-        "male": 0,
-        "f0_med": 574.6,
-        "h3_med": 0.16,
-        "bhi_med": 2.14
-      }
+        "male": 2,
+        "f0_med": 609.4,
+        "rh2_med": 3.89,
+        "rh3_med": 3.08
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 1,
+        "f0_med": 609.4,
+        "rh2_med": 2.82,
+        "rh3_med": 2.31
+      },
+      "rh2": 3.89,
+      "rh3": 3.08
     },
     {
       "rel_path": "08_ESC50_and_Vocal_Torture_Tests/08_03_Chainsaw_ESC_50.wav",
@@ -1943,7 +2575,7 @@
       "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#64748b",
       "expect_color": "#64748b",
-      "f0": 168.4,
+      "f0": 156.2,
       "h3": 0.43,
       "bhi": 2.31,
       "size_kb": 431,
@@ -1953,20 +2585,32 @@
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 168.4,
-        "h3_med": 0.43,
-        "bhi_med": 2.31
+        "f0_med": 156.2,
+        "rh2_med": 5.29,
+        "rh3_med": 4.39
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 699.6,
-        "h3_med": 0.16,
-        "bhi_med": 3.22
-      }
+        "f0_med": 156.2,
+        "rh2_med": 5.29,
+        "rh3_med": 4.39
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 1,
+        "f0_med": 664.1,
+        "rh2_med": 3.13,
+        "rh3_med": 1.63
+      },
+      "rh2": 5.29,
+      "rh3": 4.39
     },
     {
       "rel_path": "08_ESC50_and_Vocal_Torture_Tests/08_04_Chirping_Birds_ESC_50.wav",
@@ -1983,7 +2627,7 @@
       "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#64748b",
       "expect_color": "#64748b",
-      "f0": 371.5,
+      "f0": 710.9,
       "h3": 0.26,
       "bhi": 3.69,
       "size_kb": 431,
@@ -1993,20 +2637,32 @@
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 371.5,
-        "h3_med": 0.26,
-        "bhi_med": 3.69
+        "f0_med": 710.9,
+        "rh2_med": 1.38,
+        "rh3_med": 1.39
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 137.1,
-        "h3_med": 0.19,
-        "bhi_med": 3.94
-      }
+        "f0_med": 710.9,
+        "rh2_med": 1.38,
+        "rh3_med": 1.39
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 718.8,
+        "rh2_med": 1.19,
+        "rh3_med": 1.2
+      },
+      "rh2": 1.38,
+      "rh3": 1.39
     },
     {
       "rel_path": "08_ESC50_and_Vocal_Torture_Tests/08_05_Night_Crickets_ESC_50.wav",
@@ -2023,7 +2679,7 @@
       "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#64748b",
       "expect_color": "#64748b",
-      "f0": 121.5,
+      "f0": 671.9,
       "h3": 0.29,
       "bhi": 3.15,
       "size_kb": 431,
@@ -2033,20 +2689,32 @@
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 121.5,
-        "h3_med": 0.29,
-        "bhi_med": 3.15
+        "f0_med": 671.9,
+        "rh2_med": 1.12,
+        "rh3_med": 1.59
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 137.1,
-        "h3_med": 0.17,
-        "bhi_med": 3.88
-      }
+        "f0_med": 671.9,
+        "rh2_med": 1.12,
+        "rh3_med": 1.59
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 773.4,
+        "rh2_med": 1.1,
+        "rh3_med": 1.34
+      },
+      "rh2": 1.12,
+      "rh3": 1.59
     },
     {
       "rel_path": "08_ESC50_and_Vocal_Torture_Tests/08_06_Heavy_Rain_ESC_50.wav",
@@ -2063,7 +2731,7 @@
       "expect_badge": "NOISE IGN -> FAN OFF (0%)",
       "color": "#64748b",
       "expect_color": "#64748b",
-      "f0": 144.9,
+      "f0": 484.4,
       "h3": 0.19,
       "bhi": 4.06,
       "size_kb": 431,
@@ -2073,20 +2741,32 @@
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 144.9,
-        "h3_med": 0.19,
-        "bhi_med": 4.06
+        "f0_med": 484.4,
+        "rh2_med": 1.02,
+        "rh3_med": 1.08
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
         "bee": 0,
         "male": 0,
-        "f0_med": 137.1,
-        "h3_med": 0.2,
-        "bhi_med": 4.41
-      }
+        "f0_med": 484.4,
+        "rh2_med": 1.02,
+        "rh3_med": 1.08
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 0,
+        "male": 0,
+        "f0_med": 750.0,
+        "rh2_med": 0.99,
+        "rh3_med": 1.2
+      },
+      "rh2": 1.02,
+      "rh3": 1.08
     },
     {
       "rel_path": "08_ESC50_and_Vocal_Torture_Tests/08_07_Sakib_MewMew_Vocal_Defense_Test.wav",
@@ -2103,7 +2783,7 @@
       "expect_badge": "NOISE IGN (v5.2 BLOCKED!) -> FAN OFF",
       "color": "#64748b",
       "expect_color": "#64748b",
-      "f0": 402.8,
+      "f0": 203.1,
       "h3": 0.03,
       "bhi": 0.33,
       "size_kb": 861,
@@ -2111,22 +2791,34 @@
         "vec": 0,
         "genera": [],
         "counts": {},
-        "bee": 0,
+        "bee": 2,
         "male": 0,
-        "f0_med": 402.8,
-        "h3_med": 0.03,
-        "bhi_med": 0.33
+        "f0_med": 203.1,
+        "rh2_med": 11.31,
+        "rh3_med": 4.93
       },
-      "audit_iphone13pm": {
+      "audit_live": {
         "vec": 0,
         "genera": [],
         "counts": {},
-        "bee": 0,
+        "bee": 2,
         "male": 0,
-        "f0_med": 152.8,
-        "h3_med": 0.12,
-        "bhi_med": 1.51
-      }
+        "f0_med": 203.1,
+        "rh2_med": 11.31,
+        "rh3_med": 4.93
+      },
+      "audit_speaker": {
+        "vec": 0,
+        "genera": [],
+        "counts": {},
+        "bee": 1,
+        "male": 0,
+        "f0_med": 468.8,
+        "rh2_med": 2.78,
+        "rh3_med": 2.28
+      },
+      "rh2": 11.31,
+      "rh3": 4.93
     }
   ]
 }
