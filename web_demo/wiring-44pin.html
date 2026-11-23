@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ESP32-S3 N16R8 Project 2 Interactive Pinout</title>
+  <style>
+    body, svg, button, input, select { font-family: var(--ff-sans, 'Google Sans Flex', 'Google Sans', sans-serif); }
+    .widget-container { display: flex; flex-direction: column; gap: 14px; }
+    .filter-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .board-stage { background: var(--surface-bright); border-radius: var(--r-l); padding: 16px; }
+    .stage-svg { width: 100%; max-width: 680px; height: auto; display: block; margin: 0 auto; }
+    .pin-row { cursor: pointer; transition: opacity 0.15s ease; }
+    .pin-row.is-dimmed { opacity: 0.25; }
+    .pin-label { font-family: var(--ff-mono); font-size: 12px; font-weight: 400; fill: var(--on-surface); }
+    .pin-func { font-family: var(--ff-sans); font-size: 12px; font-weight: 400; fill: var(--on-surface-variant); }
+    .pin-row.is-active .pin-func { fill: var(--primary); }
+    .board-body { fill: var(--surface-dim); stroke: var(--outline); stroke-width: 1; }
+    .board-chip { fill: var(--surface-container); stroke: var(--outline); stroke-width: 1; }
+    .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+    .conn-card { background: var(--surface-dim); border-radius: var(--r-m); padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+    .conn-title { font-size: 13px; font-weight: 500; color: var(--on-surface); }
+    .conn-wire { font-family: var(--ff-mono); font-size: 12px; color: var(--primary); }
+    .conn-note { font-size: 12px; color: var(--on-surface-variant); }
+  </style>
+</head>
+<body>
+  <div class="widget-container">
+    <div class="filter-row" id="module-filters">
+      <button type="button" class="lumi-chip is-active" data-mod="all">সব মডিউল</button>
+      <button type="button" class="lumi-chip" data-mod="mic">INMP441 Mic</button>
+      <button type="button" class="lumi-chip" data-mod="oled">OLED + DHT22</button>
+      <button type="button" class="lumi-chip" data-mod="ir">FC-51 IR Gates</button>
+      <button type="button" class="lumi-chip" data-mod="fan">Relay + 5V Fan</button>
+      <button type="button" class="lumi-chip" data-mod="io">LEDs + Buttons</button>
+      <button type="button" class="lumi-chip" data-mod="lure">UV + Heater</button>
+    </div>
+
+    <div class="board-stage">
+      <svg class="stage-svg" viewBox="0 0 680 416" role="img" aria-label="ESP32-S3 N16R8 44-pin wiring diagram">
+        <rect class="board-body" x="240" y="16" width="200" height="384" rx="28"/>
+        <rect class="board-chip" x="284" y="54" width="112" height="92" rx="24"/>
+        <text x="340" y="94" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="400" fill="var(--on-surface)">ESP32-S3</text>
+        <text x="340" y="114" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="400" font-family="var(--ff-mono)" fill="var(--on-surface-variant)">N16R8 (44-Pin)</text>
+        <rect class="board-chip" x="276" y="346" width="52" height="34" rx="24"/>
+        <text x="302" y="363" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="400" fill="var(--on-surface-variant)">USB</text>
+        <rect class="board-chip" x="352" y="346" width="52" height="34" rx="24"/>
+        <text x="378" y="363" text-anchor="middle" dominant-baseline="central" font-size="12" font-weight="400" fill="var(--on-surface-variant)">UART</text>
+        <g id="pins-layer"></g>
+      </svg>
+    </div>
+
+    <div class="lumi-summary-card">
+      <div class="lumi-body-m-emphasized" id="panel-title">সম্পূর্ণ পিন সংযোগ (সব মডিউল)</div>
+      <div class="lumi-body-s" id="panel-sub" style="color: var(--on-surface-variant); margin-bottom: 10px;">যেকোনো মডিউলের বাটনে ক্লিক করলে ESP32-S3 বোর্ডের নির্দিষ্ট পিন হাইলাইট হবে।</div>
+      <div class="detail-grid" id="detail-grid"></div>
+    </div>
+  </div>
+
+  <script>
+    const LEFT_PINS = [
+      { n: '3V3', mod: ['mic','oled','ir'], fn: '3.3V Rail (Mic, OLED, DHT22, IR)', color: '--chart-3' },
+      { n: '3V3', mod: ['mic','oled','ir'], fn: '3.3V Logic Supply', color: '--chart-3' },
+      { n: 'RST', mod: [], fn: 'EN / Reset', color: '--outline' },
+      { n: 'GPIO 4', mod: ['mic'], fn: 'INMP441 SCK (BCLK)', color: '--chart-1' },
+      { n: 'GPIO 5', mod: ['mic'], fn: 'INMP441 WS (LRCLK)', color: '--chart-1' },
+      { n: 'GPIO 6', mod: ['mic'], fn: 'INMP441 SD (DOUT)', color: '--chart-1' },
+      { n: 'GPIO 7', mod: ['oled'], fn: 'DHT22 DATA (10k pull-up)', color: '--chart-7' },
+      { n: 'GPIO 15', mod: [], fn: 'Unused', color: '--outline' },
+      { n: 'GPIO 16', mod: [], fn: 'Unused', color: '--outline' },
+      { n: 'GPIO 17', mod: [], fn: 'Unused', color: '--outline' },
+      { n: 'GPIO 18', mod: [], fn: 'Unused', color: '--outline' },
+      { n: 'GPIO 8', mod: ['oled'], fn: 'SH1106 OLED SDA', color: '--chart-7' },
+      { n: 'GPIO 3', mod: [], fn: 'Unused', color: '--outline' },
+      { n: 'GPIO 46', mod: [], fn: 'Strapping (Keep free)', color: '--outline' },
+      { n: 'GPIO 9', mod: ['oled'], fn: 'SH1106 OLED SCL', color: '--chart-7' },
+      { n: 'GPIO 10', mod: ['ir'], fn: 'FC-51 Gate #1 (Entry)', color: '--chart-8' },
+      { n: 'GPIO 11', mod: [], fn: 'Alt Gate #2', color: '--outline' },
+      { n: 'GPIO 12', mod: [], fn: 'Unused', color: '--outline' },
+      { n: 'GPIO 13', mod: ['fan'], fn: '5V Opto-Relay IN (Fan)', color: '--chart-10' },
+      { n: 'GPIO 14', mod: ['ir'], fn: 'FC-51 Gate #2 (Mesh)', color: '--chart-8' },
+      { n: '5V', mod: ['fan','lure'], fn: '5V 2A Rail (Relay, Fan, UV, Heater)', color: '--chart-10' },
+      { n: 'GND', mod: ['mic','oled','ir','fan','io','lure'], fn: 'Common Ground (All)', color: '--on-surface' }
+    ];
+
+    const RIGHT_PINS = [
+      { n: 'GND', mod: ['mic','oled','ir','fan','io','lure'], fn: 'Common Ground (All)', color: '--on-surface' },
+      { n: 'TXD0', mod: [], fn: 'UART0 TX (USB Debug)', color: '--outline' },
+      { n: 'RXD0', mod: [], fn: 'UART0 RX (USB Debug)', color: '--outline' },
+      { n: 'GPIO 1', mod: ['io'], fn: 'Button #3 (Calibrate)', color: '--chart-9' },
+      { n: 'GPIO 2', mod: ['io'], fn: 'Button #4 (NVS Reset)', color: '--chart-9' },
+      { n: 'GPIO 42', mod: ['io'], fn: 'Red LED (Vector + 220 Ohm)', color: '--chart-10' },
+      { n: 'GPIO 41', mod: ['io'], fn: 'Yellow LED (Male + 220 Ohm)', color: '--chart-8' },
+      { n: 'GPIO 40', mod: ['io'], fn: 'Green LED (Pollinator + 220 Ohm)', color: '--chart-3' },
+      { n: 'GPIO 39', mod: ['io'], fn: 'Button #2 (Mode)', color: '--chart-9' },
+      { n: 'GPIO 38', mod: ['io'], fn: 'Button #1 (Test)', color: '--chart-9' },
+      { n: 'GPIO 37', mod: [], fn: 'PSRAM (Internal)', color: '--outline' },
+      { n: 'GPIO 36', mod: [], fn: 'PSRAM (Internal)', color: '--outline' },
+      { n: 'GPIO 35', mod: [], fn: 'PSRAM (Internal)', color: '--outline' },
+      { n: 'GPIO 0', mod: [], fn: 'BOOT Button', color: '--outline' },
+      { n: 'GPIO 45', mod: [], fn: 'Strapping (Keep free)', color: '--outline' },
+      { n: 'GPIO 48', mod: [], fn: 'Onboard RGB LED', color: '--outline' },
+      { n: 'GPIO 47', mod: [], fn: 'Unused', color: '--outline' },
+      { n: 'GPIO 21', mod: [], fn: 'Unused', color: '--outline' },
+      { n: 'GPIO 20', mod: [], fn: 'USB D+', color: '--outline' },
+      { n: 'GPIO 19', mod: [], fn: 'USB D-', color: '--outline' },
+      { n: 'GND', mod: ['mic','oled','ir','fan','io','lure'], fn: 'Common Ground', color: '--on-surface' },
+      { n: 'GND', mod: ['mic','oled','ir','fan','io','lure'], fn: 'Common Ground', color: '--on-surface' }
+    ];
+
+    const DETAILS = {
+      all: [
+        { t: 'INMP441 I2S Mic', w: 'SCK→4, WS→5, SD→6, L/R→GND, VDD→3.3V', n: '6 cm ফানেলে ফোম-টেপে বসান।' },
+        { t: 'OLED + DHT22', w: 'SDA→8, SCL→9 | DHT22 DATA→7 (3.3V)', n: '4-pin DHT22 হলে 10k রোধ দিন।' },
+        { t: 'FC-51 Gates #1 & #2', w: 'Gate1 OUT→10, Gate2 OUT→14, VCC→3.3V', n: 'Trimpot ঘুরিয়ে 2.5 cm সেট করুন।' },
+        { t: 'Relay + 5V Fan', w: 'IN→13, DC+→5V, COM→5V, NO→Fan(+)', n: 'Listening-এ ফ্যান 0% OFF থাকবে।' },
+        { t: '3 LEDs + 4 Buttons', w: 'G→40, Y→41, R→42 (220Ω) | BTN→38,39,1,2', n: 'বাটনের অন্য প্রান্ত GND-তে দিন।' },
+        { t: 'UV Ring + Heater', w: '6x UV LED (220Ω) + 100Ω 5W → 5V & GND', n: '5V-এ হিটার 0.25W (+2.5°C) উষ্ণতা দেয়।' }
+      ],
+      mic: [
+        { t: 'SCK → GPIO 4', w: 'INMP441 SCK → ESP32 GPIO 4', n: 'I2S বিট ক্লক (BCLK)।' },
+        { t: 'WS → GPIO 5', w: 'INMP441 WS → ESP32 GPIO 5', n: 'I2S ওয়ার্ড সিলেক্ট (LRCLK)।' },
+        { t: 'SD → GPIO 6', w: 'INMP441 SD → ESP32 GPIO 6', n: 'ডিজিটাল অডিও ডেটা আউটপুট।' },
+        { t: 'Power & Channel', w: 'VDD → 3.3V | GND → GND | L/R → GND', n: 'ভুলেও 5V দেবেন না।' }
+      ],
+      oled: [
+        { t: 'SH1106 OLED I2C', w: 'SDA → GPIO 8 | SCL → GPIO 9', n: 'VCC → 3.3V, GND → GND (0x3C)।' },
+        { t: 'DHT22 Thermal', w: 'DATA → GPIO 7 | VCC → 3.3V', n: '4-pin হলে DATA ও 3.3V-এ 10 kΩ রোধ।' }
+      ],
+      ir: [
+        { t: 'Gate #1 (Entry)', w: 'OUT → GPIO 10 | VCC → 3.3V', n: 'ফানেলের মুখে বসবে, dt_ms মাপবে।' },
+        { t: 'Gate #2 (Mesh)', w: 'OUT → GPIO 14 | VCC → 3.3V', n: 'জালিতে মশা আটকালে ভেরিফাই করবে।' }
+      ],
+      fan: [
+        { t: 'Opto-Relay Control', w: 'IN → GPIO 13 | DC+ → 5V | DC- → GND', n: 'কেবল Class 2 শনাক্ত হলে 5s অন হবে।' },
+        { t: '5V Suction Fan', w: '5V Rail → COM | NO → Fan(+) | Fan(-) → GND', n: 'কম্পিউটার USB-র বদলে 5V 2A অ্যাডাপ্টার দিন।' }
+      ],
+      io: [
+        { t: '3-Zone Status LEDs', w: 'Green→40, Yellow→41, Red→42', n: 'প্রতিটি LED-তে 220 Ω রোধ ব্যবহার করুন।' },
+        { t: '4x Push Buttons', w: 'GPIO 38, 39, 1, 2 ↔ GND', n: 'বেঞ্চ ক্যালিব্রেশন ও NVS রিসেটের জন্য।' }
+      ],
+      lure: [
+        { t: '6x 395nm UV LEDs', w: '5V Rail → 220 Ω → LED(+) | LED(-) → GND', n: 'ফানেলের চারপাশে প্যারালালে বসান।' },
+        { t: '100 Ω 5W Ceramic', w: 'সরাসরি 5V Rail ও GND-এর মাঝে', n: '0.25W (+2.5°C) নিরাপদ থার্মাল ল্যুর।' }
+      ]
+    };
+
+    let activeMod = 'all';
+
+    function renderPins() {
+      const layer = document.getElementById('pins-layer');
+      layer.replaceChildren();
+      const ns = 'http://www.w3.org/2000/svg';
+
+      const drawSide = (pins, isLeft) => {
+        pins.forEach((p, idx) => {
+          const y = 30 + idx * 16.5;
+          const used = p.mod.length > 0;
+          const match = activeMod === 'all' ? used : p.mod.includes(activeMod);
+          const g = document.createElementNS(ns, 'g');
+          g.setAttribute('class', 'pin-row' + (match ? ' is-active' : ' is-dimmed'));
+
+          const cx = isLeft ? 252 : 428;
+          const c = document.createElementNS(ns, 'circle');
+          c.setAttribute('cx', cx);
+          c.setAttribute('cy', y);
+          c.setAttribute('r', '5');
+          c.setAttribute('fill', match ? `var(${p.color})` : 'var(--surface-container)');
+          g.appendChild(c);
+
+          const lbl = document.createElementNS(ns, 'text');
+          lbl.setAttribute('x', isLeft ? 264 : 416);
+          lbl.setAttribute('y', y);
+          lbl.setAttribute('text-anchor', isLeft ? 'start' : 'end');
+          lbl.setAttribute('dominant-baseline', 'central');
+          lbl.setAttribute('class', 'pin-label');
+          lbl.textContent = p.n;
+          g.appendChild(lbl);
+
+          if (match || activeMod === 'all') {
+            const line = document.createElementNS(ns, 'line');
+            line.setAttribute('x1', isLeft ? 236 : 444);
+            line.setAttribute('y1', y);
+            line.setAttribute('x2', isLeft ? 204 : 476);
+            line.setAttribute('y2', y);
+            line.setAttribute('stroke', match ? `var(${p.color})` : 'var(--outline)');
+            line.setAttribute('stroke-width', match ? '1.5' : '1');
+            line.setAttribute('stroke-dasharray', '0 4');
+            line.setAttribute('stroke-linecap', 'round');
+            g.appendChild(line);
+
+            const fn = document.createElementNS(ns, 'text');
+            fn.setAttribute('x', isLeft ? 198 : 482);
+            fn.setAttribute('y', y);
+            fn.setAttribute('text-anchor', isLeft ? 'end' : 'start');
+            fn.setAttribute('dominant-baseline', 'central');
+            fn.setAttribute('class', 'pin-func');
+            fn.textContent = p.fn;
+            g.appendChild(fn);
+          }
+
+          layer.appendChild(g);
+        });
+      };
+
+      drawSide(LEFT_PINS, true);
+      drawSide(RIGHT_PINS, false);
+    }
+
+    function renderDetails() {
+      const grid = document.getElementById('detail-grid');
+      grid.replaceChildren();
+      (DETAILS[activeMod] || DETAILS.all).forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'conn-card';
+        const t = document.createElement('div');
+        t.className = 'conn-title';
+        t.textContent = item.t;
+        const w = document.createElement('div');
+        w.className = 'conn-wire';
+        w.textContent = item.w;
+        const n = document.createElement('div');
+        n.className = 'conn-note';
+        n.textContent = item.n;
+        card.append(t, w, n);
+        grid.appendChild(card);
+      });
+    }
+
+    document.querySelectorAll('#module-filters .lumi-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#module-filters .lumi-chip').forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        activeMod = btn.dataset.mod;
+        renderPins();
+        renderDetails();
+      });
+    });
+
+    renderPins();
+    renderDetails();
+  </script>
+</body>
+</html>

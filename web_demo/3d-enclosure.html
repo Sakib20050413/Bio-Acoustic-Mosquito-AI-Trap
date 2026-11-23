@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>WingBeat-TinyNet v5.0 — Interactive 3D DIY PVC Enclosure &amp; Suction Simulator</title>
+<style>
+  :root { --bg:#0b1120; --panel:#111827; --border:#1f2937; --text:#f8fafc; --muted:#94a3b8; --accent:#38bdf8; --red:#ef4444; --green:#10b981; --violet:#a855f7; --amber:#f59e0b; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+  header { padding:10px 18px; background:var(--panel); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+  header h1 { font-size:1.05rem; margin:0; letter-spacing:0.2px; }
+  header span { font-size:0.78rem; color:var(--muted); }
+  .main { flex:1; display:grid; grid-template-columns:1fr 330px; min-height:0; }
+  @media (max-width:920px){ .main{ grid-template-columns:1fr; grid-template-rows:1fr auto; } }
+  .viewport { position:relative; background:radial-gradient(circle at 50% 35%, #1e293b 0%, #090e1a 78%); overflow:hidden; cursor:grab; }
+  .viewport:active { cursor:grabbing; }
+  canvas { width:100%; height:100%; display:block; }
+  .hud { position:absolute; top:12px; left:14px; background:rgba(15,23,42,0.84); border:1px solid #334155; border-radius:10px; padding:10px 14px; font-size:0.78rem; pointer-events:none; backdrop-filter:blur(6px); }
+  .hud .badge { display:inline-block; padding:2px 8px; border-radius:99px; font-weight:700; font-size:0.72rem; margin-right:6px; }
+  .sidebar { background:var(--panel); border-left:1px solid var(--border); padding:14px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; }
+  .card { background:#0f172a; border:1px solid #1e293b; border-radius:10px; padding:11px 12px; }
+  .card h2 { font-size:0.84rem; margin:0 0 8px; color:var(--accent); text-transform:uppercase; letter-spacing:0.6px; }
+  .btn-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+  button { background:#1e293b; color:#e2e8f0; border:1px solid #334155; border-radius:8px; padding:8px 9px; font-size:0.78rem; font-weight:600; cursor:pointer; transition:all .15s; }
+  button:hover { background:#334155; }
+  button.active { background:#0284c7; border-color:#38bdf8; color:#fff; }
+  button.btn-red { background:#7f1d1d; border-color:#ef4444; }
+  button.btn-red:hover { background:#991b1b; }
+  button.btn-green { background:#064e3b; border-color:#10b981; }
+  button.btn-green:hover { background:#065f46; }
+  .dim-tbl { width:100%; border-collapse:collapse; font-size:0.74rem; }
+  .dim-tbl td { padding:4px 3px; border-bottom:1px solid #1e293b; }
+  .dim-tbl td:last-child { text-align:right; color:#e2e8f0; font-family:ui-monospace,Consolas,monospace; }
+  .legend { display:flex; flex-wrap:wrap; gap:6px; font-size:0.72rem; color:var(--muted); }
+  .dot { width:9px; height:9px; border-radius:50%; display:inline-block; margin-right:4px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>WingBeat-TinyNet v5.0 — Interactive 3D DIY PVC Pipe Enclosure &amp; Suction Simulator</h1>
+    <span>BAIUST CSE 326 | Drag to Orbit 360° • Scroll to Zoom • Zero External Dependencies (100% Offline Ready)</span>
+  </div>
+  <div><span>Total Height: 240 mm | Outer Pipe: 4&quot; (110 mm) | Throat Tube: 2&quot; (45 mm ID)</span></div>
+</header>
+<div class="main">
+  <div class="viewport" id="vp">
+    <canvas id="c"></canvas>
+    <div class="hud" id="hud">
+      <div><span class="badge" id="stateBadge" style="background:#0f766e;color:#fff;">LISTENING — FAN 0% OFF</span><strong id="stateTitle">Silent Acoustic Stethoscope Mode</strong></div>
+      <div id="stateSub" style="color:#cbd5e1;margin-top:4px;">INMP441 @ 8kHz | DHT22: 28.6°C (Auto-Warped) | IR1/IR2: OK/OK</div>
+    </div>
+  </div>
+  <div class="sidebar">
+    <div class="card">
+      <h2>View Mode</h2>
+      <div class="btn-grid">
+        <button id="mCut" class="active" onclick="setMode('cutaway')">Cutaway X-Ray</button>
+        <button id="mSolid" onclick="setMode('solid')">Exterior Solid</button>
+        <button id="mExplode" onclick="setMode('explode')">Exploded Parts</button>
+        <button onclick="resetCam()">Reset Camera</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Live Physics Simulation</h2>
+      <div class="btn-grid">
+        <button class="btn-red" onclick="startSim('aedes')">Simulate Aedes (Catch!)</button>
+        <button class="btn-green" onclick="startSim('bee')">Simulate Bee (Spared!)</button>
+        <button onclick="startSim('idle')" style="grid-column:span 2;">Idle Standby (UV + Heat On)</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>DIY PVC Hardware Cut-List (BD ~180 BDT)</h2>
+      <table class="dim-tbl">
+        <tr><td>Outer Shell (4&quot; PVC Pipe)</td><td>110 OD × 160 mm</td></tr>
+        <tr><td>Top Funnel (4&quot;→2&quot; Reducer)</td><td>104 → 50 mm</td></tr>
+        <tr><td>Optical Throat (2&quot; PVC)</td><td>45 ID × 80 mm</td></tr>
+        <tr><td>Fan Shroud (2&quot; PVC)</td><td>45 ID × 40 mm</td></tr>
+        <tr><td>Mesh Capture Cup (4&quot; Cap)</td><td>110 OD × 75 mm</td></tr>
+        <tr><td>Compact Perfboard Bay</td><td>70 × 90 × 35 mm</td></tr>
+        <tr><td>UV Lure Ring (6× 395nm)</td><td>Ø 88 mm (5mm holes)</td></tr>
+        <tr><td>100 Ω 5W Thermal Cue</td><td>Top Intake Rim</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h2>Component Color Key</h2>
+      <div class="legend">
+        <span><i class="dot" style="background:#a855f7"></i>6× 395nm UV LEDs</span>
+        <span><i class="dot" style="background:#fb923c"></i>100Ω 5W Heat Cue</span>
+        <span><i class="dot" style="background:#38bdf8"></i>INMP441 Mic (Foam)</span>
+        <span><i class="dot" style="background:#f8fafc"></i>DHT22 Temp/RH</span>
+        <span><i class="dot" style="background:#10b981"></i>IR Gate #1 &amp; #2</span>
+        <span><i class="dot" style="background:#ef4444"></i>5V Suction Fan</span>
+        <span><i class="dot" style="background:#22c55e"></i>70×90mm PCB Bay</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W = 1200, H = 760;
+function resize() {
+  const r = canvas.parentElement.getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  W = r.width; H = r.height;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+window.addEventListener('resize', resize); resize();
+
+let yaw = -0.58, pitch = 0.28, zoom = 2.45;
+let viewMode = 'cutaway', explodeT = 0, targetExplode = 0;
+let simMode = 'idle', simT = 0;
+let cntAed = 0, cntBee = 0, cntCat = 0;
+
+let dragging = false, lx = 0, ly = 0;
+canvas.addEventListener('mousedown', e => { dragging = true; lx = e.clientX; ly = e.clientY; });
+window.addEventListener('mouseup', () => dragging = false);
+window.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  yaw += (e.clientX - lx) * 0.008;
+  pitch = Math.max(-1.1, Math.min(1.1, pitch + (e.clientY - ly) * 0.008));
+  lx = e.clientX; ly = e.clientY;
+});
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  zoom = Math.max(1.2, Math.min(4.8, zoom * (e.deltaY > 0 ? 0.93 : 1.07)));
+}, { passive: false });
+
+function setMode(m) {
+  viewMode = m;
+  targetExplode = (m === 'explode') ? 1.0 : 0.0;
+  ['mCut','mSolid','mExplode'].forEach(id => document.getElementById(id).classList.remove('active'));
+  document.getElementById(m === 'cutaway' ? 'mCut' : m === 'solid' ? 'mSolid' : 'mExplode').classList.add('active');
+}
+function resetCam() { yaw = -0.58; pitch = 0.28; zoom = 2.45; }
+function startSim(m) { simMode = m; simT = 0; }
+
+// 3D Projection Helper (Z is up, centered at Z=120mm)
+function proj(x, y, z) {
+  const cz = z - 120;
+  const cy = Math.cos(yaw), sy = Math.sin(yaw);
+  const cp = Math.cos(pitch), sp = Math.sin(pitch);
+  const x1 = x * cy - y * sy;
+  const y1 = x * sy + y * cy;
+  const z2 = cz * cp - y1 * sp;
+  const y2 = cz * sp + y1 * cp;
+  const persp = 680 / (680 - y2);
+  return { sx: W * 0.50 + x1 * zoom * persp, sy: H * 0.52 - z2 * zoom * persp, depth: y2 };
+}
+
+function drawPoly(pts, fill, stroke, lw=0.7) {
+  const p = pts.map(v => proj(v[0], v[1], v[2]));
+  ctx.beginPath();
+  ctx.moveTo(p[0].sx, p[0].sy);
+  for (let i=1; i<p.length; i++) ctx.lineTo(p[i].sx, p[i].sy);
+  ctx.closePath();
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); }
+}
+
+function addCylFaces(faces, r0, r1, z0, z1, segs, colBase, cutFront, alpha=1.0, stroke='rgba(148,163,184,0.22)') {
+  const startDeg = cutFront ? 35 : 0;
+  const endDeg = cutFront ? 325 : 360;
+  const n = Math.max(8, Math.round(segs * (endDeg - startDeg) / 360));
+  for (let i=0; i<n; i++) {
+    const a0 = (startDeg + (endDeg - startDeg) * i / n) * Math.PI / 180;
+    const a1 = (startDeg + (endDeg - startDeg) * (i+1) / n) * Math.PI / 180;
+    const am = (a0 + a1) * 0.5;
+    const shade = 0.55 + 0.45 * Math.max(0, Math.cos(am + yaw - 0.6));
+    const pts = [
+      [r0*Math.cos(a0), r0*Math.sin(a0), z0],
+      [r0*Math.cos(a1), r0*Math.sin(a1), z0],
+      [r1*Math.cos(a1), r1*Math.sin(a1), z1],
+      [r1*Math.cos(a0), r1*Math.sin(a0), z1]
+    ];
+    const cx = (pts[0][0]+pts[2][0])*0.5, cy = (pts[0][1]+pts[2][1])*0.5, cz = (z0+z1)*0.5;
+    const d = proj(cx, cy, cz).depth;
+    const r = Math.round(colBase[0]*shade), g = Math.round(colBase[1]*shade), b = Math.round(colBase[2]*shade);
+    faces.push({ d, pts, fill:`rgba(${r},${g},${b},${alpha})`, stroke });
+  }
+}
+
+function addBoxFaces(faces, x0, x1, y0, y1, z0, z1, col, stroke='rgba(15,23,42,0.7)') {
+  const quads = [
+    { pts:[[x0,y0,z0],[x1,y0,z0],[x1,y1,z0],[x0,y1,z0]], sh:0.55 },
+    { pts:[[x0,y0,z1],[x1,y0,z1],[x1,y1,z1],[x0,y1,z1]], sh:1.0 },
+    { pts:[[x0,y0,z0],[x1,y0,z0],[x1,y0,z1],[x0,y0,z1]], sh:0.85 },
+    { pts:[[x0,y1,z0],[x1,y1,z0],[x1,y1,z1],[x0,y1,z1]], sh:0.65 },
+    { pts:[[x0,y0,z0],[x0,y1,z0],[x0,y1,z1],[x0,y0,z1]], sh:0.75 },
+    { pts:[[x1,y0,z0],[x1,y1,z0],[x1,y1,z1],[x1,y0,z1]], sh:0.90 }
+  ];
+  for (const q of quads) {
+    const cx = q.pts.reduce((s,v)=>s+v[0],0)/4, cy = q.pts.reduce((s,v)=>s+v[1],0)/4, cz = q.pts.reduce((s,v)=>s+v[2],0)/4;
+    faces.push({
+      d: proj(cx, cy, cz).depth,
+      pts: q.pts,
+      fill: `rgb(${Math.round(col[0]*q.sh)},${Math.round(col[1]*q.sh)},${Math.round(col[2]*q.sh)})`,
+      stroke
+    });
+  }
+}
+
+const particles = Array.from({length: 34}, (_, i) => ({
+  a: (i * 1.9) % (Math.PI * 2),
+  r: 6 + (i % 5) * 3.5,
+  z: 45 + (i * 5.8) % 180
+}));
+
+let fanAngle = 0, lastTs = 0;
+function render(ts) {
+  const dt = Math.min(0.05, (ts - lastTs) / 1000 || 0.016);
+  lastTs = ts;
+  explodeT += (targetExplode - explodeT) * Math.min(1, dt * 6);
+  simT += dt;
+
+  // Simulation state machine
+  let fanOn = false, ledCol = 'none', oledLine = 'READY [OFF]';
+  let bug = null;
+  const badge = document.getElementById('stateBadge');
+  const title = document.getElementById('stateTitle');
+  const sub = document.getElementById('stateSub');
+
+  if (simMode === 'aedes') {
+    const t = simT % 9.5;
+    if (t < 3.0) {
+      const p = t / 3.0;
+      bug = { type:'aedes', x: Math.sin(t*5)*16*(1-p*0.6), y: Math.cos(t*4)*10*(1-p*0.6), z: 255 - p*110 };
+      badge.style.background = '#0f766e'; badge.textContent = 'LISTENING — FAN 0% OFF';
+      title.textContent = 'Aedes aegypti Entering 45 mm PVC Throat (525 Hz)';
+      sub.textContent = 'INMP441 Capturing 512-pt FFT | 4-Frame Pitch Lock: ' + Math.min(4, Math.floor(p*5)) + '/4 | Fan = 0% OFF';
+      oledLine = 'LOCKING 525Hz';
+    } else if (t < 7.8) {
+      fanOn = true; ledCol = 'red';
+      const p = Math.min(1, (t - 3.0) / 1.4);
+      bug = { type:'aedes', x: Math.sin(t*18)*4*(1-p), y: 0, z: 145 - p*112 };
+      if (t > 4.2 && t < 4.25) { cntAed++; cntCat++; }
+      badge.style.background = '#dc2626'; badge.textContent = 'VECTOR DETECTED — FAN ON 5.0s!';
+      title.textContent = 'AEDES (DENGUE)! -> Selective Suction Active';
+      sub.textContent = 'GPIO 13 Relay LOW -> 5V Fan Pulling Downward -> IR Gate #2 Verified Cat +1 (NVS Saved)';
+      oledLine = 'AEDES! FAN 5s';
+    } else {
+      badge.style.background = '#334155'; badge.textContent = 'SETTLING 1.5s — DMA FLUSH';
+      title.textContent = 'Acoustic Cooldown & I2S Buffer Flush';
+      sub.textContent = 'Fan 0% OFF | Clearing fan airflow turbulence before resuming silent listening';
+      oledLine = 'SETTLING...';
+    }
+  } else if (simMode === 'bee') {
+    const t = simT % 6.5;
+    const p = t < 3.2 ? t / 3.2 : (6.5 - t) / 3.3;
+    bug = { type:'bee', x: Math.sin(t*4)*12, y: Math.cos(t*3)*8, z: 255 - p*118 };
+    if (t > 1.8 && t < 5.0) {
+      ledCol = 'green';
+      badge.style.background = '#059669'; badge.textContent = 'POLLINATOR SAFE — FAN 0% OFF';
+      title.textContent = 'Honeybee (~210 Hz + IR Gate #1 38 ms Veto) — SPARED!';
+      sub.textContent = '100.0% Bee Preservation | Green LED (GPIO 40) ON | Relay stays OFF so Bee flies away unharmed';
+      oledLine = 'BEE SAFE [OFF]';
+    } else {
+      badge.style.background = '#0f766e'; badge.textContent = 'LISTENING — FAN 0% OFF';
+      title.textContent = 'Pollinator Approaching Top Intake Funnel';
+      sub.textContent = 'Dual Acoustic (140–280 Hz) + Optical IR1 (dt_ms 26–60 ms) Pollinator Veto Armed';
+      oledLine = 'READY [OFF]';
+    }
+  } else {
+    badge.style.background = '#0f766e'; badge.textContent = 'STANDBY — FAN 0% OFF';
+    title.textContent = 'Silent Listening Mode (UV 395nm + 0.25W Heat Cue Active)';
+    sub.textContent = 'Click "Simulate Aedes" or "Simulate Bee" on the right to see live airflow & optical gating!';
+    oledLine = 'READY [OFF]';
+  }
+
+  if (fanOn) fanAngle += dt * 24.0;
+  ctx.clearRect(0, 0, W, H);
+
+  const cut = (viewMode !== 'solid');
+  const ex = explodeT;
+  const faces = [];
+
+  // 1. Removable Bottom Mesh Capture Cup (Z=0..75, drops -35*ex)
+  const zCup = -38 * ex;
+  addCylFaces(faces, 55, 55, 4+zCup, 75+zCup, 36, [45, 58, 78], cut, 0.90);
+  // Mesh pattern rings at base
+  addCylFaces(faces, 51, 51, 4+zCup, 64+zCup, 24, [75, 95, 118], cut, 0.35, 'rgba(56,189,248,0.35)');
+
+  // 2. Outer 4-inch PVC Pipe Housing (Z=75..235)
+  addCylFaces(faces, 55, 55, 75, 235, 40, [30, 38, 52], cut, cut ? 0.52 : 0.96, 'rgba(148,163,184,0.28)');
+
+  // 3. Top Funnel Reducer 4" -> 2" (Z=185..235, rises +45*ex)
+  const zFun = 45 * ex;
+  addCylFaces(faces, 25, 52, 185+zFun, 235+zFun, 36, [64, 78, 102], cut, 0.78, 'rgba(203,213,225,0.30)');
+
+  // 4. Inner 2-inch Constricted Optical Throat (45 mm ID, Z=105..185)
+  addCylFaces(faces, 25, 25, 105, 185, 28, [52, 68, 92], cut, 0.65, 'rgba(56,189,248,0.40)');
+
+  // 5. Lower Fan Shroud Duct (Z=65..105, shifts -14*ex)
+  const zFan = -14 * ex;
+  addCylFaces(faces, 25, 25, 65+zFan, 105+zFan, 24, [42, 54, 74], cut, 0.72);
+
+  // 6. 5V Brushless Fan Housing (40x40x10mm @ Z=92+zFan)
+  addBoxFaces(faces, -20, 20, -20, 20, 91+zFan, 102+zFan, fanOn ? [220, 60, 60] : [80, 92, 110]);
+
+  // 7. 6x 395nm UV LEDs around top intake rim
+  for (let k=0; k<6; k++) {
+    const th = (k * 60 + 30) * Math.PI / 180;
+    const ux = 43 * Math.cos(th), uy = 43 * Math.sin(th);
+    addBoxFaces(faces, ux-3, ux+3, uy-3, uy+3, 224+zFun, 236+zFun, [180, 95, 255], '#e9d5ff');
+  }
+  // 8. 100 Ohm 5W Ceramic Thermal Resistor (+Y intake rim)
+  addBoxFaces(faces, -11, 11, 33, 43, 214+zFun, 225+zFun, [245, 158, 11], '#fef3c7');
+
+  // 9. INMP441 Mic + Acoustic Foam Gasket (-X throat wall, Z=142..156)
+  addBoxFaces(faces, -35, -24, -8, 8, 140, 156, [56, 189, 248], '#e0f2fe');
+  // 10. DHT22 Sensor (+Y upper throat, Z=158..178)
+  addBoxFaces(faces, -8, 8, 24, 33, 158, 178, [241, 245, 249], '#94a3b8');
+  // 11. HW-201 IR Gate #1 (+X entry throat, Z=126..138)
+  addBoxFaces(faces, 24, 45, -7, 7, 126, 138, [16, 185, 129], '#a7f3d0');
+  // 12. HW-201 IR Gate #2 (+X mesh catch, Z=62..74+zFan)
+  addBoxFaces(faces, 24, 45, -7, 7, 62+zFan, 74+zFan, [16, 185, 129], '#a7f3d0');
+
+  // 13. Side Compact Electronics Bay (70x90mm Perfboard + ESP32-S3 + 5V Relay at -Y)
+  const yBay = -24 * ex;
+  addBoxFaces(faces, -39, 39, -90+yBay, -55+yBay, 86, 184, [22, 101, 52], '#4ade80');
+  // Front OLED Screen + 3 LEDs + 4 Yellow Buttons
+  addBoxFaces(faces, -19, 19, -93+yBay, -90+yBay, 146, 174, [15, 23, 42], '#38bdf8');
+  addBoxFaces(faces, -20, -14, -95+yBay, -90+yBay, 125, 132, ledCol==='green' ? [34,255,120] : [22,120,60]);
+  addBoxFaces(faces, -3, 3, -95+yBay, -90+yBay, 125, 132, [202,138,4]);
+  addBoxFaces(faces, 14, 20, -95+yBay, -90+yBay, 125, 132, ledCol==='red' ? [255,50,50] : [130,30,30]);
+  for (const bx of [-24, -8, 8, 24]) {
+    addBoxFaces(faces, bx-4, bx+4, -94+yBay, -90+yBay, 102, 110, [250, 204, 21], '#713f12');
+  }
+
+  // Depth sort back-to-front
+  faces.sort((a, b) => a.d - b.d);
+  for (const f of faces) drawPoly(f.pts, f.fill, f.stroke, 0.7);
+
+  // Draw spinning fan blades inside throat
+  const fCenter = proj(0, 0, 97+zFan);
+  ctx.save();
+  ctx.strokeStyle = fanOn ? '#f87171' : '#94a3b8';
+  ctx.lineWidth = 2.5;
+  for (let b=0; b<5; b++) {
+    const a = fanAngle + b * (Math.PI * 2 / 5);
+    const tip = proj(17*Math.cos(a), 17*Math.sin(a), 97+zFan);
+    ctx.beginPath(); ctx.moveTo(fCenter.sx, fCenter.sy); ctx.lineTo(tip.sx, tip.sy); ctx.stroke();
+  }
+  ctx.restore();
+
+  // Draw glowing UV Halo & Suction Airflow Particles
+  const uvGlow = proj(0, 0, 234+zFun);
+  const grd = ctx.createRadialGradient(uvGlow.sx, uvGlow.sy, 4, uvGlow.sx, uvGlow.sy, 48*zoom*0.5);
+  grd.addColorStop(0, 'rgba(168,85,247,0.34)');
+  grd.addColorStop(1, 'rgba(168,85,247,0)');
+  ctx.fillStyle = grd;
+  ctx.beginPath(); ctx.arc(uvGlow.sx, uvGlow.sy, 48*zoom*0.5, 0, Math.PI*2); ctx.fill();
+
+  if (fanOn) {
+    ctx.strokeStyle = 'rgba(56,189,248,0.85)';
+    ctx.lineWidth = 2.0;
+    for (const pt of particles) {
+      pt.z -= dt * 195;
+      if (pt.z < 20) pt.z = 225;
+      const rad = pt.z > 185 ? pt.r * 1.9 : pt.r * 0.9;
+      const p1 = proj(rad*Math.cos(pt.a), rad*Math.sin(pt.a), pt.z);
+      const p2 = proj(rad*Math.cos(pt.a), rad*Math.sin(pt.a), pt.z + 12);
+      ctx.beginPath(); ctx.moveTo(p2.sx, p2.sy); ctx.lineTo(p1.sx, p1.sy); ctx.stroke();
+    }
+  }
+
+  // Draw IR Gate #1 & #2 red laser beams across 45mm throat
+  const drawBeam = (z, col) => {
+    const a = proj(-22, 0, z), b = proj(22, 0, z);
+    ctx.save(); ctx.strokeStyle = col; ctx.setLineDash([4, 3]); ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(a.sx, a.sy); ctx.lineTo(b.sx, b.sy); ctx.stroke(); ctx.restore();
+  };
+  drawBeam(132, 'rgba(16,185,129,0.85)');
+  drawBeam(68+zFan, 'rgba(56,189,248,0.85)');
+
+  // Draw simulated insect (Aedes or Honeybee)
+  if (bug) {
+    const bp = proj(bug.x, bug.y, bug.z);
+    ctx.save();
+    ctx.fillStyle = bug.type === 'aedes' ? '#ef4444' : '#facc15';
+    ctx.shadowColor = bug.type === 'aedes' ? '#ef4444' : '#facc15';
+    ctx.shadowBlur = 12;
+    ctx.beginPath(); ctx.arc(bp.sx, bp.sy, bug.type === 'aedes' ? 5.5 : 8.5, 0, Math.PI*2); ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 11px system-ui';
+    ctx.fillText(bug.type === 'aedes' ? 'Aedes (525 Hz)' : 'Honeybee (210 Hz)', bp.sx + 10, bp.sy + 4);
+    ctx.restore();
+  }
+
+  // Clean engineering callout pins
+  const callout = (x, y, z, dx, dy, txt, col='#e2e8f0') => {
+    const p = proj(x, y, z);
+    ctx.save();
+    ctx.strokeStyle = 'rgba(148,163,184,0.65)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(p.sx, p.sy); ctx.lineTo(p.sx+dx, p.sy+dy); ctx.stroke();
+    ctx.fillStyle = col; ctx.font = 'bold 11px system-ui';
+    ctx.textAlign = dx >= 0 ? 'left' : 'right';
+    ctx.fillText(txt, p.sx + dx + (dx>=0?4:-4), p.sy + dy + 4);
+    ctx.restore();
+  };
+  callout(44, 0, 232+zFun, 48, -14, '6x 395nm UV LED Ring + 100Ω Heat Cue', '#d8b4fe');
+  callout(-34, 0, 148, -56, -8, 'INMP441 I2S Mic (Foam Isolated)', '#7dd3fc');
+  callout(0, 30, 170, 56, -24, 'DHT22 Live Temp/RH (-10..50°C)', '#f8fafc');
+  callout(44, 0, 132, 54, 4, 'IR Gate #1 (45mm Neck Bee Veto)', '#6ee7b7');
+  callout(24, 0, 96+zFan, 68, 12, '5V Suction Fan (0% OFF While Listening)', '#fca5a5');
+  callout(44, 0, 68+zFan, 54, 18, 'IR Gate #2 (Mesh Catch Verify)', '#6ee7b7');
+  callout(-38, -76+yBay, 155, -52, 22, 'Compact 70×90mm PCB + OLED [' + oledLine + ']', '#86efac');
+  callout(-52, 0, 32+zCup, -48, 14, 'Twist-Off Fine Mesh Capture Cup', '#cbd5e1');
+
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+</script>
+</body>
+</html>

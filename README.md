@@ -102,8 +102,14 @@ python3 ml_pipeline/p2_humbugdb_q1_training_and_snr_eval.py --csv ml_pipeline/hu
 
 ---
 
-## 📱 4. Live 6-Clip Bench Demo & Mobile Audio Hub (`port 8765`)
+## 📱 4. Live Audio Test Hub — Deploy to Vercel (`web_demo/`) or Run Locally (`port 8765`)
 
+### Option A: 1-Click Live Web Audio Hub on Vercel (`52` Uncompressed `44.1 kHz` Real WAVs + 3D Viewer + 44-Pin Wiring)
+Deploy [`web_demo/`](./web_demo/) directly to Vercel (**zero build step**, `36.8 MB` total, works on any smartphone/PC anywhere — no laptop server required during viva!):
+- [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FSakib20050413%2FBio-Acoustic-Mosquito-AI-Trap&root-directory=web_demo&project-name=wingbeat-mosquito-audio)
+- Or import `Sakib20050413/Bio-Acoustic-Mosquito-AI-Trap` in [vercel.com/new](https://vercel.com/new) -> set **Root Directory** to `web_demo` -> click **Deploy** (or run `powershell -ExecutionPolicy Bypass -File .\scripts\deploy_audio_vercel.ps1`).
+
+### Option B: Local Laptop Bridge Server (`port 8765`)
 Start the included Mobile Demo Server & Camera Bridge on your laptop:
 ```powershell
 .\.venv\Scripts\python.exe -u scripts\phone_cam_bridge.py
