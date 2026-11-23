@@ -104,10 +104,10 @@ python3 ml_pipeline/p2_humbugdb_q1_training_and_snr_eval.py --csv ml_pipeline/hu
 
 ## 📱 4. Live Audio Test Hub — Deploy to Vercel (`web_demo/`) or Run Locally (`port 8765`)
 
-### Option A: 1-Click Live Web Audio Hub on Vercel (`52` Uncompressed `44.1 kHz` Real WAVs + 3D Viewer + 44-Pin Wiring)
-Deploy [`web_demo/`](./web_demo/) directly to Vercel (**zero build step**, `36.8 MB` total, works on any smartphone/PC anywhere — no laptop server required during viva!):
-- [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FSakib20050413%2FBio-Acoustic-Mosquito-AI-Trap&root-directory=web_demo&project-name=wingbeat-mosquito-audio)
-- Or import `Sakib20050413/Bio-Acoustic-Mosquito-AI-Trap` in [vercel.com/new](https://vercel.com/new) -> set **Root Directory** to `web_demo` -> click **Deploy** (or run `powershell -ExecutionPolicy Bypass -File .\scripts\deploy_audio_vercel.ps1`).
+### Option A: Live Online Audio Test Hub on Vercel (No Laptop Required!)
+- 🌐 **Live Production URL:** **https://mlpipeline-henna.vercel.app**  
+  Includes all **`52` uncompressed `44.1 kHz` real WAVs** (`6` Quick Supervisor Demo clips + `46`-Track Peer-Reviewed Species Library with Search, Filter & `Loop: ON/OFF`), plus live **Interactive 3D PVC Enclosure** (`/3d-enclosure`) and **44-Pin ESP32-S3 Wiring** (`/wiring-44pin`)!
+- Want to clone/deploy your own copy? [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FSakib20050413%2FBio-Acoustic-Mosquito-AI-Trap&root-directory=web_demo&project-name=wingbeat-mosquito-audio) (set **Root Directory** = `web_demo`, **Framework** = `Other`, or run `powershell -ExecutionPolicy Bypass -File .\scripts\deploy_audio_vercel.ps1`).
 
 ### Option B: Local Laptop Bridge Server (`port 8765`)
 Start the included Mobile Demo Server & Camera Bridge on your laptop:
