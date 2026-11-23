@@ -10,16 +10,19 @@ Supports:
 import datetime
 import html
 import http.server
+import json
 import mimetypes
 import re
 import socket
 import socketserver
+import urllib.parse
 from pathlib import Path
 
 PORT = 8765
 ROOT_DIR = Path(__file__).resolve().parent.parent
 CAPTURE_DIR = ROOT_DIR / "hardware_captures"
 DEMO_DIR = ROOT_DIR / "demo_audio"
+LIB_DIR = ROOT_DIR / "real_mosquito_test_library"
 CAPTURE_DIR.mkdir(parents=True, exist_ok=True)
 DEMO_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -78,7 +81,8 @@ HTML_PAGE = """<!doctype html>
     <h1>Project 2 (CSE 326) — iPhone Hardware Eye &amp; Live Demo</h1>
     <div>Open this URL on iPhone Safari (same Wi-Fi/Router):</div>
     <div class="url">__MOBILE_URL__</div>
-    <a class="btn" style="background:#a855f7;color:#ffffff;text-decoration:none;" href="/demo">Open Real Mosquito Live Demo Audio Player</a>
+    <a class="btn" style="background:#0ea5e9;color:#082f49;text-decoration:none;" href="/library">Open Full Real Mosquito Audio Library (All Species + Distractors)</a>
+    <a class="btn" style="background:#f97316;color:#431407;text-decoration:none;" href="/demo">Open 6-Clip Quick Supervisor Demo Player</a>
 
     <form method="POST" action="/upload" enctype="multipart/form-data" id="camForm">
       <label class="btn" for="photoCam">Take 1 Photo (Camera)</label>
@@ -125,7 +129,139 @@ def _guess_extension(headers_text: str) -> str:
 
 
 class BridgeHandler(http.server.BaseHTTPRequestHandler):
+    def _serve_wav_range(self, target: Path):
+        if not (target.exists() and target.is_file()):
+            self.send_error(404)
+            return
+        data = target.read_bytes()
+        total = len(data)
+        rng_hdr = self.headers.get("Range")
+        if rng_hdr and rng_hdr.startswith("bytes="):
+            try:
+                part = rng_hdr.split("=", 1)[1].split(",")[0].strip()
+                s_str, e_str = part.split("-", 1)
+                start = int(s_str) if s_str else 0
+                end = int(e_str) if e_str else total - 1
+                end = min(end, total - 1)
+                chunk = data[start:end + 1]
+                self.send_response(206)
+                self.send_header("Content-Type", "audio/wav")
+                self.send_header("Accept-Ranges", "bytes")
+                self.send_header("Cache-Control", "no-store")
+                self.send_header("Content-Range", f"bytes {start}-{end}/{total}")
+                self.send_header("Content-Length", str(len(chunk)))
+                self.end_headers()
+                self.wfile.write(chunk)
+                return
+            except Exception:
+                pass
+        self.send_response(200)
+        self.send_header("Content-Type", "audio/wav")
+        self.send_header("Accept-Ranges", "bytes")
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Content-Length", str(total))
+        self.end_headers()
+        self.wfile.write(data)
+
     def do_GET(self):
+        if self.path == "/library" or self.path.startswith("/library?"):
+            man_path = LIB_DIR / "manifest.json"
+            items = json.loads(man_path.read_text(encoding="utf-8")) if man_path.exists() else []
+            cards = []
+            for idx, m in enumerate(items, 1):
+                a = m.get("audit", {})
+                cat = html.escape(m.get("category", "other"))
+                col = html.escape(m.get("expect_color", "#38bdf8"))
+                rel_url = "/lib_audio/" + urllib.parse.quote(m["rel_path"])
+                aud_txt = f"f0: {a.get('f0_med', 0)} Hz | H3: {a.get('h3_med', 0)} | BHI: {a.get('bhi_med', 0)} | {m.get('duration_s', 0)}s"
+                cards.append(
+                    f'<div class="trk" data-cat="{cat}" style="border-left:4px solid {col};">'
+                    f'<div class="top-row"><span class="idx">#{idx:02d}</span>'
+                    f'<span class="ttl">{html.escape(m["title"])}</span>'
+                    f'<button class="loop-btn" type="button" onclick="toggleLoop(this)">Loop: OFF</button></div>'
+                    f'<div class="meta">{html.escape(m.get("dataset",""))} &bull; {html.escape(aud_txt)}</div>'
+                    f'<div class="exp" style="color:{col};">{html.escape(m.get("expect_badge",""))}</div>'
+                    f'<audio controls playsinline preload="none" src="{rel_url}"></audio>'
+                    f'<div class="dl"><a href="{rel_url}" download>Download 44.1 kHz WAV</a></div>'
+                    f'</div>'
+                )
+            body = (
+                '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+                '<title>Real Mosquito Scientific Audio Library — WingBeat v5.1</title>'
+                '<style>'
+                'body{font-family:system-ui,-apple-system,sans-serif;margin:0;padding:14px;background:#0b1120;color:#e2e8f0;}'
+                '.wrap{max-width:760px;margin:0 auto;}'
+                '.hdr{background:#111827;border:1px solid #1f2937;border-radius:12px;padding:16px;margin-bottom:12px;}'
+                'h1{font-size:1.2rem;margin:6px 0 4px;color:#f8fafc;}'
+                '.sub{font-size:0.83rem;color:#94a3b8;margin:0 0 10px;line-height:1.45;}'
+                '.nav{display:flex;gap:12px;font-size:0.85rem;margin-bottom:6px;}'
+                '.nav a{color:#38bdf8;text-decoration:none;}'
+                '.pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}'
+                '.pill{background:#1e293b;color:#cbd5e1;border:1px solid #334155;border-radius:999px;padding:6px 12px;font-size:0.78rem;font-weight:600;cursor:pointer;}'
+                '.pill.active{background:#0ea5e9;color:#082f49;border-color:#0ea5e9;}'
+                '.trk{background:#111827;border:1px solid #1f2937;border-radius:10px;padding:12px;margin-bottom:10px;}'
+                '.top-row{display:flex;align-items:center;gap:8px;}'
+                '.idx{font-family:monospace;font-size:0.78rem;color:#64748b;}'
+                '.ttl{font-weight:700;font-size:0.95rem;color:#f8fafc;flex:1;}'
+                '.loop-btn{background:#1e293b;color:#cbd5e1;border:1px solid #334155;border-radius:6px;padding:4px 8px;font-size:0.74rem;font-weight:600;cursor:pointer;}'
+                '.loop-btn.on{background:#10b981;color:#052e16;border-color:#10b981;}'
+                '.meta{font-size:0.76rem;color:#94a3b8;margin:4px 0 3px;font-family:monospace;}'
+                '.exp{font-size:0.8rem;font-weight:700;margin-bottom:7px;}'
+                'audio{width:100%;height:38px;}'
+                '.dl{margin-top:5px;text-align:right;}.dl a{color:#38bdf8;font-size:0.75rem;text-decoration:none;}'
+                '</style>'
+                '<script>'
+                'function filterCat(cat, btn){'
+                '  document.querySelectorAll(".pill").forEach(p=>p.classList.remove("active"));'
+                '  btn.classList.add("active");'
+                '  document.querySelectorAll(".trk").forEach(el=>{'
+                '    el.style.display=(cat==="all"||el.dataset.cat===cat)?"block":"none";'
+                '  });'
+                '}'
+                'function toggleLoop(btn){'
+                '  var a=btn.closest(".trk").querySelector("audio");'
+                '  a.loop=!a.loop;'
+                '  btn.classList.toggle("on",a.loop);'
+                '  btn.textContent=a.loop?"Loop: ON":"Loop: OFF";'
+                '}'
+                'document.addEventListener("play",function(e){'
+                '  document.querySelectorAll("audio").forEach(a=>{if(a!==e.target)a.pause();});'
+                '},true);'
+                '</script></head><body><div class="wrap"><div class="hdr">'
+                '<div class="nav"><a href="/">&larr; Camera Bridge</a><a href="/demo">6-Clip Quick Demo</a></div>'
+                f'<h1>100% Real Peer-Reviewed Mosquito Sound Library ({len(items)} Tracks)</h1>'
+                '<p class="sub">Sources: <strong>PLOS ONE 2024 MosquitoSong+</strong>, <strong>Oxford HumBugDB (NeurIPS 2021)</strong> &amp; <strong>ESC-50</strong>. '
+                'Hold PC/Bluetooth/Phone speaker <strong>5&ndash;10 cm</strong> from INMP441 at <strong>75&ndash;90%</strong> volume. Toggle <strong>Loop: ON</strong> for continuous bench testing.</p>'
+                '<div class="pills">'
+                '<button class="pill active" onclick="filterCat(\'all\',this)">All</button>'
+                '<button class="pill" onclick="filterCat(\'aedes\',this)">Aedes (Dengue)</button>'
+                '<button class="pill" onclick="filterCat(\'anopheles\',this)">Anopheles (Malaria)</button>'
+                '<button class="pill" onclick="filterCat(\'culex\',this)">Culex (Filar.)</button>'
+                '<button class="pill" onclick="filterCat(\'male\',this)">Male (Fan OFF)</button>'
+                '<button class="pill" onclick="filterCat(\'bee\',this)">Bees &amp; Flies</button>'
+                '<button class="pill" onclick="filterCat(\'noise\',this)">Field Distractors</button>'
+                '<button class="pill" onclick="filterCat(\'torture\',this)">ESC-50 &amp; Mew</button>'
+                '</div></div>'
+                + "".join(cards)
+                + '</div></body></html>'
+            ).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Cache-Control", "no-store")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+
+        if self.path.startswith("/lib_audio/"):
+            rel_raw = urllib.parse.unquote(self.path.split("?")[0].replace("/lib_audio/", "", 1))
+            target = (LIB_DIR / rel_raw).resolve()
+            if str(target).startswith(str(LIB_DIR.resolve())) and target.exists() and target.is_file():
+                self._serve_wav_range(target)
+                return
+            self.send_error(404)
+            return
+
         if self.path == "/demo" or self.path.startswith("/demo?"):
             wavs = sorted(DEMO_DIR.glob("*.wav"))
             cards = []
@@ -172,39 +308,7 @@ class BridgeHandler(http.server.BaseHTTPRequestHandler):
 
         if self.path.startswith("/demo_audio/"):
             fname = Path(self.path.split("?")[0].replace("/demo_audio/", "", 1)).name
-            target = DEMO_DIR / fname
-            if target.exists() and target.is_file():
-                data = target.read_bytes()
-                total = len(data)
-                rng_hdr = self.headers.get("Range")
-                if rng_hdr and rng_hdr.startswith("bytes="):
-                    try:
-                        part = rng_hdr.split("=", 1)[1].split(",")[0].strip()
-                        s_str, e_str = part.split("-", 1)
-                        start = int(s_str) if s_str else 0
-                        end = int(e_str) if e_str else total - 1
-                        end = min(end, total - 1)
-                        chunk = data[start:end + 1]
-                        self.send_response(206)
-                        self.send_header("Content-Type", "audio/wav")
-                        self.send_header("Accept-Ranges", "bytes")
-                        self.send_header("Cache-Control", "no-store")
-                        self.send_header("Content-Range", f"bytes {start}-{end}/{total}")
-                        self.send_header("Content-Length", str(len(chunk)))
-                        self.end_headers()
-                        self.wfile.write(chunk)
-                        return
-                    except Exception:
-                        pass
-                self.send_response(200)
-                self.send_header("Content-Type", "audio/wav")
-                self.send_header("Accept-Ranges", "bytes")
-                self.send_header("Cache-Control", "no-store")
-                self.send_header("Content-Length", str(total))
-                self.end_headers()
-                self.wfile.write(data)
-                return
-            self.send_error(404)
+            self._serve_wav_range(DEMO_DIR / fname)
             return
 
         if self.path.startswith("/img/") or self.path.startswith("/media/"):
