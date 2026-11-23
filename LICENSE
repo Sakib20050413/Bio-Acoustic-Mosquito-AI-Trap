@@ -1,0 +1,45 @@
+Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+
+Copyright (c) 2026 Md. Najmus Sakib Rahatul (1119003), Nesar Uddin Ifag (1119004),
+Rayhan Alam Towhid (1119007) — Department of Computer Science and Engineering (CSE),
+Bangladesh Army International University of Science and Technology (BAIUST), Cumilla, Bangladesh.
+Supervised by: Md. Fahim Kabir Chowdhury (Lecturer, Dept. of CSE, BAIUST).
+
+===============================================================================
+CREATIVE COMMONS LEGAL CODE SUMMARY (CC BY-SA 4.0)
+Full Legal Text: https://creativecommons.org/licenses/by-sa/4.0/legalcode
+===============================================================================
+
+This work — including all hardware designs, DIY PVC enclosure CAD models (.OBJ/.STL),
+interactive 3D viewers, PCB/perfboard layouts, engineering diagrams, documentation,
+academic project book, demonstration media, and scientific evaluation reports — is
+licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
+
+You are free to:
+  - SHARE — copy and redistribute the material in any medium or format for any purpose.
+  - ADAPT — remix, transform, and build upon the material for any purpose, even commercially.
+
+Under the following terms:
+  - ATTRIBUTION — You must give appropriate credit (cite the BAIUST CSE 326 WingBeat-TinyNet
+    Team & Repository URL), provide a link to the license, and indicate if changes were made.
+  - SHAREALIKE — If you remix, transform, or build upon the material, you must distribute your
+    contributions under the same license (CC BY-SA 4.0) as the original.
+  - NO ADDITIONAL RESTRICTIONS — You may not apply legal terms or technological measures that
+    legally restrict others from doing anything the license permits.
+
+Disclaimer of Warranties:
+This open-source hardware and educational prototype is provided "AS IS" without warranty of
+any kind, express or implied. Follow all electrical safety precautions (especially 3.3V vs 5V
+rail isolation and LED current-limiting resistors) when assembling physical hardware.
+
+Note on Source Code:
+Firmware (.ino, .h) and software scripts (.py, .ps1, .sh, .html) in this repository are
+dual-licensed under both CC BY-SA 4.0 and the MIT License (see LICENSE-CODE) to ensure
+maximum interoperability with Arduino, Espressif, and Python open-source ecosystems.
+
+Note on Third-Party Benchmark Datasets:
+Original raw audio corpora referenced during ML feature extraction retain their respective
+open-access academic licenses:
+  - PLOS ONE 2024 MosquitoSong+ (Supratak et al., 2024) — CC BY 4.0
+  - Oxford HumBugDB (Kiskin et al., 2021) — CC BY 4.0
+  - ESC-50 Environmental Sound Dataset (Piczak, 2015) — CC BY-NC 3.0
