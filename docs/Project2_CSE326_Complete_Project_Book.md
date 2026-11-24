@@ -10,7 +10,7 @@
 | **Team Members** | Md. Najmus Sakib Rahatul (ID: `1119003`), Nesar Uddin Ifag (ID: `1119004`), Rayhan Alam Towhid (ID: `1119007`) |
 | **Target Platform** | `ESP32-S3 N16R8` (44-Pin, Dual-Core 240 MHz, 16 MB Flash, 8 MB OPI PSRAM) |
 | **Firmware & Model Version** | `WingBeat-TinyNet v6.0 Clean-Real` — 100% Untouched Real Audio (`0%` synthetic `sin()`, `0%` artificial EQ/noise/pitch aug) + `130 Hz` Butterworth HPF + Local-Envelope Spectral Whitening `R[k]` + QAT 6-Class INT8 (`24->96->48->6`, `7.18 KB`) + Universal `DHT22` Thermal Bin Warping |
-| **Verified Artifacts** | `wingbeat_q1_int8.h` (`SHA-256: C367F46DF8F904AD...`, `33,122 B`), `p2_deployment_trap_esp32s3.ino` (`SHA-256: 434DB5CC1790553F...`, `27,940 B`) |
+| **Verified Artifacts** | `wingbeat_q1_int8.h` (`SHA-256: C367F46DF8F904AD...`, `33,122 B`), `p2_deployment_trap_esp32s3.ino` (`SHA-256: 020DE8A6E635E99D...`, `33,241 B`, Pro 3-Card + Live FFT OLED UI) |
 | **Total Hardware Cost** | `2,757 BDT` (~$23 USD; 12 verified hardware groups + `10x 220 Ohm` current-limiting resistors) |
 
 ---
@@ -54,7 +54,7 @@ Mosquito-borne diseases — primarily **Dengue** and **Chikungunya** (*Aedes aeg
   - **Tier-2 6-Class Multi-Genus Attribution:** **`87.08%`** (`Macro-F1: 83.22%`, Noise Rejection **`97.03%`**) in Straight-Through QAT `INT8` inside a **`7.18 KB`** weight tensor (virtually zero quantization drop vs. `FP32` `87.09%` / `83.21%`).
 - **Transfer-Function-Invariant DSP (`130 Hz` HPF + Local-Envelope Spectral Whitening `R[k]`):** Strips `50–125 Hz` Thailand lab AC rumble & Bangladesh ceiling-fan motor rumble (cutting live room `RMS` by `>2×`, enabling adaptive `MIN_ACTIVE_RMS = 160` for faint live mosquitoes at `2–6 cm`), while keeping `22 / 24` features invariant (`<= 0.03` diff) between a flat live mic and a `720 Hz` HPF phone speaker.
 - **Offline Real-Recording Firmware Audit (`64 ms` Cadence, `streak = 4`):** `0` false fan triggers on Sakib's real `"mew-mew"` vocal hum (`step=512`), room speech/sawmill, real Wikimedia bees (`44.1 s` + `20.1 s`), and males; **`135 / 136` (`99.26%`)** ESC-50 WAVs zero false triggers (1 emergency siren clip `1-54084-A-42.wav` honestly reported); **`20 / 20`** female vector library WAVs triggered and **`23 / 23`** non-vector library WAVs zero false triggers across quiet live-air (`RMS = 260`) and generic small phone speakers.
-- **Standalone Edge Deployment (`COM5` Live-Flashed & Verified):** **`2,757 BDT`** electronics (`+~340 BDT` DIY 4" PVC enclosure & `70×90 mm` perfboard), `356,573 B` (`11%`) Flash, `35,144 B` (`10%`) RAM; live `[P2v6.0]` telemetry verified (`T: 24.1–24.2°C`, `IR:OK/OK`, post-HPF room `RMS 423–685`, adaptive `FLR 391–588`, `0` room false triggers).
+- **Standalone Edge Deployment (`COM5` Live-Flashed & Verified):** **`2,757 BDT`** electronics (`+~340 BDT` DIY 4" PVC enclosure & `70×90 mm` perfboard), `359,853 B` (`11%`) Flash, `35,144 B` (`10%`) RAM; live `[P2v6.0]` telemetry, Pro 3-Card OLED Dashboard + Live 16-Bar FFT Spectrum + Animated 5.0s Spinning Fan UI, and physical suction fan live-verified on `COM5`.
 
 ---
 
@@ -210,9 +210,9 @@ Every frequency index (`k_lo, k_hi, k9, k14, k21, k28, k35, k42, k68`) shifts by
 - **Training Protocol (`v6.0 Clean-Real`):** Adam + Cosine Annealing (`620` epochs, label smoothing `0.025`, mid-training hard-negative mining `1.40×`, final `120`-epoch Straight-Through QAT) with 6-round champion selection on strict clip-disjoint holdout (`seed=106, lr=0.0095, l2=1.8e-4`).
 - **Symmetric Per-Layer INT8 Export (`wingbeat_q1_int8.h`):**
   $$s_l = \frac{\max(|W_l|) + 10^{-8}}{127}, \qquad W_{l,\text{int8}} = \operatorname{clip}\!\left(\operatorname{round}\!\left(\frac{W_l}{s_l}\right), -127, 127\right)$$
-- **Verified `ESP32-S3` Footprint (`v6.0 Clean-Real`):**
-  - `UART` Binary (`CDCOnBoot=default`): **`356,573 B`** sketch / **`356,944 B`** `.bin` (**`11%`** Flash) | Global RAM: **`35,144 B` (`10%`)**.
-  - `USB` Binary (`CDCOnBoot=cdc`): **`345,073 B`** sketch / **`345,440 B`** `.bin` (**`10%`** Flash) | Global RAM: **`34,936 B` (`10%`)**.
+- **Verified `ESP32-S3` Footprint (`v6.0 Clean-Real` + Pro OLED UI):**
+  - `UART` Binary (`CDCOnBoot=default`): **`359,853 B`** sketch / **`360,224 B`** `.bin` (**`11%`** Flash) | Global RAM: **`35,144 B` (`10%`)**.
+  - `USB` Binary (`CDCOnBoot=cdc`): **`348,357 B`** sketch / **`348,720 B`** `.bin` (**`11%`** Flash) | Global RAM: **`34,936 B` (`10%`)**.
 
 ---
 
@@ -282,7 +282,7 @@ After flashing `v6.0 Clean-Real` (`UART` `356,944 B`, `Hash of data verified.`),
 
 ### 10.1 Boot Verification & Physical Button Controls
 - **Power-On Self-Test:** Sequential LED blink (`Green 40 -> Yellow 41 -> Red 42`, `220 ms` each) + OLED splash **`WingBeat v6.0` / `100% Real QAT`**.
-- **Buttons:** `BTN1` (`38`) = `1.5 s` Fan + LED self-test; `BTN2` (`39`) = OLED Main/Diagnostics toggle; `BTN3` (`1`) = Serial toggle; `BTN4` (`2`) = Reset NVS counters to `0`.
+- **Buttons:** `BTN1` (`38`) = `1.5 s` Animated Fan + 3-LED self-test; `BTN2` (`39`) = cycle 3 OLED screens (`Page 0` Pro 3-Card Genus Dashboard -> `Page 1` Live 16-Bar FFT Spectrum Analyzer -> `Page 2` Sensors & Adaptive `RMS/FLR` Gauge); `BTN3` (`1`) = Serial toggle; `BTN4` (`2`) = Reset NVS counters to `0`.
 
 ### 10.2 Testing with Live Captured Mosquitoes (Lab Protocol)
 1. Capture `3–5` live mosquitoes inside a small transparent cup covered with thin mosquito-net mesh (zero solid plastic barrier blocking sound).

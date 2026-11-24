@@ -9,7 +9,7 @@
 | **Supervisor** | Md. Fahim Kabir Chowdhury (Lecturer, Dept. of CSE, BAIUST) |
 | **Model & Firmware** | `WingBeat-TinyNet v6.0 Clean-Real` (`130 Hz` Butterworth HPF + Local-Envelope Spectral Whitening `R[k]` + QAT 6-Class INT8 `24->96->48->6` + Universal `DHT22` Thermal Bin Warping) |
 | **Dataset Integrity** | **`13,256` untouched real frames (`5` real datasets) — `0` synthetic `np.sin()` rows, `0` artificial EQ/noise/pitch augmentations** |
-| **Verified Checksums** | `wingbeat_q1_int8.h` (`SHA-256: C367F46DF8F904AD...`), `p2_deployment_trap_esp32s3.ino` (`SHA-256: 434DB5CC1790553F...`) |
+| **Verified Checksums** | `wingbeat_q1_int8.h` (`SHA-256: C367F46DF8F904AD...`), `p2_deployment_trap_esp32s3.ino` (`SHA-256: 020DE8A6E635E99D...`, Pro 3-Card + Live FFT OLED UI) |
 
 ---
 
@@ -25,7 +25,7 @@ This automatically installs `arduino-cli` (if needed), pins `esp32:esp32@2.0.17`
 ### Step 2: Plug in `ESP32-S3 N16R8` (Right `UART` USB-C Port)
 - Holding the board upright (metal RF shield at top): plug USB-C into the **Right `UART` (`CH343`)** port.
 - Choose Menu Option `[3]` (uses `CDCOnBoot=default`, `16MB Flash`, `OPI PSRAM`, `115200` baud).
-- Pre-compiled `v6.0` `.bin` files for both `uart/` (`356,944 B`) and `usb/` (`345,440 B`) are also ready in `compiled_bins/p2_deployment_trap_esp32s3/`.
+- Pre-compiled `v6.0` `.bin` files for both `uart/` (`360,224 B`) and `usb/` (`348,720 B`) are also ready in `compiled_bins/p2_deployment_trap_esp32s3/`.
 
 ### Step 3: Live Lab Testing — Real Mosquitoes OR Any Phone / Laptop Speaker
 - **Live Captured Mosquito Test (Quiet Room / Mesh Cup):** Turn off ceiling fans near the bench so the adaptive `FLR` settles down toward `160–220`, then hold the fine mesh cup containing live mosquitoes **`2–6 cm`** from `INMP441`.

@@ -141,8 +141,8 @@ python3 ml_pipeline/p2_humbugdb_q1_training_and_snr_eval.py --csv ml_pipeline/hu
   - **Full `43`-track real library:** **`20 / 20`** female vector WAVs triggered; **`23 / 23`** non-vector WAVs zero false fan triggers.
 - **Verified Deployed `v6.0` Artifacts (`COM5` Flashed & Live Serial Verified `[P2v6.0]`):**
   - `wingbeat_q1_int8.h`: `SHA-256: C367F46DF8F904ADFF363B0320DE36DE4987EE83A59A9D407518744375E6A666` (`33,122 B`, `7.18 KB` INT8 weights)
-  - `p2_deployment_trap_esp32s3.ino`: `SHA-256: 434DB5CC1790553F040178A5BB6451A9A3AC791B019C797A54319F4C5E1EF715` (`27,940 B`)
-  - `UART` binary: `356,573 B` sketch / `356,944 B` `.bin` (`11%` Flash, `35,144 B` / `10%` RAM) | `USB` binary: `345,073 B` sketch / `345,440 B` `.bin` (`10%` Flash, `34,936 B` / `10%` RAM).
+  - `p2_deployment_trap_esp32s3.ino`: `SHA-256: 020DE8A6E635E99DEACD2096B3A3B89042ED3ACFFEF859B4510678FA01A9D43B` (`33,241 B`, Pro 3-Card OLED Dashboard + Live 16-Bar FFT Spectrum + Animated 5.0s Spinning Fan UI)
+  - `UART` binary: `359,853 B` sketch / `360,224 B` `.bin` (`11%` Flash, `35,144 B` / `10%` RAM) | `USB` binary: `348,357 B` sketch / `348,720 B` `.bin` (`11%` Flash, `34,936 B` / `10%` RAM).
 
 ---
 
