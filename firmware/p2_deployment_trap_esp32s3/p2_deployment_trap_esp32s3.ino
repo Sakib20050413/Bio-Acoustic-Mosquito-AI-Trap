@@ -59,7 +59,7 @@
 #define MAL_PROB_MIN        0.72f
 #define POL_PROB_MIN        0.70f
 #define FAN_COOLDOWN_MS     1500UL
-#define OLED_REFRESH_MS     400UL
+#define OLED_REFRESH_MS     250UL
 #define IR_STUCK_MS         150UL
 
 // Exact 2nd-order Butterworth High-Pass Filter (fc = 130 Hz, fs = 8000 Hz)
@@ -111,7 +111,7 @@ float last_valid_dt_ms = 12.0f;
 uint32_t last_ir1_pulse_ms = 0;
 float ambient_rms_ema = 220.0f;
 
-bool show_diag_page = false;
+uint8_t oled_page = 0; // 0=Pro 3-Card Dashboard, 1=Live 16-Bar FFT, 2=Sensor Diagnostics
 bool serial_verbose = true;
 bool prev_oled_ok = false;
 
@@ -215,63 +215,223 @@ void runWingBeatQ1Probs(const float x_raw[P2_N_FEATURES], float probs_out[P2_N_C
 }
 
 void showToastOLED(const char *title, const char *sub, uint16_t ms = 900) {
-  u8g2.setDrawColor(1);
   u8g2.clearBuffer();
-  u8g2.drawFrame(1, 1, 126, 62);
+  u8g2.setDrawColor(1);
+  u8g2.drawRFrame(0, 0, 128, 64, 4);
+  u8g2.drawRBox(6, 6, 116, 16, 2);
+  u8g2.setDrawColor(0);
   u8g2.setFont(u8g2_font_7x13B_tf);
-  u8g2.setCursor(8, 28); u8g2.print(title);
+  int tw = u8g2.getStrWidth(title);
+  u8g2.setCursor(max(8, (128 - tw) / 2), 19);
+  u8g2.print(title);
+  u8g2.setDrawColor(1);
   u8g2.setFont(u8g2_font_6x10_tf);
-  u8g2.setCursor(8, 48); u8g2.print(sub);
+  int sw = u8g2.getStrWidth(sub);
+  u8g2.setCursor(max(6, (128 - sw) / 2), 40);
+  u8g2.print(sub);
+  u8g2.drawHLine(16, 48, 96);
+  u8g2.setFont(u8g2_font_5x8_tf);
+  u8g2.setCursor(21, 58);
+  u8g2.print("ESP32-S3  512-FFT");
   u8g2.sendBuffer();
   delay(ms);
 }
 
-void drawMainOLED(bool in_cooldown, float f0_corr, float e_rms) {
+void drawFanIcon(int cx, int cy, uint8_t frame) {
   u8g2.setDrawColor(1);
-  u8g2.clearBuffer();
+  u8g2.drawCircle(cx, cy, 11);
+  if ((frame & 1) == 0) {
+    u8g2.drawBox(cx - 1, cy - 9, 3, 7);
+    u8g2.drawBox(cx - 1, cy + 3, 3, 7);
+    u8g2.drawBox(cx - 9, cy - 1, 7, 3);
+    u8g2.drawBox(cx + 3, cy - 1, 7, 3);
+  } else {
+    u8g2.drawLine(cx - 6, cy - 6, cx + 6, cy + 6);
+    u8g2.drawLine(cx - 6, cy - 5, cx + 5, cy + 6);
+    u8g2.drawLine(cx - 5, cy - 6, cx + 6, cy + 5);
+    u8g2.drawLine(cx + 6, cy - 6, cx - 6, cy + 6);
+    u8g2.drawLine(cx + 5, cy - 6, cx - 6, cy + 5);
+    u8g2.drawLine(cx + 6, cy - 5, cx - 5, cy + 6);
+  }
+  u8g2.drawDisc(cx, cy, 2);
+}
 
-  if (!show_diag_page) {
+void drawCaptureOLED(const char *header_txt, const char *detail_txt, uint32_t elapsed_ms, uint32_t total_ms, uint8_t anim_frame) {
+  u8g2.clearBuffer();
+  // Inverted top alert banner
+  u8g2.setDrawColor(1);
+  u8g2.drawRBox(0, 0, 128, 16, 2);
+  u8g2.setDrawColor(0);
+  u8g2.setFont(u8g2_font_7x13B_tf);
+  int hw = u8g2.getStrWidth(header_txt);
+  u8g2.setCursor(max(2, (128 - hw) / 2), 13);
+  u8g2.print(header_txt);
+
+  // Rotating fan icon + live countdown
+  u8g2.setDrawColor(1);
+  drawFanIcon(16, 33, anim_frame);
+
+  float rem_s = (elapsed_ms < total_ms) ? ((float)(total_ms - elapsed_ms) / 1000.0f) : 0.0f;
+  char tbuf[20];
+  snprintf(tbuf, sizeof(tbuf), "FAN ON %.1fs", rem_s);
+  u8g2.setFont(u8g2_font_7x13B_tf);
+  u8g2.setCursor(34, 31);
+  u8g2.print(tbuf);
+
+  u8g2.setFont(u8g2_font_5x8_tf);
+  u8g2.setCursor(34, 43);
+  u8g2.print(detail_txt);
+
+  // Smooth rounded progress bar
+  u8g2.drawRFrame(4, 51, 120, 11, 3);
+  int fill_w = (int)((min(elapsed_ms, total_ms) * (uint32_t)116) / max((uint32_t)1, total_ms));
+  if (fill_w >= 4) {
+    u8g2.drawRBox(6, 53, fill_w, 7, 2);
+  }
+  u8g2.sendBuffer();
+}
+
+static void drawGenusCard(int cx, int cw, const char *label, uint32_t count) {
+  u8g2.setDrawColor(1);
+  u8g2.drawRFrame(cx, 17, cw, 33, 3);
+  u8g2.drawHLine(cx + 2, 27, cw - 4);
+
+  u8g2.setFont(u8g2_font_5x8_tf);
+  int lw = u8g2.getStrWidth(label);
+  u8g2.setCursor(cx + (cw - lw) / 2, 25);
+  u8g2.print(label);
+
+  char nbuf[12];
+  snprintf(nbuf, sizeof(nbuf), "%lu", (unsigned long)count);
+  u8g2.setFont(u8g2_font_9x15B_tn);
+  int nw = u8g2.getStrWidth(nbuf);
+  u8g2.setCursor(cx + max(2, (cw - nw) / 2), 45);
+  u8g2.print(nbuf);
+}
+
+void drawMainOLED(bool in_cooldown, float f0_corr, float e_rms, float dyn_floor, float snr_db) {
+  u8g2.clearBuffer();
+  u8g2.setDrawColor(1);
+
+  if (oled_page == 0) {
+    // === PAGE 0: PRO 3-CARD GENUS DASHBOARD ===
     const char *status_txt = "READY";
+    bool is_ready = true;
     bool active_hold = (millis() < status_hold_until_ms);
     if (in_cooldown) {
-      status_txt = "SETTLING";
+      status_txt = "SETTLE";
+      is_ready = false;
     } else if (active_hold) {
-      if (held_status_code == 2)      status_txt = "BEE SAFE";
-      else if (held_status_code == 3) status_txt = "MALE IGN";
-      else if (held_status_code == 1) status_txt = "NOISE IGN";
+      if (held_status_code == 2)      { status_txt = "BEE SAFE"; is_ready = false; }
+      else if (held_status_code == 3) { status_txt = "MALE IGN"; is_ready = false; }
+      else if (held_status_code == 1) { status_txt = "NOISE";    is_ready = false; }
     }
 
-    // Bold top status bar (safe x=4..124, zero glare, zero clipping)
-    u8g2.setFont(u8g2_font_7x13B_tf);
-    u8g2.setCursor(4, 13);  u8g2.print(status_txt);
-    u8g2.setCursor(88, 13); u8g2.print("[OFF]");
-    u8g2.drawHLine(2, 17, 124);
-
-    // Genus Vector Counters (Aedes=Dengue/Chik, Anopheles=Malaria, Culex=Filariasis)
+    // Inverted sleek top status bar (y=0..13)
+    u8g2.drawRBox(0, 0, 128, 14, 2);
+    u8g2.setDrawColor(0);
     u8g2.setFont(u8g2_font_6x10_tf);
-    u8g2.setCursor(4, 31);
-    u8g2.printf("AED:%lu ANO:%lu CUL:%lu", (unsigned long)cnt_aedes, (unsigned long)cnt_anoph, (unsigned long)cnt_culex);
+    if (is_ready) {
+      if (((millis() / 450UL) & 1UL) == 0) u8g2.drawDisc(6, 7, 2);
+      else u8g2.drawCircle(6, 7, 2);
+      u8g2.setCursor(12, 10);
+      u8g2.print("READY");
+    } else {
+      u8g2.setCursor(4, 10);
+      u8g2.print(status_txt);
+    }
 
-    // Ecological & Catch Summary
-    u8g2.setCursor(4, 45);
-    u8g2.printf("Cat:%lu Bee:%lu Mal:%lu", (unsigned long)cnt_caught, (unsigned long)cnt_pollinator, (unsigned long)cnt_male);
-    u8g2.drawHLine(2, 50, 124);
+    // Live 5-bar micro audio VU meter inside header (x=68..87)
+    float scale_step = max(80.0f, dyn_floor * 0.30f);
+    int vu_lvl = constrain((int)(e_rms / scale_step), 0, 5);
+    const int bar_h[5] = {2, 4, 6, 8, 10};
+    for (int b = 0; b < 5; b++) {
+      int bx = 68 + b * 4;
+      if (b < vu_lvl) {
+        u8g2.drawBox(bx, 12 - bar_h[b], 3, bar_h[b]);
+      } else {
+        u8g2.drawPixel(bx + 1, 11);
+      }
+    }
 
-    // Clean bottom telemetry + IR health indicator
-    u8g2.setCursor(4, 62);
-    const char *ir_tag = (ir1_stuck || ir2_stuck) ? "IR:POT!" : "IR:OK";
-    u8g2.printf("%.1fC  %.0f%%  %s", cached_t, cached_h, ir_tag);
+    // Live DHT22 temperature on far right (x=96..126)
+    char tbuf[10];
+    snprintf(tbuf, sizeof(tbuf), "%.1fC", cached_t);
+    u8g2.setFont(u8g2_font_5x8_tf);
+    int tw = u8g2.getStrWidth(tbuf);
+    u8g2.setCursor(125 - tw, 10);
+    u8g2.print(tbuf);
+
+    // Center 3 Rounded Big-Number Vector Cards (41 + 2 + 42 + 2 + 41 = 128 px)
+    drawGenusCard(0,  41, "AED", cnt_aedes);
+    drawGenusCard(43, 42, "ANO", cnt_anoph);
+    drawGenusCard(87, 41, "CUL", cnt_culex);
+
+    // Clean Bottom Telemetry Strip (y=52..63)
+    u8g2.setDrawColor(1);
+    u8g2.drawHLine(0, 52, 128);
+    u8g2.setFont(u8g2_font_5x8_tf);
+    u8g2.setCursor(1, 62);  u8g2.printf("B:%lu", (unsigned long)cnt_pollinator);
+    u8g2.setCursor(32, 62); u8g2.printf("M:%lu", (unsigned long)cnt_male);
+    u8g2.setCursor(63, 62); u8g2.printf("C:%lu", (unsigned long)cnt_caught);
+    if (ir1_stuck || ir2_stuck) {
+      u8g2.drawRBox(94, 54, 34, 10, 1);
+      u8g2.setDrawColor(0);
+      u8g2.setCursor(96, 62); u8g2.print("IR:POT");
+    } else {
+      u8g2.setCursor(98, 62); u8g2.print("IR:OK");
+    }
+  } else if (oled_page == 1) {
+    // === PAGE 1: LIVE 16-BAR REAL-TIME FFT SPECTRUM ANALYZER ===
+    u8g2.drawRBox(0, 0, 128, 13, 2);
+    u8g2.setDrawColor(0);
+    u8g2.setFont(u8g2_font_5x8_tf);
+    u8g2.setCursor(3, 9);
+    u8g2.printf("FFT %4.0fHz  SNR:%2.0f", f0_corr, snr_db);
+
+    u8g2.setDrawColor(1);
+    // 16 bars spanning bins 9..72 (140 Hz .. 1125 Hz, 4 bins per bar)
+    for (int b = 0; b < 16; b++) {
+      double mx = 0.0;
+      int k0 = 9 + b * 4;
+      for (int k = k0; k < k0 + 4 && k < 128; k++) {
+        if (specR[k] > mx) mx = specR[k];
+      }
+      int h = constrain((int)((mx - 0.85) * 6.5), 1, 33);
+      u8g2.drawBox(1 + b * 8, 49 - h, 6, h);
+    }
+    u8g2.drawHLine(0, 50, 128);
+    // Highlight female mosquito band (bars 3..7 = 328..640 Hz)
+    u8g2.drawBox(25, 51, 38, 2);
+
+    u8g2.setFont(u8g2_font_5x8_tf);
+    u8g2.setCursor(1, 62);   u8g2.print("140");
+    u8g2.setCursor(25, 62);  u8g2.print("[340-660]");
+    u8g2.setCursor(107, 62); u8g2.print("1.1k");
   } else {
-    u8g2.setFont(u8g2_font_7x13B_tf);
-    u8g2.setCursor(4, 13); u8g2.print("SENSOR CHECK");
-    u8g2.drawHLine(2, 17, 124);
+    // === PAGE 2: SENSOR & ADAPTIVE FLOOR DIAGNOSTICS ===
+    u8g2.drawRBox(0, 0, 128, 13, 2);
+    u8g2.setDrawColor(0);
+    u8g2.setFont(u8g2_font_5x8_tf);
+    u8g2.setCursor(4, 9);
+    u8g2.print("SENSORS & FLOOR  v6.0");
 
+    u8g2.setDrawColor(1);
     u8g2.setFont(u8g2_font_6x10_tf);
-    u8g2.setCursor(4, 31); u8g2.printf("Temp:%.1fC  Hum:%.0f%%", cached_t, cached_h);
+    u8g2.setCursor(2, 24); u8g2.printf("Temp:%.1fC  RH:%.0f%%", cached_t, cached_h);
     const char *s1 = ir1_stuck ? "POT!" : (prev_g1_low ? "HIT" : "OK");
     const char *s2 = ir2_stuck ? "POT!" : (prev_g2_low ? "HIT" : "OK");
-    u8g2.setCursor(4, 45); u8g2.printf("IR1:%-4s   IR2:%-4s", s1, s2);
-    u8g2.setCursor(4, 59); u8g2.printf("%.0fHz   RMS:%.0f", f0_corr, e_rms);
+    u8g2.setCursor(2, 36); u8g2.printf("IR1:%-4s   IR2:%-4s", s1, s2);
+
+    u8g2.setFont(u8g2_font_5x8_tf);
+    u8g2.setCursor(2, 48); u8g2.printf("RMS:%4.0f FLR:%4.0f %3.0fHz", e_rms, dyn_floor, f0_corr);
+
+    // Live RMS horizontal bar with dynamic floor marker tick (0..1600 scale)
+    u8g2.drawFrame(2, 53, 124, 9);
+    int rms_w = constrain((int)(e_rms * 120.0f / 1600.0f), 0, 120);
+    if (rms_w > 0) u8g2.drawBox(4, 55, rms_w, 5);
+    int flr_x = 4 + constrain((int)(dyn_floor * 120.0f / 1600.0f), 1, 119);
+    u8g2.drawVLine(flr_x, 51, 13);
   }
   u8g2.sendBuffer();
 }
@@ -344,19 +504,16 @@ void loop() {
   updateIRGates();
 
   if (digitalRead(BTN_FAN_TEST) == LOW) {
-    u8g2.setDrawColor(1);
-    u8g2.clearBuffer();
-    u8g2.drawFrame(1, 1, 126, 62);
-    u8g2.setFont(u8g2_font_7x13B_tf);
-    u8g2.setCursor(14, 28); u8g2.print("FAN TEST 1.5s");
-    u8g2.setFont(u8g2_font_6x10_tf);
-    u8g2.setCursor(16, 48); u8g2.print("Relay + LEDs ON");
-    u8g2.sendBuffer();
     digitalWrite(LED_GREEN, HIGH);
     digitalWrite(LED_YELLOW, HIGH);
     digitalWrite(LED_RED, HIGH);
     setRelay(true);
-    delay(1500);
+    uint32_t t_test0 = millis();
+    uint8_t anim_f = 0;
+    while (millis() - t_test0 < 1500UL) {
+      drawCaptureOLED("FAN SELF-TEST", "Relay + 3 LEDs ON", millis() - t_test0, 1500UL, anim_f++);
+      delay(140);
+    }
     setRelay(false);
     digitalWrite(LED_GREEN, LOW);
     digitalWrite(LED_YELLOW, LOW);
@@ -369,7 +526,7 @@ void loop() {
     last_oled_ms = 0;
   }
   if (digitalRead(BTN_PAGE) == LOW) {
-    show_diag_page = !show_diag_page;
+    oled_page = (oled_page + 1) % 3;
     last_oled_ms = 0;
     delay(250);
   }
@@ -704,24 +861,22 @@ void loop() {
       genus_title = "AEDES (DENGUE)!";
     }
 
-    u8g2.setDrawColor(1);
-    u8g2.clearBuffer();
-    u8g2.drawFrame(1, 1, 126, 62);
-    u8g2.setFont(u8g2_font_7x13B_tf);
-    u8g2.setCursor(8, 17); u8g2.print(genus_title);
-    u8g2.drawHLine(4, 22, 120);
-    u8g2.setFont(u8g2_font_8x13B_tf);
-    u8g2.setCursor(14, 40); u8g2.print("FAN ON: 5.0s");
-    u8g2.setFont(u8g2_font_6x10_tf);
-    u8g2.setCursor(14, 56); u8g2.printf("%.0fHz  Conf:%.0f%%", f0_corr, p_vec * 100.0f);
-    u8g2.sendBuffer();
+    char detail_buf[24];
+    snprintf(detail_buf, sizeof(detail_buf), "%.0fHz  CONF:%.0f%%", f0_corr, p_vec * 100.0f);
 
     bool ir2_healthy_before = (!ir2_stuck && (millis() - g2_last_low_ms > 1000UL));
     setRelay(true);
     bool caught = false;
     bool g2_prev_fan = (digitalRead(PIN_GATE_2) == LOW);
     uint32_t fan_t0 = millis();
+    uint32_t last_cap_draw = 0;
+    uint8_t anim_frame = 0;
     while (millis() - fan_t0 < 5000UL) {
+      uint32_t elap = millis() - fan_t0;
+      if (last_cap_draw == 0 || (millis() - last_cap_draw >= 160UL)) {
+        last_cap_draw = millis();
+        drawCaptureOLED(genus_title, detail_buf, elap, 5000UL, anim_frame++);
+      }
       bool g2_now = (digitalRead(PIN_GATE_2) == LOW);
       if (ir2_healthy_before && g2_now && !g2_prev_fan) {
         caught = true;
@@ -752,8 +907,9 @@ void loop() {
                   cnt_aedes, cnt_anoph, cnt_culex, cnt_pollinator, cnt_male, cnt_caught);
   }
 
-  if (millis() - last_oled_ms >= OLED_REFRESH_MS || last_oled_ms == 0) {
+  uint32_t refresh_int = (oled_page == 1) ? 120UL : OLED_REFRESH_MS;
+  if (millis() - last_oled_ms >= refresh_int || last_oled_ms == 0) {
     last_oled_ms = millis();
-    drawMainOLED(in_cooldown, f0_corr, (float)e_rms);
+    drawMainOLED(in_cooldown, f0_corr, (float)e_rms, dyn_rms_floor, (float)snr_db);
   }
 }
